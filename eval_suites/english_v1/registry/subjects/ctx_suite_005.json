@@ -1,0 +1,36 @@
+{
+  "member": {
+    "name": "Tomasz Wierzbicki",
+    "member_ids": [
+      "WTZ40517"
+    ],
+    "dob": "1980-09-09",
+    "phone": "718-555-0164",
+    "mrn": "MRN-3057719",
+    "email": "tomasz.w@example.com",
+    "address": "51 Greenpoint Avenue",
+    "city": "Brooklyn",
+    "zip": "11222"
+  },
+  "contacts": [
+    "Agata Wierzbicka"
+  ],
+  "providers": [
+    {
+      "name": "Helen Cho",
+      "npi": "1669302287"
+    }
+  ],
+  "staff": [
+    "Marcus Delacroix"
+  ],
+  "facilities": [
+    {
+      "name": "Newtown Creek Pharmacy",
+      "aliases": [
+        "Newtown Creek"
+      ]
+    }
+  ],
+  "employers": []
+}

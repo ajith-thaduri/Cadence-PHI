@@ -1,0 +1,15 @@
+# Knowledgator streaming PII (open-label). Stateless full-text inference for the main
+# evaluation; cached incremental sessions are evaluated separately (streaming test).
+native_trained_labels: []   # not published
+labels: [person, organization, street address, city, state, zip code, phone number, email address, url, date, date of birth, medical record number, member id, account number, identification number]
+threshold: 0.5              # card examples and PIIMB configuration use 0.5
+max_length: 8192
+aggregation:
+  strategy: chunk
+  chunk_words: 2000
+  overlap_words: 50
+production: {chunk_words: 256, overlap_words: 64}
+overlap_policy: flat_ner
+multi_label: false
+add_prefix_space: false
+load_tokenizer: true

@@ -1,0 +1,33 @@
+# PRODUCTION MONITORING - owner: platform (review: privacy). Plan §16 / T8 / gate G9.
+# Canary texts are CONSPICUOUSLY FAKE (555-01xx phones, example.com, RFC 5737 IPs, 1900 dates) and must never
+# be replaced with anything resembling real data. Runtime: harness/phi/monitoring.py.
+monitoring:
+  canaries:
+    interval_seconds: 300
+    cases:
+      - id: typed_direct
+        text: "CANARY: member called from 415-555-0199, email canary.check@example.com, MRN 00000002, DOB 02/02/1900."
+        entities: [PHONE, EMAIL, MRN, DOB]
+        must_redact: ["415-555-0199", "canary.check@example.com", "00000002", "02/02/1900"]
+      - id: spoken_phone
+        text: "CANARY spoken: you can reach me at four one five, five five five, oh one nine nine."
+        normalization_profile: asr
+        modality: telephone
+        entities: [PHONE]
+        must_redact: ["four one five, five five five, oh one nine nine"]
+      - id: safe_harbor_patterns
+        text: "CANARY: SSN 219-09-9999, portal login from IP 198.51.100.77."
+        entities: [SSN, IP_ADDRESS]
+        must_redact: ["219-09-9999", "198.51.100.77"]
+      - id: device_location_account
+        text: "CANARY: tablet MAC 02:00:5e:10:00:01, pickup GPS 0.00010, -0.00010, refund IBAN BE80618600258170."
+        entities: [DEVICE_ID, GEO_COORDINATES, ACCOUNT_ID]
+        must_redact: ["02:00:5e:10:00:01", "0.00010, -0.00010", "BE80618600258170"]
+      - id: negative_clinical
+        text: "CANARY: the patient received 500 mg of metformin; BP 128/82; recheck labs in 2 weeks."
+        must_not_redact: true
+  detection_rate:
+    baseline: results/monitoring/baseline.json      # written by: python -m harness_eval.monitoring baseline
+    control_limit_sigma: 3.0
+    min_chars_per_window: 20000
+    window_minutes: 60

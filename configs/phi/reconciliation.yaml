@@ -1,0 +1,72 @@
+# migrated from configs/phi_harness.yaml
+precedence:
+- registry_exact
+- checksum_valid
+- registry_normalized
+- regex_match
+- spoken_number_match
+- contextual_rule
+- registry_fuzzy
+- model_confidence
+type_refinements:
+  DATE:
+  - DOB
+  NAME:
+  - RELATIVE_NAME
+  - PROVIDER_NAME
+  - CARE_TEAM_MEMBER
+  ORGANIZATION:
+  - FACILITY_NAME
+  - EMPLOYER
+  # Safe Harbor identifier categories are more specific than the generic identifier type (45 CFR 164.514(b)(2));
+  # label only - the redaction extent never changes (docs/rule_changelog.md, 2026-10-06)
+  OTHER_UNIQUE_ID:
+  - SSN
+  - LICENSE_CERT_ID
+  - VEHICLE_ID
+  - DEVICE_ID
+  - IP_ADDRESS
+  - ACCOUNT_ID
+  - MEMBER_ID
+
+# RECONCILIATION v2 (harness/phi/reconciliation) - general span-shaping rules, developed 2026-10-07 from issue
+# analysis (docs/rule_changelog.md). None of them depends on a specific document or value.
+reconciliation:
+  # a model span that bridges two deterministic findings of DIFFERENT types ("AZ 85201" = STATE + ZIP) is split back
+  # into its parts; text between the parts stays redacted unless it is only connector words / punctuation
+  split_bridged_groups: true
+  connector_words: [by, at, in, "on", of, for, with, from, to, and, or, the, a, an, via, near, per, was, is, were]
+  # field-label acronyms are never part of the value they label ("MAC 3C:52:..", "IP 10.0.0.1"); case-sensitive
+  field_labels: [IP, MAC, IMEI, MEID, ICCID, IMSI, VIN, MRN, NPI, SSN, DOB, DEA, IBAN, BIC, SWIFT, EIN, TIN, UDI, GPS, URL, ID, ACCT, DL]
+  # same-type detections separated only by these characters (no whitespace) are one value ("KQ/22918-B")
+  fragment_joiners: "-/.:#"
+  # same-type pieces split at "<initial>. " or "<abbreviation>. " are one name ("Kevin L. Harper", "St. Vincent ...")
+  abbreviation_joiners: [St, Mt, Ft, Ste, Jr, Sr, Dr]
+
+# CONTEXTUAL TYPE RULES - a role / relation cue directly before a span refines its type (label only, extent unchanged).
+# Only connector words may sit between the cue and the span; `unless_preceded_by` blocks the rule (e.g. a title).
+contextual_type_rules:
+  - id: relation_cue
+    from: [NAME, PROVIDER_NAME, CARE_TEAM_MEMBER]
+    to: RELATIVE_NAME
+    cues: [emergency contact, next of kin, next-of-kin, daughter, son, wife, husband, spouse, partner, mother, father,
+           mom, dad, sister, brother, sibling, grandmother, grandfather, grandson, granddaughter, aunt, uncle, niece,
+           nephew, cousin, caregiver, guardian, fiancé, fiancee, fiance]
+    window: 40
+    unless_preceded_by: '\b(?:Dr|Dra|Doctor|Prof|Nurse|NP|PA)\.?'
+  - id: provider_requires_role
+    mode: requires
+    from: [PROVIDER_NAME]
+    to: NAME
+    # a PROVIDER_NAME proposed by the model ALONE needs a provider cue within the window (either side); otherwise it is
+    # treated as NAME - the outbound guard blocks NAME but only flags PROVIDER_NAME, so this errs on the safe side
+    cues: [dr, dra, doctor, md, do, np, pa-c, rn, lpn, nurse, physician, provider, surgeon, therapist, clinician,
+           practitioner, cardiologist, oncologist, neurologist, psychiatrist, psychologist, pediatrician,
+           dermatologist, radiologist, urologist, pcp, attending, resident, prescriber, prescribed, pharmacist, dentist,
+           referred by, referred to, seen by, saw, signed, ordered, npi, office, clinic]
+    window: 40
+  - id: employer_cue
+    from: [ORGANIZATION, FACILITY_NAME]
+    to: EMPLOYER
+    cues: [employer, employed by, works for, works at, working at, worked at]
+    window: 40

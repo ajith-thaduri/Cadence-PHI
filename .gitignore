@@ -1,0 +1,28 @@
+# --- environments / caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+# --- run outputs (may contain document text; never commit)
+results/
+reports/
+*.log
+# --- local data caches and model artefacts
+data/cadence_realistic/asr_cache/
+data/public/
+hf_cache/
+models/
+# --- secrets / vaults (never commit)
+*.key
+.env
+vault/
+*.vault
+# --- operator console
+# built by scripts/build_ui.sh from frontend/ (reproducible from package-lock.json)
+harness_ui/static/
+# console accounts (scrypt hashes) - per deployment, never commit
+configs/ui/users.yaml
+frontend/node_modules/
+frontend/test-results/
+frontend/playwright-report/

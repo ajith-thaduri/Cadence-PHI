@@ -1,0 +1,2147 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PHI Shield Harness Plan</title>
+<style>
+:root{--bg:#ffffff;--fg:#1c2230;--mute:#5a6475;--line:#dde2ea;--hd:#f3f5f8;--acc:#1f5fbf;--code:#f5f7fa;--crit:#b3261e}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#13161b;--fg:#e4e8ee;--mute:#9aa3b2;--line:#2b313b;--hd:#1b1f26;--acc:#79a8ff;--code:#1a1e25;--crit:#ff8a80}}
+:root[data-theme="dark"]{--bg:#13161b;--fg:#e4e8ee;--mute:#9aa3b2;--line:#2b313b;--hd:#1b1f26;--acc:#79a8ff;--code:#1a1e25;--crit:#ff8a80}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
+h1{font-size:28px;line-height:1.25;margin:8px 0 12px}
+h2{font-size:21px;margin:44px 0 12px;padding-top:12px;border-top:2px solid var(--line)}
+h3{font-size:17px;margin:28px 0 8px}
+h2,h3{scroll-margin-top:16px}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+p,li{max-width:100ch}
+code{font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto}
+pre code{background:none;padding:0;font-size:12.5px}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--hd);font-weight:600;position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+blockquote{margin:12px 0;padding:8px 14px;border-left:4px solid var(--acc);background:var(--hd);border-radius:0 6px 6px 0}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+strong{font-weight:650}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar div{max-width:1180px;margin:0 auto;padding:8px 16px;display:flex;gap:12px;align-items:center;font-size:13px;color:var(--mute)}
+.bar button{margin-left:auto;font:inherit;background:var(--hd);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer}
+@media print{.bar{display:none}h2{break-before:page}.tw{overflow:visible}th{position:static}}
+</style></head>
+<body><div class="bar"><div><span>Cadence PHI Shield · production-grade harness plan · 2026-10-06 · plan only, no code changed</span>
+<button id="tg" type="button">Toggle theme</button></div></div>
+<main><h1 id="cadence-phi-shield-production-grade-detection-de-identification-and-evaluation-harness">Cadence PHI Shield: production-grade detection, de-identification and evaluation harness</h1>
+<p><strong>Status:</strong> plan for review. <strong>No code has been changed.</strong></p>
+<p><strong>Date:</strong> 2026-10-06. This document replaces all earlier plan drafts.</p>
+<p><strong>Scope</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language</td>
+<td>English only: clinical notes, care-management conversations, ASR transcripts</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Local inference only. OBI RoBERTa i2b2 is the single production model candidate.</td>
+</tr>
+<tr>
+<td>Orchestration</td>
+<td>Microsoft Presidio. Business policy stays in our own code.</td>
+</tr>
+<tr>
+<td>Excluded</td>
+<td>Spanish and code-switched text, any second production model, LLM-based detection, cloud de-identification services</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Evidence markers used throughout.</strong> <code>[V]</code> means the source page was read. <code>[S]</code> means only a
+search snippet or a secondary summary was seen. Full references are in §19.</p>
+<hr />
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#1-executive-summary">Executive summary</a></li>
+<li><a href="#2-industry-research-findings">Industry research findings</a></li>
+<li><a href="#3-recommended-production-grade-architecture">Recommended production-grade architecture</a></li>
+<li><a href="#4-current-architecture-assessment">Current architecture assessment</a></li>
+<li><a href="#5-production-gap-analysis">Production-gap analysis</a></li>
+<li><a href="#6-configuration-architecture">Configuration architecture</a></li>
+<li><a href="#7-phi-entity-strategy">PHI entity strategy</a></li>
+<li><a href="#8-recognizer-and-model-strategy">Recognizer and model strategy</a></li>
+<li><a href="#9-evaluation-and-testing-strategy-tevv">Evaluation and testing strategy (TEVV)</a></li>
+<li><a href="#10-prompt-suite-and-test-case-design">Prompt suite and test-case design</a></li>
+<li><a href="#11-failure-analysis-strategy">Failure-analysis strategy</a></li>
+<li><a href="#12-redaction-and-residual-phi-evaluation">Redaction and residual-PHI evaluation</a></li>
+<li><a href="#13-regression-strategy">Regression strategy</a></li>
+<li><a href="#14-privacy-and-security-controls">Privacy and security controls</a></li>
+<li><a href="#15-production-readiness-gates">Production-readiness gates</a></li>
+<li><a href="#16-implementation-phases">Implementation phases</a></li>
+<li><a href="#17-files-and-modules-to-create-or-modify">Files and modules to create or modify</a></li>
+<li><a href="#18-testing-and-validation-plan">Testing and validation plan</a></li>
+<li><a href="#19-decisions-required">Decisions required</a></li>
+<li><a href="#20-references">References</a></li>
+</ol>
+<hr />
+<h2 id="1-executive-summary">1. Executive summary</h2>
+<p><strong>Current state.</strong> The detection engine is already production-<em>shaped</em>:
+- typed contracts;
+- coordinates always in the original text;
+- a full evidence chain for every decision;
+- Presidio orchestration with its silent filtering bypassed;
+- detection and redaction kept separate;
+- calibration that only uses development data;
+- a tool for manual evaluation.</p>
+<p><strong>The gap.</strong> The assurance layer around the engine is still research-grade:
+- the repository is not under version control;
+- failure handling is undefined and untested;
+- there are no release gates and no confidence intervals;
+- the gold data is fabricated and single-annotated;
+- the token vault is in-memory and unencrypted;
+- entity behaviour is partly hard-coded in Python;
+- there is no performance testing and no monitoring.</p>
+<p><strong>What industry practice requires.</strong> NIST AI RMF, NIST SP 800-188 and 800-53, 45 CFR 164.514,
+the vendor transparency documents and the de-identification literature agree on the following:
+- <strong>Recall is the release metric.</strong> Gate on its lower confidence bound for each entity and
+    modality, not on F1.
+- <strong>Release evidence must come from real data in deployment conditions.</strong>
+- <strong>The system must fail closed,</strong> and this must be proven by fault injection.
+- <strong>Every output is stamped</strong> with the config hash, model hash and code commit.
+- <strong>Configuration separates policy from mechanism.</strong> It is strictly validated, composed from
+    layers and hashed.
+- <strong>The re-identification map is randomly derived and strongly protected.</strong>
+- <strong>Behavioural (CheckList) suites and a regression baseline</strong> run on every change.</p>
+<p><strong>Plan in brief.</strong> Six phases:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0</strong> Foundations</td>
+<td>version control, fail-closed behaviour, PHI-free logging</td>
+</tr>
+<tr>
+<td><strong>P1</strong> Configuration and entity catalog</td>
+<td>entity behaviour moves out of code</td>
+</tr>
+<tr>
+<td><strong>P2</strong> Evaluation core</td>
+<td>three-view metrics with confidence intervals, contamination control, redaction checks, stage attribution</td>
+</tr>
+<tr>
+<td><strong>P3</strong> Test suites</td>
+<td>behavioural tests, prompt suite, performance tests</td>
+</tr>
+<tr>
+<td><strong>P4</strong> Gates and regression</td>
+<td>gate runner, regression baselines, system card</td>
+</tr>
+<tr>
+<td><strong>P5</strong> Production readiness</td>
+<td>vault, outbound guard, monitoring, first evaluation on real governed data</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Critical gaps</strong> (4 of 26):
+- G-01 no version control
+- G-02 fail-closed behaviour undefined
+- G-03 no release evidence or gates
+- G-04 the vault is not production-safe</p>
+<hr />
+<h2 id="2-industry-research-findings">2. Industry research findings</h2>
+<h3 id="21-assurance-frameworks-tevv">2.1 Assurance frameworks (TEVV)</h3>
+<p><strong>NIST AI RMF 1.0, MEASURE function</strong> [V]. Testing, evaluation, verification and validation
+(TEVV) must be documented and repeatable:
+- MEASURE 2.1: test sets, metrics and tools are documented.
+- MEASURE 2.3: evaluation happens under conditions representative of deployment.
+- MEASURE 2.6: the system fails safely.
+- MEASURE 1.3: there are independent assessors.
+- Privacy risk is examined explicitly.</p>
+<p><strong>Good Machine Learning Practice</strong> (FDA, Health Canada, MHRA; IMDRF N88 2025) [S]:
+- test data stays independent of training data;
+- reference standards are fit for purpose;
+- the system is evaluated in clinically relevant conditions;
+- deployed performance is monitored.</p>
+<p><strong>CHAI Applied Model Card</strong> (draft v0.1, 2024) [V]:
+- a release-level card covering safety/reliability, fairness and usefulness;
+- the card is re-issued on any change of use, risk, metric or structure.</p>
+<p><strong>Regulatory status notes:</strong>
+- <strong>ONC HTI-1 model-card requirements</strong> are proposed for removal under HTI-5 [S], so they should not
+    be cited as binding.
+- <strong>SR 11-7 model risk management</strong> is useful as an analogy only (independent validation, ongoing
+    monitoring). It was reportedly rescinded in 2026 [S].</p>
+<h3 id="22-de-identification-standards">2.2 De-identification standards</h3>
+<ul>
+<li><strong>45 CFR 164.514(b) Safe Harbor</strong> [V]:<ul>
+<li>removes the 18 identifier types, including all date elements except the year, ages over 89,
+    geography below state, and the first three ZIP digits under the population rule;</li>
+<li>Expert Determination requires a "very small" re-identification risk, with <strong>no numeric
+    threshold</strong>.</li>
+</ul>
+</li>
+<li><strong>45 CFR 164.514(c)</strong> [V]: a re-identification code must <strong>not be derived from or related to
+    information about the individual</strong>, and the mechanism must not be disclosed.</li>
+<li><strong>NIST SP 800-188 (2023)</strong> [V]:<ul>
+<li>de-identification software must be verified for correctness, <strong>containment</strong> (no leaks "in
+    expected or unexpected ways"), usability, efficiency, scalability, <strong>repeatability</strong> and
+    transparency;</li>
+<li>lookup-table pseudonyms "must be randomly assigned", and the table must be highly protected;</li>
+<li>tests should use conspicuously non-natural fakes such as "FIRSTNAME1".</li>
+</ul>
+</li>
+<li><strong>HITRUST</strong> de-identification framework [S]: the organisation must define its own thresholds
+    and governance.</li>
+<li><strong>NIST SP 800-38G Rev.1</strong> (FF1 format-preserving encryption, 2nd draft, 2025) [V]: FF3 is
+    removed and the minimum domain is 10⁶. Ages and day-of-month fields are therefore not FF1
+    domains.</li>
+</ul>
+<h3 id="23-how-production-de-identification-services-are-built-and-documented">2.3 How production de-identification services are built and documented</h3>
+<ul>
+<li><strong>Google Sensitive Data Protection / Healthcare API</strong> [V]:<ul>
+<li><em>inspection</em> config (infoTypes, custom detectors, exclusion and hotword rules, likelihood) is
+    separated from <em>de-identification</em> config (transformations);</li>
+<li>reusable templates;</li>
+<li>a version field on infoTypes, though templates themselves are not versioned. That is a gap we
+    should not copy.</li>
+</ul>
+</li>
+<li><strong>AWS Comprehend Medical DetectPHI</strong> [V]: returns <code>ModelVersion</code> and a confidence score on every
+    response.</li>
+<li><strong>AWS Transcribe PII redaction</strong> [V]: "does not meet the requirements for de-identification
+    under HIPAA".</li>
+<li><strong>Azure Health Data Services de-identification</strong> [V]:<ul>
+<li>its <strong>primary release criterion is recall</strong>, with a goal above 95% (entity-level, fuzzy
+    matching);</li>
+<li>it warns that "small datasets, synthetic data, and tests that don't reflect your end-to-end
+    scenario are unlikely to sufficiently represent your production performance";</li>
+<li>it prefers surrogates, but warns that <strong>consistent surrogation over large batches degrades
+    privacy</strong>;</li>
+<li>it is not recommended for real-time transcription.</li>
+</ul>
+</li>
+<li><strong>presidio-research</strong> [V]: span (IoU) and token evaluators, F2, and a hierarchy-aware entity
+    mapper. Suitable as an independent cross-check of our scorer.</li>
+<li><strong>Presidio itself</strong> [V, source]:<ul>
+<li><code>AnalyzerEngine.analyze()</code> drops results below threshold, then drops results contained in a
+    same-type result, so evidence is lost;</li>
+<li><code>AnalyzerEngineProvider</code> <strong>silently falls back to defaults</strong> when the config file is missing;</li>
+<li><code>log_decision_process=True</code> writes raw entity text to a logger.</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-de-identification-literature">2.4 De-identification literature</h3>
+<p><strong>Architecture size:</strong>
+- One model plus rules plus dictionaries is the proven size: the i2b2 2014 winner (Yang &amp;
+    Garibaldi 2015) [S] and Dehghan 2015 [V].
+- <strong>Ensembles add 1.1–1.5 F1 and no recall</strong> (Kim, Heider &amp; Meystre 2020) [V].
+- Rules plus dictionaries can reach 99%+ recall at roughly 78% precision (Philter, Norgeot 2020)
+    [V].
+- A hybrid beats the same NER model alone by about 10% (Kocaman 2023) [V].</p>
+<p><strong>Patient-specific dictionaries</strong> work: CRIS reached P 98.8 / R 97.6 (Fernandes 2013) [V].
+Propagating confident detections to every mention also helps (Dehghan 2015).</p>
+<p><strong>Generalisation:</strong>
+- Expect <strong>10–20 points lower at a new site</strong>: Yang 2019 fell from 0.955 to 0.857 F1 [V].
+- Local fine-tuning plateaus at about 700 notes (Yang 2020) [V].
+- Synthetic PHI overstates performance (Yeniterzi 2010) [S].</p>
+<p><strong>Speech (ASR):</strong> word error rate on PHI words was 41.8%, and recall of an i2b2-trained model on
+conversational transcripts was 0.37. Of the false negatives, 45% were caused by ASR and 50% by NER
+(Cohn 2019) [V].</p>
+<p><strong>Residual risk:</strong>
+- Every method leaves residual identifiers.
+- Realistic surrogates hid about 90% of leaked identifiers (Carrell 2013) [V], and motivated
+    attackers found only 26.8% of leaked PII (Carrell 2020) [V].
+- Consistent replacement turns tiny token miss rates into large document-level leakage
+    (Osborne 2025) [V].
+- Presidio uncustomised on clinical notes scored only P 0.51 / R 0.74 (Alrazihi 2025) [S].</p>
+<h3 id="25-evaluation-methodology">2.5 Evaluation methodology</h3>
+<p><strong>i2b2/n2c2 2014</strong> [V]:
+- strict and relaxed entity matching;
+- binary token-level PHI recall;
+- HIPAA-only and full label sets reported separately;
+- double annotation plus adjudication, with inter-annotator agreement of token F1 0.93 and entity
+    F1 0.895.</p>
+<p><strong>Small-sample statistics:</strong>
+- <strong>Rule of three</strong> (Hanley 1983) [S]: zero misses in n gives a 95% upper bound of about 3/n on
+    the miss rate. About 300 mentions per category are needed to bound the miss rate below 1%.
+- Use a <strong>cluster bootstrap over documents</strong> (tokens within a document are correlated).
+- Use Wilson or Clopper-Pearson intervals for proportions.
+- Use <strong>paired approximate randomisation</strong> to compare system versions (Dror 2018) [S].</p>
+<p><strong>Behavioural testing with CheckList</strong> (Ribeiro 2020) [V]:
+- <em>minimum functionality</em> tests (MFT);
+- <em>invariance</em> tests (INV);
+- <em>directional</em> tests (DIR).</p>
+<p>They find failures that held-out accuracy misses.</p>
+<p><strong>Documentation:</strong> model cards (Mitchell 2019) and datasheets (Gebru 2021) [S].</p>
+<h3 id="26-mlops-reliability-and-security">2.6 MLOps, reliability and security</h3>
+<ul>
+<li><strong>ML Test Score</strong> (Breck 2017) [V abstract]:<ul>
+<li>check the model before serving (startup self-test on canary data);</li>
+<li>monitor the deployed model;</li>
+<li>make readiness the <em>minimum</em> across test areas.</li>
+</ul>
+</li>
+<li>
+<p><strong>Fail-safe controls in NIST SP 800-53</strong> [V]:</p>
+<ul>
+<li>SC-24: fail in a known state;</li>
+<li>SI-17: fail-safe procedures;</li>
+<li>SI-11: error messages carry no sensitive information.</li>
+</ul>
+<p>No vendor documents "fail-closed redaction" explicitly, so these generic controls are the basis.
+- <strong>Latency targets are set as p50/p95/p99, not means.</strong> Load, soak and cold-start testing are
+standard (Google SRE) [S].
+- <strong>Document size limits:</strong> Azure accepts 50 KB per request and AWS 20 KB per call [V]. Inputs
+beyond the limit must be rejected or split, <strong>never silently truncated</strong>.
+- <strong>HIPAA technical safeguards</strong> (45 CFR 164.312) [V]: access control, audit controls, integrity,
+transmission security.
+- <strong>Logs</strong> may hold only <em>keyed</em> hashes. Plain hashes of a DOB or SSN can be brute-forced.
+- <strong>Production leak monitoring</strong> is emerging practice, not standardised. It covers detection-rate
+control charts, sentinel canary records sent through the real path, an outbound payload scan,
+and sampled human review.</p>
+</li>
+</ul>
+<h3 id="27-unsettled-in-industry-to-be-raised-with-stakeholders">2.7 Unsettled in industry, to be raised with stakeholders</h3>
+<ul>
+<li>What numeric recall thresholds to adopt.</li>
+<li>How to calibrate de-identification confidence scores.</li>
+<li>How to monitor leaks in production.</li>
+<li>The right scope for consistent tokens.</li>
+<li>Whether a PHI-minimised payload sent to a BAA-covered LLM needs Expert Determination. It is
+    generally <em>not</em> legally "de-identified". This is a legal question.</li>
+</ul>
+<hr />
+<h2 id="3-recommended-production-grade-architecture">3. Recommended production-grade architecture</h2>
+<pre><code>            ┌───────────────────────────── RUNTIME (shipped) ──────────────────────────────────────┐
+config/  ─► │ ConfigLoader: compose → env overlay → calibrated overlay → strict schema → resolved   │
+(layered,   │   JSON + SHA-256 → startup self-test on sentinel text  (refuse to start on failure)    │
+ hashed)    │                                                                                       │
+            │ DetectionRequest ─► Guard (language, size limit, deadline budget)                     │
+            │   ─► TextViews (normalizers; exact offset maps; approximate views = evidence only)    │
+            │   ─► Presidio EvidenceAnalyzer (all evidence kept; no built-in filtering)             │
+            │        declarative pattern recognizers │ conversational rules │ scoped registry       │
+            │        ModelRecognizerAdapter (production | shadow) │ Presidio predefined (optional)  │
+            │   ─► Policy: entity catalog, thresholds (entity × model × modality), exclusions       │
+            │   ─► Reconciliation: union, word expansion, precedence, subtype refinement           │
+            │   ─► DetectionResponse (stamped: config/model/code/catalog versions)                 │
+            │   ─► Redaction (operators per entity) ─► TokenVault (encrypted, scoped, audited)      │
+            │   ─► Outbound guard (independent rules+registry re-scan; block on direct-ID hit)      │
+            │ Fail-closed handler: any error/timeout/oversize/config/vault failure → BLOCK          │
+            │   (or configured conservative fallback) — never pass-through                          │
+            │ Telemetry: PHI-free structured logs, metrics, detection-rate counters                 │
+            └───────────────────────────────────────────────────────────────────────────────────────┘
+            ┌──────────────────────── EVALUATION (separate package, never shipped) ─────────────────┐
+            │ dataset manifests (roles, hashes, PHI class) · contamination checks · evaluation ledger │
+            │ tiers T0–T8 (unit … release … monitoring) · prompt suite · CheckList suites           │
+            │ scorer: leak view · strict/relaxed entity · document level · CIs · strata             │
+            │ stage attribution · source-group attribution · ablation · redaction validation        │
+            │ gate runner (gates.yaml → go/no-go) · regression baselines · system card, datasheets  │
+            └───────────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Principles</strong></p>
+<ol>
+<li><strong>Policy is separate from mechanism.</strong><ul>
+<li>Entity behaviour (enablement, risk tier, thresholds, actions) lives in configuration.</li>
+<li>Recognizers only declare which entities they can emit.</li>
+</ul>
+</li>
+<li><strong>Runtime and evaluation are separate packages.</strong><ul>
+<li>Gold labels, gate thresholds and datasets never reach the engine.</li>
+<li>An import rule enforces this.</li>
+</ul>
+</li>
+<li><strong>Fail closed by default,</strong> proven by fault injection.</li>
+<li><strong>Every artifact is versioned and stamped.</strong> Every response and report carries the config
+    hash, model weight hash, code commit and catalog version.</li>
+<li><strong>Gate on recall lower bounds</strong> per risk tier and modality. Also gate on document-level
+    sanitisation, regression, behavioural, security and performance results. Any single failure
+    means no-go.</li>
+<li><strong>Detection and redaction are judged independently.</strong> Residual PHI is measured on the
+    <em>output</em>.</li>
+</ol>
+<hr />
+<h2 id="4-current-architecture-assessment">4. Current architecture assessment</h2>
+<p>This is what exists today, verified by read-only inspection.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Implemented</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contracts</td>
+<td>Pydantic <code>DetectionRequest</code>, <code>DetectionResponse</code>, <code>DetectionEvidence</code>, <code>Detection</code>, <code>RedactionRequest</code>, <code>RedactionResponse</code>, <code>GoldDocument</code>, <code>EntityOutcome</code>, <code>EvaluationRecord</code>. Original-text <code>[start, end)</code> coordinates.</td>
+<td><strong>Keep.</strong> Extend additively.</td>
+</tr>
+<tr>
+<td>Engine</td>
+<td><code>PHIEngine.analyze</code>, <code>redact(RedactionRequest)</code>, <code>restore</code>. English-only profile. Process-wide model cache. Config hash in every response.</td>
+<td><strong>Keep.</strong> Add fail-closed handling, stamping and telemetry.</td>
+</tr>
+<tr>
+<td>Detection</td>
+<td>Rule families, six conversational rules, scoped registry (exact / normalised / fuzzy), OBI adapter (pinned revision), Presidio predefined recognizers (off). Presidio filtering bypassed.</td>
+<td><strong>Keep.</strong> Move entity tables and keywords to config. Add declarative patterns.</td>
+</tr>
+<tr>
+<td>Normalization</td>
+<td>Six versioned normalizers. Exact segment maps. Approximate mappings cannot drive redaction.</td>
+<td><strong>Keep.</strong></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>Threshold precedence with recorded source. Type precedence, subtype refinement (full-span only), allow-list, REVIEW band.</td>
+<td><strong>Keep.</strong> Add modality dimension and per-entity actions.</td>
+</tr>
+<tr>
+<td>Redaction</td>
+<td>Presidio AnonymizerEngine. REDACT / TOKENIZE / PSEUDONYMIZE / ENCRYPT. Token map not in responses.</td>
+<td>Vault <strong>not production-safe</strong> (G-04).</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>One YAML file plus a generated calibrated overlay. Presets, request allow-lists, CLI overrides. Generated responsibility matrix.</td>
+<td><strong>Monolithic.</strong> No strict schema, no environment layers. Entity behaviour partly in code (G-06, G-08).</td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>Dataset adapter (request plus separate gold, English filter). Residual-PHI scorer. Seven failure outcomes. Dev-only calibration that refuses test data. Ablation ladder. <code>harness.phi.analyze</code> (file, directory or JSONL; optional gold; HTML/MD report).</td>
+<td>Good base. <strong>No confidence intervals, strict/relaxed scoring, manifests, ledger, contamination checks, redaction validation or full stage tree</strong> (G-09 to G-13).</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>132 passing: contract, threshold precedence, evidence chain, offsets, privacy of responses and logs on tested paths, determinism, batch vs single.</td>
+<td>No fault-injection, performance, behavioural or regression-baseline tiers.</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>Engine contract, Presidio architecture, manual evaluation, rule changelog, research notes.</td>
+<td>No annotation guidelines, gates doc, security doc or system card.</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Fabricated Cadence-realistic dev and test sets (English subset: dev 38+27 documents, test 54+38). Simulated ASR (TTS → phone channel → Whisper).</td>
+<td><strong>Engineering evidence only.</strong> No real governed data (G-03).</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="5-production-gap-analysis">5. Production-gap analysis</h2>
+<p><strong>Priority levels</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Critical</strong></td>
+<td>Blocks any production claim, or is a safety or audit hole.</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>Required for a production-grade harness.</td>
+</tr>
+<tr>
+<td><strong>Medium</strong></td>
+<td>Maintainability and operations.</td>
+</tr>
+<tr>
+<td><strong>Low</strong></td>
+<td>Nice to have.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Gap (what is missing or not production-grade)</th>
+<th>Current state</th>
+<th>Why it matters</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G-01</td>
+<td>No version control</td>
+<td>Repository is not a git repo. No commit to stamp, no change history.</td>
+<td>Auditability, reproducibility and change management are impossible (AI RMF MEASURE 2.1; SP 800-188 repeatability).</td>
+<td><strong>Critical</strong></td>
+</tr>
+<tr>
+<td>G-02</td>
+<td>Fail-closed behaviour undefined and untested</td>
+<td>Exceptions propagate. No timeouts, no input-size limit, no startup self-test, no fallback policy.</td>
+<td>A shield must fail in a known safe state (SC-24, SI-17). Pass-through or silent truncation is the worst failure.</td>
+<td><strong>Critical</strong></td>
+</tr>
+<tr>
+<td>G-03</td>
+<td>No release evidence or gates</td>
+<td>All data fabricated. Gold single-authored. No inter-annotator agreement, no CIs, no gate definitions.</td>
+<td>"Production ready" cannot be decided (MEASURE 2.3; Azure TN).</td>
+<td><strong>Critical</strong></td>
+</tr>
+<tr>
+<td>G-04</td>
+<td>Token vault not production-safe</td>
+<td>In-memory only. Not encrypted, no access audit. Pseudonym key falls back to random (inconsistent). Consistency scope fixed at document.</td>
+<td>164.514(c); SP 800-188 table protection. Restore must work across processes.</td>
+<td><strong>Critical</strong> (production path)</td>
+</tr>
+<tr>
+<td>G-05</td>
+<td>No outbound payload guard</td>
+<td>Nothing re-scans sanitised text before the LLM call.</td>
+<td>Last line of defence; the only end-to-end leak control that needs no labels.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-06</td>
+<td>Entity behaviour hard-coded</td>
+<td>Taxonomy, high-risk list, title / ID-affix / edge-word lists, rule-family→entity and registry-kind→entity tables, ID and DOB context keywords, token formats all live in Python.</td>
+<td>Adding, disabling or modifying an entity should not need code.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-07</td>
+<td>HIPAA Safe Harbor mapping incomplete</td>
+<td>No catalog mapping. AGE &gt; 89, license/certificate, vehicle, device, IP and fax have no explicit entity or recognizer. SSN and health-plan IDs are folded into other labels.</td>
+<td>Coverage claims must trace to the 18 identifiers.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-08</td>
+<td>Configuration architecture</td>
+<td>Single mixed-ownership file. Custom validation on raw dicts. No environment overlays. No threshold provenance. Evaluation presets ship in runtime config.</td>
+<td>Maintainability, review, safe production overrides. Presidio's silent-default risk.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-09</td>
+<td>Evaluation methodology incomplete</td>
+<td>No strict/relaxed entity scoring, no document-level rate with CI, no token-level binary recall, no CIs, no paired tests, no strata by length / document type / subgroup.</td>
+<td>Industry-standard reporting; honest small-sample statistics.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-10</td>
+<td>Gold and test-data management</td>
+<td>Hashes recorded, but no manifest of roles, provenance, PHI class or access. No annotation guidelines in the repo. No double annotation or agreement measurement. No gold versioning. Dev/test separation by convention. No contamination checks. No log of test-set access.</td>
+<td>Prevents leakage and overfitting to the test set. Required for TEVV.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-11</td>
+<td>No behavioural (CheckList) suites</td>
+<td>Unit tests and fabricated corpora only.</td>
+<td>Systematic format, invariance and directional coverage; cheap regression.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-12</td>
+<td>Redaction not validated independently of detection</td>
+<td>Residual computed from detection coverage.</td>
+<td>Detection and redaction failures are conflated.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-13</td>
+<td>Failure attribution incomplete</td>
+<td>Seven outcomes. No <code>normalization_failure</code> or <code>redaction_failure</code>. Coarse source groups. No marginal ablation in reports.</td>
+<td>Exact failed stage and component cannot be named.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-14</td>
+<td>PHI-free logging not enforced</td>
+<td>Discipline only. No log filter or allow-listed structured logging. Log-grep tests cover some paths only.</td>
+<td>One stray log call leaks PHI.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-15</td>
+<td>No performance or reliability testing</td>
+<td>Per-request timings only.</td>
+<td>p50/p95/p99 per stage, throughput, soak, cold start, chunk-boundary behaviour are all unmeasured.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-16</td>
+<td>No modality-specific policy</td>
+<td>Thresholds by model × entity only.</td>
+<td>ASR needs its own operating points and gates (Cohn 2019; vendors).</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>G-17</td>
+<td>Runtime and evaluation mixed in one package</td>
+<td><code>harness/phi</code> holds engine and evaluation; the legacy benchmark sits alongside.</td>
+<td>Runtime could import gold or evaluation code. Review boundaries. Image size.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-18</td>
+<td>No monitoring hooks</td>
+<td>No metrics export, detection-rate counters, canaries or shadow mode.</td>
+<td>Regression detection in production without labels.</td>
+<td><strong>Medium</strong> (High before go-live)</td>
+</tr>
+<tr>
+<td>G-19</td>
+<td>No system card or datasheets</td>
+<td>Results files only.</td>
+<td>Transparency; re-issue on change (CHAI).</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-20</td>
+<td>No model integrity check</td>
+<td>Revision pinned. Weight hash neither verified nor stamped.</td>
+<td>Supply-chain integrity; reproducibility.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-21</td>
+<td>Cross-device determinism unverified</td>
+<td>Same-device determinism tested. CPU vs MPS/GPU not tested. Torch determinism flags not set.</td>
+<td>Repeatability.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-22</td>
+<td>Registry matching parameters in code</td>
+<td>Fuzzy limits, nicknames, particles, capitalisation rule.</td>
+<td>Configurability; reviewable registry policy.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-23</td>
+<td>Dependency pinning and egress not enforced</td>
+<td><code>requirements.txt</code> without hashes. Offline mode via an environment variable only. No socket-block test.</td>
+<td>Supply chain; a no-egress guarantee.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>G-24</td>
+<td>Inert Spanish code paths</td>
+<td>Out-of-scope branches in shared rules.</td>
+<td>Clarity and attack surface.</td>
+<td><strong>Low</strong></td>
+</tr>
+<tr>
+<td>G-25</td>
+<td>No independent metric cross-check</td>
+<td>Our scorer only.</td>
+<td>Verification of metric code (presidio-research).</td>
+<td><strong>Low</strong></td>
+</tr>
+<tr>
+<td>G-26</td>
+<td>GEOGRAPHIC_CONTEXT has no recognizer</td>
+<td>Covered only incidentally by address and city spans.</td>
+<td>Quasi-identifier gap.</td>
+<td><strong>Low</strong> (unless gates require it)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Keep as is:</strong>
+- the contracts and evidence chain;
+- the original-coordinate guarantee;
+- the Presidio filter bypass;
+- recording which config key supplied each threshold;
+- dev-only calibration that refuses test data;
+- redaction kept separate from detection;
+- <code>harness.phi.analyze</code>;
+- the responsibility matrix (to be generated from the catalog).</p>
+<hr />
+<h2 id="6-configuration-architecture">6. Configuration architecture</h2>
+<h3 id="61-recommendation">6.1 Recommendation</h3>
+<p><strong>Split configuration by owner and change cadence, then compose it into one resolved, strictly
+validated, hashed artifact. Evaluation configuration stays out of the runtime.</strong></p>
+<p>This follows four precedents:
+- Google DLP's inspect/de-identify split;
+- Hydra-style ordered composition;
+- Kustomize-style base-plus-overlay environments;
+- Presidio's own pydantic validation, without its silent default fallback.</p>
+<p><strong>Why not one file:</strong>
+- every change becomes a mixed-ownership diff (privacy policy vs detector mechanics);
+- environment differences can't be restricted;
+- evaluation settings leak into production.</p>
+<p><strong>Why not many unconnected files:</strong> behaviour becomes unauditable unless the files compose into
+one hashed artifact.</p>
+<h3 id="62-layout">6.2 Layout</h3>
+<pre><code>configs/phi/                               # RUNTIME configuration (shipped)
+  phi.yaml                                 # composition root: schema version, ordered includes, active environment
+  entities.yaml                            # ENTITY CATALOG — owner: privacy/compliance
+  recognizers/
+    patterns.yaml                          # declarative pattern recognizers (regex, context words, named validators)
+    contextual.yaml                        # conversational/ASR recognizers: keywords, guards, scores
+    registry.yaml                          # registry kinds → entities; exact/normalized/fuzzy parameters; nicknames
+    external.yaml                          # Presidio predefined recognizers + entity_map (off by default)
+    exclusions.yaml                        # allow-list / deny-list / exclusion rules (incl. medical-term safe list)
+  models.yaml                              # production model(s): key, revision, weight sha256, label mapping, chunking,
+                                           #   device, candidate floor, mode: production | shadow | disabled
+  normalization.yaml                       # normalizers (versions, mapping quality) + named profiles
+  reconciliation.yaml                      # precedence, type refinements, word-expansion rule
+  policy/
+    thresholds.yaml                        # default / model / entity / model×entity × modality, each with provenance
+    redaction.yaml                         # action per entity or risk tier, token format, consistency scope, surrogates
+    failure.yaml                           # fail-closed mode per failure class, deadlines, max input size
+    profiles.yaml                          # policy profiles (cadence_default, research, …)
+  environments/
+    base.yaml   dev.yaml   test.yaml   prod.yaml      # restricted overlays (allow-listed keys only)
+  generated/                               # written ONLY by tools, never by hand
+    thresholds_calibrated.yaml             # from `calibrate` on dev data, with provenance
+    entity_responsibility.yaml             # from the matrix generator
+configs/eval/                              # EVALUATION configuration (never shipped, never loaded by the engine)
+  datasets.yaml                            # manifests: id, path, sha256, role, provenance, PHI class, access class, license
+  suites.yaml                              # behavioural / prompt / fault-injection / performance suite definitions
+  gates.yaml                               # release gates (risk-owner signed) + insufficient-evidence rules
+  metrics.yaml                             # metric definitions, CI method, strata
+  presets.yaml                             # ablation presets (moved out of runtime config)
+configs/models.yaml, configs/label_mapping/      # existing research benchmark catalog (kept, research only)
+</code></pre>
+<h3 id="63-example-entity-catalog-entitiesyaml">6.3 Example: entity catalog (<code>entities.yaml</code>)</h3>
+<pre><code class="language-yaml">catalog_version: &quot;2026.10.0&quot;
+risk_tiers: {direct: &quot;uniquely identifies a person&quot;, quasi: &quot;identifies in combination&quot;, contextual: &quot;organisational context&quot;}
+entities:
+  NAME:
+    description: &quot;Name of the member (patient) or other individual referred to as the subject&quot;
+    category: person
+    hipaa_safe_harbor: [names]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    aliases: [PERSON, PATIENT_NAME]
+    subtypes: [MEMBER_NAME, PARTIAL_NAME, SPELLED_NAME]
+    core_chars: {strip_titles: [dr, mr, mrs, ms, miss, sr, sra, nurse], strip_edge_words: true}
+    outbound_guard: block
+  PHONE:
+    description: &quot;Telephone or fax number&quot;
+    category: contact
+    hipaa_safe_harbor: [telephone, fax]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [PHONE, FAX, PARTIAL_PHONE]
+    outbound_guard: block
+  DATE:
+    description: &quot;Any date element (except year) related to an individual&quot;
+    category: date
+    hipaa_safe_harbor: [dates]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE          # alternative: GENERALIZE (keep year)
+    subtypes: [ADMISSION_DATE, DISCHARGE_DATE, APPOINTMENT_DATE, PROCEDURE_DATE, SERVICE_DATE, RELATIVE_DATE]
+    core_chars: {strip_edge_words: true}
+  AGE_OVER_89:
+    description: &quot;Age above 89 and its elements (Safe Harbor)&quot;
+    category: person
+    hipaa_safe_harbor: [age_over_89]
+    risk_tier: quasi
+    enabled: false                    # opt-in until its recognizer is developed and evaluated on dev data
+</code></pre>
+<p>Every other file refers to entities by catalog id, and the schema rejects unknown ids. The engine
+reads risk tier, actions, core-character rules and outbound-guard behaviour from the catalog. These
+replace the Python constants <code>HIGH_RISK</code>, <code>DEFAULT_TITLES</code>, <code>ID_AFFIXES</code> and <code>EDGE_WORDS</code>.</p>
+<h3 id="64-example-declarative-pattern-recognizer-recognizerspatternsyaml">6.4 Example: declarative pattern recognizer (<code>recognizers/patterns.yaml</code>)</h3>
+<pre><code class="language-yaml">patterns:
+  rule_npi:
+    version: &quot;1&quot;
+    entity: NPI
+    patterns:
+      - {name: npi_keyword, regex: '(?i)\bNPI\b\W{0,3}(\d{10})\b', group: 1, score: 1.0}
+    validators: [npi_luhn]            # named validator → score_type checksum_valid
+    context: [npi, provider]
+    developed_on: [synthetic_dev]
+  rule_ssn:
+    version: &quot;1&quot;
+    entity: SSN
+    patterns:
+      - {name: ssn_dashed, regex: '\b(?!000|666|9\d\d)\d{3}-(?!00)\d{2}-(?!0000)\d{4}\b', score: 0.9}
+    context: [ssn, social security]
+    enabled: false
+</code></pre>
+<p><strong>Adding a deterministic entity needs no code:</strong>
+1. add a catalog entry;
+2. add a pattern entry;
+3. optionally add policy overrides.</p>
+<p>A test proves this. Complex families (spoken-number parsing, conversational rules) stay in code,
+but take every keyword, guard and score from <code>contextual.yaml</code>.</p>
+<h3 id="65-example-policy-files">6.5 Example: policy files</h3>
+<pre><code class="language-yaml"># policy/thresholds.yaml
+default: 0.50
+deterministic_default: 0.0
+applies_to_score_types: [model_confidence]
+model: {obi_roberta: 0.50}
+entity: {}
+model_entity:
+  obi_roberta: {NAME: 0.85, DATE: 0.85, PHONE: 0.90}
+modality:                                   # NEW: per-modality operating points
+  asr: {model_entity: {obi_roberta: {NAME: 0.60}}}
+provenance:                                 # every non-default value must cite its evidence
+  model_entity.obi_roberta.NAME: {run_id: calib-2026-10-06, datasets: [cadence_dev_text, cadence_dev_asr],
+                                  dataset_sha256: &quot;...&quot;, rule: &quot;highest threshold within 1% residual of minimum&quot;}
+
+# policy/failure.yaml
+on_model_error: block                       # block | conservative_fallback
+on_timeout: block
+on_oversize_input: reject                   # reject | split  (never truncate)
+on_vault_unavailable: block
+on_config_invalid: refuse_start
+deadline_ms: {total: 2000, model: 1500}
+max_input_chars: 50000
+startup_self_test: required
+
+# policy/redaction.yaml
+default_operator: TOKENIZE
+token_format: &quot;[{ENTITY}_{N}]&quot;
+consistency_scope: conversation             # document | conversation | member  (never global)
+per_entity: {DATE: GENERALIZE_YEAR}        # optional
+vault: {backend: encrypted_file, key_ref: env:PHI_VAULT_KEY, ttl_days: 30, audit: true}
+</code></pre>
+<h3 id="66-resolution-order-and-hashing">6.6 Resolution order and hashing</h3>
+<ol>
+<li>Composition root and its includes, in a fixed order.</li>
+<li>Environment overlay. Only allow-listed keys may change. <strong>Prod cannot lower thresholds,
+    disable a direct-identifier entity or turn off the outbound guard.</strong></li>
+<li>Generated calibrated overlay, validated against <code>provenance</code>.</li>
+<li>CLI overrides (evaluation only).</li>
+<li>Request allow-lists, which can only <strong>narrow</strong> what is enabled.</li>
+</ol>
+<p>Then strict Pydantic validation:
+- <code>extra="forbid"</code>;
+- value ranges checked;
+- references checked against the catalog;
+- the loader <strong>refuses to start</strong> if a file is missing.</p>
+<p>The validated config is serialised to canonical JSON and hashed with SHA-256. Every response and
+report is stamped with:
+- <code>config_sha256</code>
+- <code>catalog_version</code>
+- <code>code_commit</code>
+- <code>model_weight_sha256</code>
+- <code>engine_version</code></p>
+<p><code>python -m harness.phi.config validate --env prod</code> prints the resolved hash.</p>
+<h3 id="67-threshold-precedence-current-order-kept-plus-modality">6.7 Threshold precedence (current order kept, plus modality)</h3>
+<p>For <code>model_confidence</code> evidence, the most specific setting wins:</p>
+<pre><code>model×entity×modality &gt; model×entity &gt; entity×modality &gt; entity &gt; model &gt; recognizer &gt; default
+</code></pre>
+<p>Deterministic and registry evidence keeps its own semantics: <code>recognizer &gt; deterministic_default</code>.
+Entity and model ML thresholds never suppress deterministic or registry evidence.</p>
+<h3 id="68-migration">6.8 Migration</h3>
+<ul>
+<li><code>configs/phi_harness.yaml</code> stays readable.</li>
+<li><code>python -m harness.phi.config migrate</code> splits it into the new layout.</li>
+<li>An equivalence test asserts that old and new layouts produce identical detections on the
+    regression corpus.</li>
+</ul>
+<hr />
+<h2 id="7-phi-entity-strategy">7. PHI entity strategy</h2>
+<h3 id="71-entities-and-detection-responsibility">7.1 Entities and detection responsibility</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Entity (canonical)</th>
+<th>HIPAA Safe Harbor</th>
+<th>Risk tier</th>
+<th>Evaluation subtypes</th>
+<th>Detection sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NAME</td>
+<td>names</td>
+<td>direct</td>
+<td>MEMBER_NAME, PARTIAL_NAME, SPELLED_NAME</td>
+<td>registry (exact, fuzzy), OBI, titled-name rule, spelled-name rule (spoken)</td>
+</tr>
+<tr>
+<td>RELATIVE_NAME</td>
+<td>names</td>
+<td>direct</td>
+<td>SPOUSE_NAME, PARENT_NAME, CHILD_NAME, CAREGIVER_NAME</td>
+<td>OBI (primary), registry contacts</td>
+</tr>
+<tr>
+<td>CARE_TEAM_MEMBER</td>
+<td>names</td>
+<td>contextual</td>
+<td>STAFF_NAME</td>
+<td>registry staff directory, OBI (as NAME or PROVIDER; scored as compatible)</td>
+</tr>
+<tr>
+<td>PROVIDER_NAME</td>
+<td>names</td>
+<td>contextual</td>
+<td>PROVIDER</td>
+<td>registry provider directory, titled-name rule, OBI</td>
+</tr>
+<tr>
+<td>FACILITY_NAME</td>
+<td>geographic / name</td>
+<td>quasi</td>
+<td>HOSPITAL, CLINIC, PHARMACY</td>
+<td>OBI, registry facility directory</td>
+</tr>
+<tr>
+<td>ADDRESS</td>
+<td>geographic &lt; state</td>
+<td>direct</td>
+<td>STREET_ADDRESS, PO_BOX, UNIT</td>
+<td>address rule, spoken-address rule + normaliser, registry record, OBI</td>
+</tr>
+<tr>
+<td>CITY</td>
+<td>geographic &lt; state</td>
+<td>quasi</td>
+<td>–</td>
+<td>address rule, OBI, registry record</td>
+</tr>
+<tr>
+<td>STATE</td>
+<td>(allowed under Safe Harbor)</td>
+<td>contextual</td>
+<td>–</td>
+<td>address rule</td>
+</tr>
+<tr>
+<td>ZIP</td>
+<td>geographic</td>
+<td>quasi</td>
+<td>ZIP_CODE, SPOKEN_ZIP</td>
+<td>ZIP rule, spoken digits + spoken-ZIP rule, registry record</td>
+</tr>
+<tr>
+<td>GEOGRAPHIC_CONTEXT</td>
+<td>geographic &lt; state</td>
+<td>quasi</td>
+<td>LANDMARK, NEIGHBORHOOD</td>
+<td><strong>none</strong> (gap G-26)</td>
+</tr>
+<tr>
+<td>DOB</td>
+<td>dates</td>
+<td>direct</td>
+<td>SPOKEN_DOB</td>
+<td>date rule with DOB context, spoken-DOB rule, registry DOB (incl. spoken forms), OBI</td>
+</tr>
+<tr>
+<td>DATE</td>
+<td>dates</td>
+<td>quasi</td>
+<td>ADMISSION / DISCHARGE / APPOINTMENT / PROCEDURE / SERVICE / RELATIVE</td>
+<td>date rule, ordinal-date rule + spoken-dates normaliser, OBI</td>
+</tr>
+<tr>
+<td>AGE_OVER_89 <em>(new, opt-in)</em></td>
+<td>ages &gt; 89</td>
+<td>quasi</td>
+<td>–</td>
+<td>new rule (ages ≥ 90 with age context)</td>
+</tr>
+<tr>
+<td>PHONE</td>
+<td>telephone, fax</td>
+<td>direct</td>
+<td>FAX, PARTIAL_PHONE, SPOKEN_PHONE</td>
+<td>phone rule, spoken-number rule, spoken-ID / partial-phone rules, registry, OBI</td>
+</tr>
+<tr>
+<td>EMAIL</td>
+<td>email</td>
+<td>direct</td>
+<td>SPOKEN_EMAIL</td>
+<td>email rule, spoken-email normaliser, spelled-name (EMAIL) rule, registry record</td>
+</tr>
+<tr>
+<td>URL</td>
+<td>URLs</td>
+<td>direct</td>
+<td>–</td>
+<td>email/URL rule</td>
+</tr>
+<tr>
+<td>IP_ADDRESS <em>(new)</em></td>
+<td>IP address</td>
+<td>direct</td>
+<td>–</td>
+<td>pattern (IPv4/IPv6); optional Presidio IpRecognizer</td>
+</tr>
+<tr>
+<td>SSN <em>(new)</em></td>
+<td>SSN</td>
+<td>direct</td>
+<td>–</td>
+<td>pattern + context (currently folded into OTHER_UNIQUE_ID); optional Presidio UsSsnRecognizer</td>
+</tr>
+<tr>
+<td>MRN</td>
+<td>medical record numbers</td>
+<td>direct</td>
+<td>SPOKEN_MRN</td>
+<td>keyword-ID rule, spoken-ID rule, registry identifiers</td>
+</tr>
+<tr>
+<td>MEMBER_ID</td>
+<td>health plan beneficiary numbers</td>
+<td>direct</td>
+<td>HEALTH_PLAN_ID, POLICY_ID, MBI, SPOKEN_MEMBER_ID</td>
+<td>keyword-ID rule, spoken-ID rule, registry; optional Presidio UsMbiRecognizer</td>
+</tr>
+<tr>
+<td>ACCOUNT_ID</td>
+<td>account numbers</td>
+<td>direct</td>
+<td>–</td>
+<td>keyword-ID rule, spoken-ID rule</td>
+</tr>
+<tr>
+<td>LICENSE_CERT_ID <em>(new)</em></td>
+<td>certificate / license numbers</td>
+<td>direct</td>
+<td>DRIVER_LICENSE, MEDICAL_LICENSE</td>
+<td>pattern + context; optional Presidio license recognizers</td>
+</tr>
+<tr>
+<td>VEHICLE_ID <em>(new)</em></td>
+<td>vehicle identifiers</td>
+<td>direct</td>
+<td>VIN, PLATE</td>
+<td>pattern + context</td>
+</tr>
+<tr>
+<td>DEVICE_ID <em>(new)</em></td>
+<td>device identifiers / serials</td>
+<td>direct</td>
+<td>SERIAL</td>
+<td>keyword-ID rule (serial / device)</td>
+</tr>
+<tr>
+<td>NPI</td>
+<td>(provider identifier)</td>
+<td>contextual</td>
+<td>–</td>
+<td>keyword-ID rule (Luhn → <code>checksum_valid</code>), registry; optional Presidio UsNpiRecognizer</td>
+</tr>
+<tr>
+<td>OTHER_UNIQUE_ID</td>
+<td>any other unique number</td>
+<td>direct</td>
+<td>CLAIM, CASE, AUTH, ORDER, GATE_CODE</td>
+<td>keyword-ID rule, spoken-ID rule, OBI</td>
+</tr>
+<tr>
+<td>EMPLOYER</td>
+<td>(context)</td>
+<td>quasi</td>
+<td>–</td>
+<td>OBI, registry employer</td>
+</tr>
+<tr>
+<td>ORGANIZATION</td>
+<td>(context)</td>
+<td>contextual</td>
+<td>SCHOOL, AGENCY</td>
+<td>OBI</td>
+</tr>
+<tr>
+<td>LANGUAGE</td>
+<td>(context)</td>
+<td>contextual</td>
+<td>–</td>
+<td>preferred-language rule</td>
+</tr>
+</tbody>
+</table></div>
+<p>Biometric identifiers and full-face photos are out of scope for text.</p>
+<h3 id="72-entity-policy">7.2 Entity policy</h3>
+<ul>
+<li><strong>Per entity:</strong><ul>
+<li>action (TOKENIZE / REDACT / SURROGATE / GENERALIZE_YEAR for dates);</li>
+<li>per-modality thresholds;</li>
+<li>consistency scope;</li>
+<li>outbound-guard behaviour (<code>block</code> for every direct identifier).</li>
+</ul>
+</li>
+<li><strong>New entities start <code>enabled: false</code>.</strong> They are enabled only after their recognizer is developed
+    on dev data and passes the behavioural suite. Each change is logged in the rule changelog.</li>
+<li><strong>Evaluation subtypes</strong> carry the fine-grained requirements (spouse, admission date, hospital …)
+    without growing the runtime taxonomy. Reports cover every canonical entity <em>and</em> every subtype.</li>
+<li><strong>The generated responsibility matrix flags:</strong><ul>
+<li>entities with no enabled recognizer;</li>
+<li>entities with a single point of failure;</li>
+<li>mismatches between <em>expected</em> and <em>actual</em> source in evaluation.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="8-recognizer-and-model-strategy">8. Recognizer and model strategy</h2>
+<ul>
+<li><strong>Deterministic rules.</strong><ul>
+<li>Simple families move to declarative <code>patterns.yaml</code>.</li>
+<li>Validators are chosen by name (<code>luhn</code>, <code>npi_luhn</code>, <code>date_valid</code>).</li>
+<li>Complex parsers (spoken numbers) stay in code, with their parameters in configuration.</li>
+</ul>
+</li>
+<li><strong>Conversational / ASR rules</strong> stay in code.<ul>
+<li>Keywords, guards and scores move to <code>contextual.yaml</code>.</li>
+<li>Each rule is developed on dev data only and logged in <code>docs/rule_changelog.md</code>.</li>
+</ul>
+</li>
+<li><strong>Registry.</strong><ul>
+<li>Matching parameters move to <code>registry.yaml</code>.</li>
+<li>Access stays scoped to the subject plus versioned directories.</li>
+<li>Each lookup is audited by subject id and directory version, never content.</li>
+<li>Each match records <code>match_type</code>, <code>registry_type</code> and <code>registry_version</code>.</li>
+</ul>
+</li>
+<li><strong>One production model: OBI RoBERTa</strong>, behind the generic <code>ModelRecognizerAdapter</code>.<ul>
+<li>The weight SHA-256 is verified at load; a mismatch fails closed.</li>
+<li>Revision and hash are stamped on every response.</li>
+<li><code>mode: production | shadow | disabled</code>. Shadow evidence is recorded and evaluated but never
+    changes a decision, so a future model can be trialled without risk.</li>
+<li>Stanford V2 and MedNotes GLiNER remain experimental adapters.</li>
+</ul>
+</li>
+<li><strong>Recognizer contract tests</strong> that every recognizer must pass:<ul>
+<li>never mutates text;</li>
+<li>spans stay within bounds;</li>
+<li>emits declared entities only;</li>
+<li>deterministic;</li>
+<li>within its time budget on the long-document fixture.</li>
+</ul>
+</li>
+<li>
+<p><strong>Model-change protocol:</strong></p>
+<ol>
+<li>shadow run;</li>
+<li>paired approximate-randomisation comparison on the release set;</li>
+<li>all gates;</li>
+<li>system card re-issued.</li>
+</ol>
+<p>A second production model requires the pre-registered materiality protocol. The literature shows
+ensembles add no recall (§2.4).</p>
+</li>
+</ul>
+<hr />
+<h2 id="9-evaluation-and-testing-strategy-tevv">9. Evaluation and testing strategy (TEVV)</h2>
+<h3 id="91-test-tiers">9.1 Test tiers</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Data</th>
+<th>Purpose</th>
+<th>When</th>
+<th>Gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T0 unit / contract</td>
+<td>inline fixtures</td>
+<td>component correctness; contract invariants</td>
+<td>every change</td>
+<td>must pass</td>
+</tr>
+<tr>
+<td>T1 behavioural (CheckList)</td>
+<td>template-generated, conspicuous fakes (SP 800-188)</td>
+<td><strong>MFT:</strong> every format of every entity (Safe Harbor coverage). <strong>INV:</strong> case, punctuation, fillers, ASR lowercase, homoglyphs, PHI across 512-token chunk boundaries, name-origin swaps, repeated or adjacent PHI. <strong>DIR:</strong> hotwords raise evidence; negative contexts don't redact.</td>
+<td>every change (fast: rules and registry); nightly (with OBI)</td>
+<td>G5</td>
+</tr>
+<tr>
+<td>T2 prompt suite</td>
+<td>curated fabricated prompts with expected inventories (§10)</td>
+<td>expected vs actual; stage attribution; regression baseline</td>
+<td>every change (fast subset), nightly</td>
+<td>G4</td>
+</tr>
+<tr>
+<td>T3 dataset evaluation</td>
+<td><code>cadence_dev</code> / <code>cadence_test</code> / holdout (fabricated)</td>
+<td>engineering evidence; dev-only calibration; ablations</td>
+<td>on demand; every test-set run logged</td>
+<td>informational</td>
+</tr>
+<tr>
+<td>T4 release evaluation</td>
+<td><strong>real governed Cadence data</strong>: double-annotated, adjudicated, agreement reported, stratified</td>
+<td>the only go-live evidence</td>
+<td>per release candidate</td>
+<td>G1–G3, G6</td>
+</tr>
+<tr>
+<td>T5 fault injection</td>
+<td>synthetic</td>
+<td>fail-closed on model load failure, timeout, oversized input, invalid config, vault down, recognizer exception, registry store down</td>
+<td>every change</td>
+<td>G7</td>
+</tr>
+<tr>
+<td>T6 security / privacy</td>
+<td>synthetic sentinels</td>
+<td>no PHI in logs, masked outputs or caches; no network egress; vault encryption and audit; missing key handled</td>
+<td>every change</td>
+<td>G7</td>
+</tr>
+<tr>
+<td>T7 performance / reliability</td>
+<td>synthetic, bucketed by length</td>
+<td>p50/p95/p99 per stage and end to end; 1× and 2× peak throughput; one-hour soak; cold start; determinism across runs and devices</td>
+<td>nightly, each release</td>
+<td>G8</td>
+</tr>
+<tr>
+<td>T8 production monitoring</td>
+<td>live, no labels</td>
+<td>detection-rate control charts per entity × modality; sentinel canaries; outbound-guard hit rate; shadow disagreement; human-review sampling</td>
+<td>continuous</td>
+<td>G9</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="92-metrics">9.2 Metrics</h3>
+<p>Every metric is defined in <code>configs/eval/metrics.yaml</code> and computed from the same predictions.</p>
+<p><strong>Core definitions</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core characters</td>
+<td>Alphanumeric characters of a gold span, excluding titles, ID affixes and edge function words, as defined in the catalog.</td>
+</tr>
+<tr>
+<td>Entity TP</td>
+<td>A gold entity overlapped by a REDACT/REVIEW detection. <strong>Full</strong> if every core character is covered.</td>
+</tr>
+<tr>
+<td>Entity FN</td>
+<td>Otherwise.</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>A detection overlapping no gold entity and no ignore region.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Three scoring views</strong></p>
+<ol>
+<li><strong>Leak view:</strong> binary character-level and token-level PHI recall. Residual PHI characters (and
+    %) are measured on the <em>redacted output</em> (§12).</li>
+<li><strong>Entity view:</strong><ul>
+<li>strict (exact span) and relaxed (any overlap / full core) recall;</li>
+<li>precision and F2 per entity, subtype and risk tier.</li>
+</ul>
+</li>
+<li><strong>Document view:</strong><ul>
+<li>fully-sanitised document rate (no direct-identifier leak);</li>
+<li>"all mentions masked" rate per entity instance.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Utility metrics:</strong>
+- over-redaction (non-PHI characters redacted);
+- spurious spans per 1,000 characters;
+- the false-positive rate on negative prompts;
+- <code>must_not_redact</code> violations.</p>
+<p><strong>Per-recognizer metrics</strong> (§11.2):
+- contributed;
+- sole catch;
+- false positives contributed;
+- marginal loss when ablated;
+- precision of accepted evidence.</p>
+<p><strong>Statistics:</strong>
+- document-level cluster bootstrap, at least 1,000 replicates, percentile 95% CI;
+- Wilson intervals for proportions;
+- the rule of three for zero-miss categories;
+- a paired approximate-randomisation test when comparing versions;
+- <strong>support below the gate minimum is reported as "insufficient evidence"</strong>.</p>
+<p><strong>Strata:</strong> entity, subtype, risk tier, modality (typed / note / dictation / telephone / ASR),
+document type, length bucket and chunk count. Name origin is added when the data allows (fairness).</p>
+<p><strong>Cross-check:</strong> presidio-research span and token evaluators on the same predictions. Any
+difference must be explained by documented definitional differences.</p>
+<h3 id="93-gold-and-test-data-management">9.3 Gold and test-data management</h3>
+<ul>
+<li>
+<p><strong>Dataset manifests</strong> (<code>configs/eval/datasets.yaml</code>) record for each dataset:</p>
+<ul>
+<li>id, path and SHA-256;</li>
+<li><strong>role</strong> (<code>dev</code>, <code>test</code>, <code>holdout</code>, <code>suite</code>, <code>release</code>, <code>regression</code>);</li>
+<li>provenance;</li>
+<li><strong>PHI class</strong> (<code>fabricated</code>, <code>public</code>, <code>real_governed</code>);</li>
+<li>access class, licence and retention date.</li>
+</ul>
+<p>Calibration and rule development read the <strong>role</strong>, never the dataset name.
+- <strong>Annotation guidelines</strong> (<code>docs/annotation_guidelines.md</code>, versioned) define:
+- entity boundaries (titles, affixes, edge words);
+- subtype rules;
+- ignore regions;
+- how to annotate ASR loss.
+- <strong>Release sets</strong> are double-annotated and adjudicated, with agreement reported as pairwise F1 on
+tokens and entities.
+- <strong>Gold files carry a schema version.</strong> Every gold change is logged with its reason. Annotation
+errors are the only valid reason; changing gold "to match the system" is never allowed.
+- <strong>Contamination prevention:</strong>
+- exact and near-duplicate detection (shingled Jaccard or MinHash) between dev and
+    test/holdout/suite/release, and between prompt-suite items and dev. CI fails above a
+    threshold;
+- the evaluation ledger (below) records every frozen-test access.
+- <strong>Evaluation ledger:</strong> <code>results/ledger.jsonl</code>, append-only. Each run records:
+- run id and timestamp;
+- config hash, code commit and model hash;
+- dataset ids and hashes;
+- headline metrics;
+- operator.
+- <strong>Datasheet per dataset:</strong> provenance, consent or BAA basis, annotation process, agreement,
+known gaps, retention.</p>
+</li>
+</ul>
+<hr />
+<h2 id="10-prompt-suite-and-test-case-design">10. Prompt suite and test-case design</h2>
+<h3 id="101-format">10.1 Format</h3>
+<p>The suite lives in <code>eval_suites/english_v1/prompts.jsonl</code>, one prompt per line. Spans are anchored
+by text, so no offsets are typed by hand.</p>
+<pre><code class="language-json">{&quot;prompt_id&quot;: &quot;C-007&quot;, &quot;group&quot;: &quot;C_conversational&quot;, &quot;modality&quot;: &quot;telephone&quot;, &quot;holdout&quot;: false,
+ &quot;text&quot;: &quot;Her birthday is April twelve nineteen eighty-five and her number is four one five five five five zero one nine eight.&quot;,
+ &quot;registry&quot;: null,
+ &quot;expected&quot;: [
+   {&quot;entity_type&quot;: &quot;DOB&quot;, &quot;subtype&quot;: &quot;SPOKEN_DOB&quot;, &quot;match&quot;: &quot;April twelve nineteen eighty-five&quot;, &quot;occurrence&quot;: 1,
+    &quot;expected_action&quot;: &quot;REDACT&quot;, &quot;expected_sources&quot;: [&quot;DETERMINISTIC&quot;, &quot;CONVERSATIONAL&quot;]},
+   {&quot;entity_type&quot;: &quot;PHONE&quot;, &quot;subtype&quot;: &quot;SPOKEN_PHONE&quot;, &quot;match&quot;: &quot;four one five five five five zero one nine eight&quot;,
+    &quot;expected_action&quot;: &quot;REDACT&quot;}],
+ &quot;must_not_redact&quot;: [&quot;birthday&quot;],
+ &quot;asr&quot;: null,
+ &quot;status&quot;: &quot;expected_pass&quot;, &quot;notes&quot;: &quot;&quot;}
+</code></pre>
+<p><strong>How the format works:</strong>
+- The loader resolves <code>match</code> and <code>occurrence</code> to <code>[start, end)</code>. It fails on zero or ambiguous
+    matches, and freezes the result as <code>prompts.resolved.jsonl</code> with a hash.
+- <strong><code>must_not_redact</code></strong> lists non-PHI anchors that must stay untouched.
+- <strong><code>asr</code></strong> (ASR prompts only) records the clean source and the PHI the ASR destroyed:
+    <code>{"source_text": "...", "lost": [{"entity_type": "MEMBER_ID", "source_match": "..."}]}</code>.
+    This drives the <code>ASR_destroyed</code> outcome.
+- <strong><code>status</code></strong> is one of <code>expected_pass</code>, <code>known_failure</code> (with a reason) or <code>exploratory</code>.
+- <strong><code>holdout: true</code></strong> marks about 25% of prompts. These are excluded from debugging views and
+    reported separately.</p>
+<h3 id="102-groups">10.2 Groups</h3>
+<p>The groups follow the requested priority order. About 200 fabricated prompts in v1.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>~Count</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A single-entity</td>
+<td>50</td>
+<td>each entity and subtype in each written form (e.g. PHONE with dashes, dots, spaces, parentheses, no separators, +1), one entity per prompt</td>
+</tr>
+<tr>
+<td>B multi-entity clinical</td>
+<td>25</td>
+<td>notes and summaries with 3–8 entities; adjacent entities; punctuation boundaries; repeated PHI</td>
+</tr>
+<tr>
+<td>C conversational</td>
+<td>25</td>
+<td>spoken DOB / phone / ZIP / email / addresses; ordinal dates; read-backs; self-corrections</td>
+</tr>
+<tr>
+<td>D ASR-style</td>
+<td>25</td>
+<td>lowercase, no punctuation, fillers, "slash", split digits, misheard tokens; with <code>asr.source_text</code> and <code>lost</code> where structure is destroyed</td>
+</tr>
+<tr>
+<td>E contextual</td>
+<td>20</td>
+<td>providers, relatives (spouse / parent / child / caregiver), employers and facilities <strong>not</strong> in any registry; targets OBI</td>
+</tr>
+<tr>
+<td>F registry-scoped</td>
+<td>20</td>
+<td>scoped fabricated registry (member, spouse, member ID, DOB, phone); <strong>decoy</strong> prompts naming a different member's registered values, which must not produce registry evidence</td>
+</tr>
+<tr>
+<td>G edge cases</td>
+<td>25</td>
+<td>initials; hyphenated and apostrophe names; similar names; multi-format dates; long addresses; PO boxes; mixed letter-digit IDs; PHI across sentence boundaries; PHI next to punctuation; PHI repeated many times</td>
+</tr>
+<tr>
+<td>N negative / non-PHI</td>
+<td>25</td>
+<td>doses, vitals, counts, durations, drug names, eponyms, years alone, habitual weekdays, organisation name, generic roles; expected PHI is empty</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Integrity rules:</strong>
+- Expectations are written <strong>before</strong> the engine is run.
+- After a run, an expectation may change only to fix an annotation error. The change is logged in
+    <code>eval_suites/english_v1/CHANGELOG.md</code>.
+- The suite is never used to tune thresholds or develop rules. Fixes are developed on dev data
+    (§13).</p>
+<h3 id="103-expected-vs-actual-record">10.3 Expected vs actual record</h3>
+<p><strong>Per expected entity, an <code>EntityEvaluation</code> record holds:</strong>
+- prompt id, entity type and subtype, expected span and text, expected action;
+- <code>detection_status</code>: <code>detected_full</code>, <code>detected_partial</code> or <code>not_detected</code>;
+- <code>redaction_status</code>: <code>redacted_ok</code>, <code>redaction_failure</code> or <code>n/a</code>;
+- post-redaction residual characters;
+- <code>failure_reason</code> and <code>failed_stage</code> (§11);
+- the responsible evidence: recognizers and source groups, raw scores, score types, thresholds
+    with their source, final decision and reason;
+- expected sources vs actual sources.</p>
+<p><strong>Unexpected detections become FP records</strong> with recognizer, group, score, reason and any
+<code>must_not_redact</code> hit.</p>
+<p><strong>Per prompt, a <code>PromptRecord</code></strong> lists the input, expected, detected, redacted, missed and
+unexpected entities, with the responsible recognizer and model, raw scores, thresholds, final
+decisions and failure reasons.</p>
+<hr />
+<h2 id="11-failure-analysis-strategy">11. Failure-analysis strategy</h2>
+<h3 id="111-stage-decision-tree">11.1 Stage decision tree</h3>
+<p>Every gold entity receives exactly one outcome and one failed stage. The checks run in this order.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Outcome</th>
+<th>Condition</th>
+<th>Failed stage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>ASR_destroyed</code></td>
+<td>listed in <code>asr.lost</code>; no span exists in the transcript</td>
+<td>ASR</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>disabled_only</code></td>
+<td>only evidence comes from recognizers, models or normalizers disabled in this configuration</td>
+<td>configuration</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>policy_rejected</code></td>
+<td>evidence at or above threshold, but entity disabled, allow-listed, or REVIEW not redacted by policy</td>
+<td>policy</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>normalization_failure</code></td>
+<td>the only evidence comes from a derived view and was rejected for unsafe mapping, or was projected to a span not overlapping the entity</td>
+<td>normalization</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>below_threshold</code></td>
+<td>live evidence exists but all of it is below threshold (best rejected recognizer, raw score, threshold and source reported)</td>
+<td>threshold</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>no_candidate</code></td>
+<td>no evidence overlaps the entity</td>
+<td>recognition</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>reconciliation_failure</code></td>
+<td>accepted evidence fully covers the core, but no final detection does</td>
+<td>reconciliation</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>partial_span</code></td>
+<td>detections cover only part of the core characters (sub-cause: model boundary, rule boundary or word expansion)</td>
+<td>recognition boundary</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>redaction_failure</code></td>
+<td>detections fully cover the entity, but the redacted output still exposes core characters (§12)</td>
+<td>redaction</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>success</code></td>
+<td>detected in full and redacted correctly</td>
+<td>–</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Required changes:</strong>
+- Outcomes 4 and 9 are new.
+- For outcome 4, evidence metadata must keep the derived-view span and a mapping-validity flag.
+- <strong>Known limitation:</strong> a normaliser that <em>should</em> have fired but didn't looks like <code>no_candidate</code>.
+    The local report therefore shows the derived text view for each prompt to make this diagnosable.</p>
+<h3 id="112-source-attribution">11.2 Source attribution</h3>
+<p><strong>Source groups</strong> are derived from configuration:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Recognizers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DETERMINISTIC</code></td>
+<td><code>rule_*</code> and pattern recognizers</td>
+</tr>
+<tr>
+<td><code>CONVERSATIONAL</code></td>
+<td><code>conv_*</code></td>
+</tr>
+<tr>
+<td><code>REGISTRY</code></td>
+<td><code>registry_*</code></td>
+</tr>
+<tr>
+<td><code>MODEL:&lt;key&gt;</code></td>
+<td>e.g. <code>MODEL:obi_roberta</code></td>
+</tr>
+<tr>
+<td><code>PRESIDIO</code></td>
+<td><code>presidio_*</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each accepted evidence item also records its <strong>view</strong>: original, or normalised with the
+normaliser ids.</p>
+<p><strong>Per entity and per FP, the evaluator records:</strong>
+- the contributing groups;
+- <strong>sole catch</strong>: only one group caught it, so it would leak without that group;
+- the group whose evidence set the final type;
+- <strong>expected vs actual source</strong>, checked against the catalog's responsibility matrix.</p>
+<p><strong>Marginal ablation:</strong> the suite is re-scored with each group disabled, reusing the collected
+evidence, so it is cheap. The result shows which entities each group <em>uniquely</em> protects and which
+false positives it adds, per entity type.</p>
+<h3 id="113-triage-workflow">11.3 Triage workflow</h3>
+<p>Each miss is classified as one of:
+- a system error;
+- an annotation error (which goes to the gold changelog);
+- out of scope.</p>
+<p><strong>For system errors:</strong>
+1. Write a similar but <strong>different</strong> fabricated example into the dev set.
+2. Develop the fix there and log it in <code>docs/rule_changelog.md</code>.
+3. Add the original case to the prompt suite as <code>known_failure</code>, flipping it to <code>expected_pass</code>
+    once it is fixed on independent evidence.</p>
+<h3 id="114-explainability">11.4 Explainability</h3>
+<p><strong>The report shows for every entity:</strong>
+- the text views;
+- every candidate (recognizer, raw score, score type, threshold and its source, accepted or
+    rejected with reason);
+- the decision reason;
+- the confidence class.</p>
+<p><strong>In production:</strong> traces carry ids, counts and timings only. They never contain text.</p>
+<hr />
+<h2 id="12-redaction-and-residual-phi-evaluation">12. Redaction and residual-PHI evaluation</h2>
+<ol>
+<li><strong>Detection status</strong> comes from the <code>DetectionResponse</code> alone.</li>
+<li><strong>Redaction validation</strong> comes independently from the <code>RedactionResponse</code>:<ul>
+<li>every core character lies inside a <code>Replacement</code> original range;</li>
+<li>the output at <code>output_start</code>–<code>output_end</code> equals the replacement token and contains no core
+    character;</li>
+<li>a vault round trip restores the original exactly;</li>
+<li>tokens are not derived from PHI (format and randomness check);</li>
+<li>consistency scope behaves as configured.</li>
+</ul>
+</li>
+<li><strong>Post-redaction re-scan</strong> of the sanitised text:<ul>
+<li>verbatim search for every gold surface;</li>
+<li>normalised search (digits only for phones and IDs; case- and space-folded for names and
+    emails) to catch leaks through a different mention;</li>
+<li>the <strong>outbound-guard scan</strong> (the same component as production: rules plus registry);</li>
+<li>an optional second engine pass, reported for information only;</li>
+<li>the <code>must_not_redact</code> anchors must still be present.</li>
+</ul>
+</li>
+<li><strong>Residual and over-redaction metrics:</strong><ul>
+<li>expected, redacted and residual PHI characters (and %) per entity, document, risk tier and
+    modality;</li>
+<li>verbatim leaks;</li>
+<li>over-redacted characters;</li>
+<li><code>must_not_redact</code> violations;</li>
+<li>fully-sanitised documents with CI.</li>
+</ul>
+</li>
+<li><strong>Fault test:</strong> an injected faulty operator must be reported as <code>redaction_failure</code>.</li>
+<li><strong>Utility, later:</strong> the downstream task delta on sanitised vs original text.</li>
+</ol>
+<hr />
+<h2 id="13-regression-strategy">13. Regression strategy</h2>
+<p><strong>Baselines</strong> are recorded per release and stored as versioned JSON stamped with the config hash:
+- per-entity outcomes on T1 and T2;
+- per-prompt FP counts;
+- T3 headline metrics with CIs;
+- T7 percentiles.</p>
+<p><strong>Regression rules:</strong>
+- <strong>zero new misses in direct-identifier entities</strong> (G4) unless individually signed off;
+- no new redaction of negative or <code>must_not_redact</code> anchors;
+- no residual increase beyond the CI;
+- improvements on <code>known_failure</code> are reported, and the baseline is updated only by explicit
+    command after review.</p>
+<p><strong>CI tiers:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Contents</th>
+<th>Runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fast</td>
+<td>T0, T1 and T2 with rules and registry only, T5, T6 (no model weights)</td>
+<td>every change</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>T1 and T2 with OBI, T3</td>
+<td>nightly</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>T4, T7, gate runner</td>
+<td>per release candidate</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Re-validation triggers</strong> are enforced by the gate runner by comparing stamped hashes:
+- any config hash change;
+- a model, tokenizer, Presidio or transformers version change;
+- an ASR engine or ASR version change;
+- a new document type or line of business;
+- a drift alarm;
+- a confirmed leak;
+- at least once a year.</p>
+<p><strong>Failures become permanent regression cases.</strong> Every confirmed production or manual-evaluation miss
+becomes a fabricated <code>known_failure</code> prompt plus a dev example, and stays in the suite for good.</p>
+<hr />
+<h2 id="14-privacy-and-security-controls">14. Privacy and security controls</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Implementation</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHI-free logs, enforced</td>
+<td>structured logging with an allow-listed field set; a log filter rejecting text-bearing records; sentinel-PHI grep tests across all logs and masked outputs</td>
+<td>SP 800-53 AU / SI-11 [V]</td>
+</tr>
+<tr>
+<td>Evaluation artifact classification</td>
+<td>real-governed data outputs masked by default, written under an access-controlled root, retention date from the manifest, a <code>purge</code> command; fabricated data may show text</td>
+<td>HIPAA minimum necessary; SP 800-188</td>
+</tr>
+<tr>
+<td>Keyed hashes only</td>
+<td>text hashes in logs and caches use HMAC with a managed key</td>
+<td>brute-force risk on short values</td>
+</tr>
+<tr>
+<td>Vault</td>
+<td>encrypted at rest (AES-GCM); key from KMS or env with a rotation procedure; scoped consistency; audited restore (vault id, caller, time, no content); TTL and deletion</td>
+<td>45 CFR 164.514(c) [V]; SP 800-188 [V]</td>
+</tr>
+<tr>
+<td>Keys</td>
+<td>no random fallback: a required key that is missing fails closed; FF1 only if format preservation is ever required (domain ≥ 10⁶)</td>
+<td>SP 800-38G r1 [V]</td>
+</tr>
+<tr>
+<td>No egress</td>
+<td>sockets blocked in tests; <code>OFFLINE_MODE</code> enforced; models loaded from local cache with hash verification; no LLM, cloud or AHDS components; <code>log_decision_process</code> never enabled</td>
+<td>organisational requirement; Presidio notes</td>
+</tr>
+<tr>
+<td>Supply chain</td>
+<td>locked, hash-pinned dependencies; SBOM; licence check of model artifacts</td>
+<td>SP 800-53 SR</td>
+</tr>
+<tr>
+<td>Access</td>
+<td>documented roles for restore and for evaluation outputs; tiers T0–T3 and T5–T7 never need production PHI</td>
+<td>45 CFR 164.312(a)(b) [V]</td>
+</tr>
+<tr>
+<td>Fail-safe</td>
+<td>the §6.5 failure policy, proven by T5</td>
+<td>SP 800-53 SC-24 / SI-17 [V]</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="15-production-readiness-gates">15. Production-readiness gates</h2>
+<p>The gates live in <code>configs/eval/gates.yaml</code>. <code>python -m harness_eval.gates run</code> produces a go/no-go
+report. The <strong>numbers are proposals for the risk owner</strong>; no standard prescribes them (§2.7).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Metric (T4 real governed data unless noted)</th>
+<th>Proposed criterion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1 direct identifiers</td>
+<td>character-level recall per entity × modality, <strong>95% CI lower bound</strong></td>
+<td>≥ 0.99 notes / typed; ≥ 0.97 ASR. At least 300 mentions per category, otherwise "insufficient evidence", which counts as no-go.</td>
+</tr>
+<tr>
+<td>G2 quasi identifiers</td>
+<td>recall lower bound per entity</td>
+<td>≥ 0.95</td>
+</tr>
+<tr>
+<td>G3 documents</td>
+<td>fully-sanitised rate (no direct-identifier leak) with CI</td>
+<td>≥ 0.99</td>
+</tr>
+<tr>
+<td>G4 regression</td>
+<td>new direct-identifier misses vs previous release (T1–T4)</td>
+<td>0, or individually signed off</td>
+</tr>
+<tr>
+<td>G5 behavioural</td>
+<td>T1 MFT pass rate</td>
+<td>100%; INV failures triaged</td>
+</tr>
+<tr>
+<td>G6 utility</td>
+<td>over-redaction rate; negative-suite FPs</td>
+<td>at or below the agreed limit (e.g. ≤ 3% of non-PHI characters)</td>
+</tr>
+<tr>
+<td>G7 fail-closed and security</td>
+<td>T5 + T6 pass rate</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>G8 performance</td>
+<td>p95 / p99 per typical document; soak memory stability</td>
+<td>within SLO (to be set; e.g. p95 ≤ 500 ms on CPU per typical call)</td>
+</tr>
+<tr>
+<td>G9 operations</td>
+<td>monitoring baselines exported; canaries configured; system card issued</td>
+<td>present</td>
+</tr>
+<tr>
+<td><strong>Overall</strong></td>
+<td>minimum across gates (ML Test Score style)</td>
+<td>any failure = <strong>no-go</strong>; sign-off by an independent reviewer and the privacy officer</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="16-implementation-phases">16. Implementation phases</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Content</th>
+<th>Gaps closed</th>
+<th>Exit criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0 Foundations</strong> (Critical)</td>
+<td>git repository; locked, hashed dependencies; code-commit stamping; fail-closed handler with deadlines, input-size limit and startup self-test; T5 fault-injection suite; enforced PHI-free logging and T6 tests; remove the pseudonym-key fallback</td>
+<td>G-01, G-02, G-14, G-23, part of G-04</td>
+<td>T5 and T6 green; every response stamped with commit, config and model hashes</td>
+</tr>
+<tr>
+<td><strong>P1 Configuration and entity catalog</strong></td>
+<td>layered configuration with loader, strict schema, environment overlays and provenance; <strong>entity catalog</strong>; declarative pattern recognizers; hard-coded tables moved to config; modality thresholds; migration plus equivalence test; matrix generated from the catalog</td>
+<td>G-06, G-08, G-16, G-22, part of G-07</td>
+<td>old and new configuration give identical detections on the regression corpus; adding a pattern-based entity needs zero code (proven by test)</td>
+</tr>
+<tr>
+<td><strong>P2 Evaluation core</strong></td>
+<td>manifests, roles, contamination checks and ledger; scorer v2 (three views, CIs, strata, paired tests); new outcomes and stage tree; independent redaction validation and re-scan; source-group attribution and ablation; presidio-research cross-check</td>
+<td>G-09, G-10 (tooling), G-12, G-13, G-25</td>
+<td>metric tests match hand-computed fixtures; cross-check agreement documented</td>
+</tr>
+<tr>
+<td><strong>P3 Test suites</strong></td>
+<td>CheckList generator (T1); prompt suite v1 (T2, about 200 prompts, 25% holdout); performance and soak harness (T7); cross-device determinism</td>
+<td>G-11, G-15, G-21</td>
+<td>suites versioned, baselined, running in CI</td>
+</tr>
+<tr>
+<td><strong>P4 Gates, regression and documentation</strong></td>
+<td><code>gates.yaml</code> and gate runner; regression baselines and CI tiers; re-validation triggers; system card and datasheet generators; runtime/evaluation package split</td>
+<td>G-03 (tooling), G-17, G-19</td>
+<td>an end-to-end go/no-go report on T3, explicitly labelled "engineering evidence, not release evidence"</td>
+</tr>
+<tr>
+<td><strong>P5 Production readiness</strong></td>
+<td>hardened vault (encryption, persistence, audit, scope); outbound guard; model-hash verification; shadow mode; monitoring hooks and canaries; <strong>real governed release dataset</strong> (guidelines, double annotation, agreement) and first T4 gate run; new Safe Harbor entities developed on dev</td>
+<td>G-04, G-05, G-07, G-18, G-20, G-03 (evidence)</td>
+<td>all gates evaluated on T4; sign-off</td>
+</tr>
+</tbody>
+</table></div>
+<p>P0 and P1 come first. P2 and P3 can then run in parallel. The real-data workstream in P5 needs
+governance and annotation resources and should <strong>start immediately</strong>, because it is the critical
+path to any go-live claim.</p>
+<hr />
+<h2 id="17-files-and-modules-to-create-or-modify">17. Files and modules to create or modify</h2>
+<h3 id="171-create">17.1 Create</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>configs/phi/**</code> (§6.2)</td>
+<td>runtime configuration: catalog, recognizers, models, normalization, reconciliation, policy, environments, generated</td>
+</tr>
+<tr>
+<td><code>configs/eval/{datasets,suites,gates,metrics,presets}.yaml</code></td>
+<td>evaluation-only configuration</td>
+</tr>
+<tr>
+<td><code>harness/phi/config/schema.py</code>, <code>loader.py</code>, <code>migrate.py</code>, <code>__main__.py</code></td>
+<td>Pydantic schema; composition and overlays with restrictions; resolved hash; <code>validate</code> and <code>migrate</code> commands</td>
+</tr>
+<tr>
+<td><code>harness/phi/catalog.py</code></td>
+<td>catalog API (risk tier, actions, core-character rules, subtypes, Safe Harbor mapping, outbound-guard behaviour)</td>
+</tr>
+<tr>
+<td><code>harness/phi/recognizers/patterns.py</code></td>
+<td>declarative pattern recognizers and named validators</td>
+</tr>
+<tr>
+<td><code>harness/phi/failsafe.py</code></td>
+<td>fail-closed handler, deadlines, input guards, startup self-test</td>
+</tr>
+<tr>
+<td><code>harness/phi/telemetry.py</code></td>
+<td>allow-listed structured logging, PHI log filter, metrics counters, keyed hashing</td>
+</tr>
+<tr>
+<td><code>harness/phi/vault.py</code></td>
+<td>vault interface; encrypted file and in-memory backends; scope, TTL, audit</td>
+</tr>
+<tr>
+<td><code>harness/phi/outbound_guard.py</code></td>
+<td>independent re-scan of sanitised payloads (block or flag)</td>
+</tr>
+<tr>
+<td><code>harness_eval/__init__.py</code></td>
+<td>evaluation package; existing evaluation modules move here</td>
+</tr>
+<tr>
+<td><code>harness_eval/manifests.py</code>, <code>contamination.py</code>, <code>ledger.py</code></td>
+<td>dataset roles and hashes; near-duplicate checks; append-only run ledger</td>
+</tr>
+<tr>
+<td><code>harness_eval/scoring.py</code></td>
+<td>three-view metrics; cluster bootstrap and Wilson CIs; strata; paired approximate randomisation</td>
+</tr>
+<tr>
+<td><code>harness_eval/attribution.py</code></td>
+<td>stage decision tree; source groups; sole catch; ablation</td>
+</tr>
+<tr>
+<td><code>harness_eval/redaction_check.py</code></td>
+<td>independent redaction validation and post-redaction re-scan</td>
+</tr>
+<tr>
+<td><code>harness_eval/checklist.py</code>, <code>suites/behavioural/*.yaml</code></td>
+<td>behavioural templates (MFT/INV/DIR) and generator</td>
+</tr>
+<tr>
+<td><code>harness_eval/suite.py</code>, <code>eval_suites/english_v1/{prompts.jsonl,registry/,entity_coverage.yaml,baseline.json,CHANGELOG.md,README.md}</code></td>
+<td>prompt suite: loader, validator, runner, compare, baseline/regress</td>
+</tr>
+<tr>
+<td><code>harness_eval/perf.py</code>, <code>harness_eval/faults.py</code></td>
+<td>latency, throughput, soak and cold-start harness; fault-injection scenarios</td>
+</tr>
+<tr>
+<td><code>harness_eval/gates.py</code>, <code>harness_eval/cards.py</code>, <code>harness_eval/presidio_xcheck.py</code></td>
+<td>gate runner and re-validation triggers; system card and datasheet generation; metric cross-check</td>
+</tr>
+<tr>
+<td><code>docs/annotation_guidelines.md</code>, <code>evaluation_methodology.md</code>, <code>release_gates.md</code>, <code>config_guide.md</code>, <code>security_controls.md</code>, <code>system_card.md</code> (generated)</td>
+<td>documentation</td>
+</tr>
+<tr>
+<td>tests: <code>test_config_schema.py</code>, <code>test_config_migration.py</code>, <code>test_catalog.py</code>, <code>test_patterns_declarative.py</code>, <code>test_failsafe.py</code>, <code>test_telemetry_privacy.py</code>, <code>test_vault.py</code>, <code>test_outbound_guard.py</code>, <code>test_scoring_ci.py</code>, <code>test_attribution.py</code>, <code>test_redaction_check.py</code>, <code>test_contamination.py</code>, <code>test_gates.py</code>, <code>test_checklist_fast.py</code>, <code>test_suite_regression_fast.py</code>, <code>test_*_model.py</code> (marker <code>model</code>), <code>test_perf_smoke.py</code></td>
+<td>coverage for every new component</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="172-modify">17.2 Modify</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>harness/phi/engine.py</code></td>
+<td>use the loader; fail-safe wrapper; stamping (commit, model hash, catalog version); shadow models; telemetry; vault interface; outbound-guard hook</td>
+</tr>
+<tr>
+<td><code>harness/phi/contracts.py</code></td>
+<td>additive: stamping fields, fail-closed response status, new outcomes, <code>subtype</code>, modality-aware threshold source, <code>PromptRecord</code>, <code>EntityEvaluation</code></td>
+</tr>
+<tr>
+<td><code>harness/phi/policy/__init__.py</code></td>
+<td>thresholds by modality; entity actions from the catalog; exclusions file</td>
+</tr>
+<tr>
+<td><code>harness/phi/recognizers/{rules,registry,conversational}.py</code></td>
+<td>read entity tables, keywords, guards and matching parameters from config</td>
+</tr>
+<tr>
+<td><code>harness/phi/normalizers/__init__.py</code>, <code>recognizers/base.py</code></td>
+<td>keep the derived-view span and a mapping-validity flag in evidence metadata</td>
+</tr>
+<tr>
+<td><code>harness/phi/redaction/__init__.py</code></td>
+<td>vault abstraction; consistency scope; no key fallback</td>
+</tr>
+<tr>
+<td><code>harness/phi/{evaluate,calibrate,compare,analyze,datasets,report,matrix}.py</code></td>
+<td>move to or wrap from <code>harness_eval</code>; read manifest roles; write ledger entries</td>
+</tr>
+<tr>
+<td><code>harness/evaluation/matching.py</code></td>
+<td>core-character rules from the catalog (legacy benchmark keeps working)</td>
+</tr>
+<tr>
+<td><code>configs/phi_harness.yaml</code></td>
+<td>kept as the legacy entry point; superseded by <code>configs/phi/phi.yaml</code></td>
+</tr>
+<tr>
+<td><code>README.md</code>, <code>docs/engine_contract.md</code>, <code>docs/manual_evaluation.md</code>, <code>docs/presidio_architecture.md</code></td>
+<td>updated</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="18-testing-and-validation-plan">18. Testing and validation plan</h2>
+<ol>
+<li><strong>Unit and contract (T0):</strong><ul>
+<li>schema rejections (unknown keys or ids, out-of-range values, forbidden prod overrides);</li>
+<li>catalog-driven behaviour, including a test that <strong>adds a fabricated pattern entity in a
+    temporary config with no code change</strong>;</li>
+<li>metric fixtures with hand-computed CIs;</li>
+<li>each stage-tree outcome built from constructed evidence;</li>
+<li>an injected faulty operator detected as <code>redaction_failure</code>;</li>
+<li>vault encryption, scope and audit;</li>
+<li>log-filter rejection.</li>
+</ul>
+</li>
+<li><strong>Integration:</strong><ul>
+<li>old and new config layouts are equivalent on the regression corpus;</li>
+<li>engine plus outbound guard blocks an injected leak;</li>
+<li>the runtime cannot import <code>harness_eval</code> (an import-linter rule);</li>
+<li>registry scoping with decoy subjects.</li>
+</ul>
+</li>
+<li><strong>End to end:</strong><ul>
+<li>the full CLI path (analyze → suite → gates) on fabricated data produces every report and a
+    go/no-go document labelled "engineering evidence";</li>
+<li>batch vs single-document consistency;</li>
+<li>determinism across runs, plus a CPU vs MPS comparison.</li>
+</ul>
+</li>
+<li><strong>Behavioural (T1) and prompt suite (T2):</strong> versioned and baselined, with fast tiers in CI.</li>
+<li><strong>Fault injection (T5):</strong> for every scenario, no LLM call and no pass-through. The response
+    carries a fail-closed status and no PHI.</li>
+<li><strong>Security (T6):</strong><ul>
+<li>sentinel PHI is absent from logs, masked outputs and caches;</li>
+<li>sockets are blocked;</li>
+<li>a missing key fails closed;</li>
+<li>the vault is unreadable without its key.</li>
+</ul>
+</li>
+<li><strong>Performance (T7):</strong> latency percentiles by stage and length bucket, 2× peak load, one-hour
+    soak and cold start, each stored as a baseline.</li>
+<li><strong>Synthetic smoke test:</strong> the end-to-end example plus the fast tier of the prompt suite.</li>
+<li><strong>Release validation (T4):</strong> on governed real data only, under the gate runner, with independent
+    review. <strong>Nothing before T4 is presented as release evidence.</strong></li>
+</ol>
+<p>All existing tests (132 today) must keep passing at every phase.</p>
+<p><strong>Commands after implementation</strong></p>
+<pre><code class="language-bash">python -m harness.phi.config validate --env prod                       # resolve, validate, print resolved hash
+python -m harness.phi.analyze --input sample.txt --redact              # single document (existing)
+python -m harness.phi.analyze --input-dir data/manual_eval --gold gold.jsonl --redact --output results/me
+python -m harness_eval.suite validate --suite eval_suites/english_v1
+python -m harness_eval.suite run --suite eval_suites/english_v1 --redact --output results/suite/run1
+python -m harness_eval.suite ablate --suite eval_suites/english_v1 --output results/suite/ablation
+python -m harness_eval.suite regress --suite eval_suites/english_v1    # regression check vs baseline
+python -m harness_eval.checklist run --output results/checklist
+python -m harness_eval.faults run
+python -m harness_eval.perf run --scenario typical_call --output results/perf
+python -m harness_eval.gates run --release-set &lt;id&gt; --output results/gates/rc1   # go / no-go report
+pytest -q                 # fast tiers (no model weights)
+pytest -q -m model        # model tiers (local OBI)
+</code></pre>
+<hr />
+<h2 id="19-decisions-required">19. Decisions required</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Decision</th>
+<th>Owner</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Gate numbers G1–G8 and minimum support per category</td>
+<td>risk owner / privacy officer</td>
+<td>start from §15; review after the first T4 run</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Fail-closed mode: block the LLM call, or a conservative fallback (rules + registry masking + flag)</td>
+<td>product + privacy</td>
+<td><strong>block</strong> for detector, timeout and vault failures; configurable per failure class</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Token consistency scope</td>
+<td>privacy</td>
+<td>per conversation; never global (Azure; Osborne 2025)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Vault persistence technology and key management</td>
+<td>platform / security</td>
+<td>encrypted store behind the vault interface; KMS-managed keys; audited restore</td>
+</tr>
+<tr>
+<td>5</td>
+<td>New canonical entities (SSN, HEALTH_PLAN_ID via MEMBER_ID subtype, LICENSE_CERT_ID, VEHICLE_ID, DEVICE_ID, IP_ADDRESS, AGE_OVER_89)</td>
+<td>privacy + engineering</td>
+<td>add to the catalog disabled; enable after dev development and behavioural tests</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Real governed data for T4: source, volume (at least 300 mentions per direct category per modality), annotation resources, agreement target</td>
+<td>compliance / data governance</td>
+<td><strong>start now</strong>; critical path</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Whether the LLM payload needs Expert Determination</td>
+<td>legal</td>
+<td>out of engineering scope; to be raised</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Prompt-suite authorship</td>
+<td>engineering + reviewers</td>
+<td>engineering drafts about 200 fabricated prompts; reviewers approve; frozen before the first run</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Timing of the <code>harness_eval</code> package split</td>
+<td>engineering</td>
+<td>in P4, to avoid churn during P1–P3</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="20-references">20. References</h2>
+<p><code>[V]</code> = read; <code>[S]</code> = search snippet or secondary only.</p>
+<p><strong>Standards, regulation and guidance</strong>
+- NIST. <em>AI Risk Management Framework 1.0</em> (NIST AI 100-1), 2023; Playbook, MEASURE. https://airc.nist.gov/airmf-resources/playbook/measure/ [V]
+- NIST. <em>AI 600-1 Generative AI Profile</em>, 2024. https://doi.org/10.6028/NIST.AI.600-1 [S]
+- IMDRF / FDA / Health Canada / MHRA. <em>Good Machine Learning Practice: Guiding Principles</em> (N88, 2025; original 2021). https://www.fda.gov/medical-devices/artificial-intelligence-enabled-medical-devices/good-machine-learning-practice-medical-device-development-guiding-principles [V date and agencies only]
+- ISO/IEC 42001:2023; ISO/IEC 25059:2023 [S]
+- CHAI. <em>Assurance Standards Guide</em> (draft, 2024) [S]; <em>Applied Model Card</em> draft v0.1, 2024. https://mc.chai.org/v0.1/documentation.pdf [V]
+- ASTP/ONC HTI-1 (2023) and HTI-5 proposed rule [S]
+- 45 CFR 164.514. https://www.law.cornell.edu/cfr/text/45/164.514 [V]
+- HHS OCR. <em>Guidance Regarding Methods for De-identification of PHI</em>, 2012 [S]
+- 45 CFR 164.312. https://www.law.cornell.edu/cfr/text/45/164.312 [V]; HIPAA Security Rule NPRM (Jan 2025) status [S]
+- NIST SP 800-188, <em>De-Identifying Government Datasets</em>, 2023. https://csrc.nist.gov/pubs/sp/800/188/final [V]
+- NIST IR 8053, 2015 [S]; ISO/IEC 20889:2018 [S]; ISO 25237:2017 [S]; HITRUST De-Identification Framework [S]; UK ICO anonymisation guidance, 2025 [S]
+- NIST SP 800-38G Rev.1, 2nd public draft (FF1), 2025. https://csrc.nist.gov/pubs/sp/800/38/g/r1/2pd [V]; NIST SP 800-57 Pt.1 Rev.5 [S]
+- NIST SP 800-53 Rev.5: SC-24, SI-11, SI-17 [V]; AC, AU, SC, SI, CM, SA, SR families [S]
+- Federal Reserve / OCC SR 11-7 (2011) and its 2026 replacement [S]</p>
+<p><strong>Vendor and tool documentation</strong>
+- Google Sensitive Data Protection (hotword and likelihood rules, exclusion rules, InfoType version, templates) and Healthcare API de-identify. https://docs.cloud.google.com/sensitive-data-protection/docs/ [V]
+- AWS Comprehend Medical DetectPHI. https://docs.aws.amazon.com/comprehend-medical/latest/dev/textanalysis-phi.html [V]
+- AWS Transcribe PII redaction. https://docs.aws.amazon.com/transcribe/latest/dg/pii-redaction.html [V]
+- Microsoft Azure Health Data Services de-identification: overview and Transparency Note. https://learn.microsoft.com/en-us/azure/healthcare-apis/deidentification/ [V]
+- Microsoft Presidio 2.2.364 (source and docs, data-privacy-stack/presidio) [V]; presidio-research evaluators. https://github.com/data-privacy-stack/presidio-research [V]
+- John Snow Labs DeIdentification [S]; Philter-UCSF. https://github.com/BCHSI/philter-ucsf [V]; Private AI [S]; Tonic Textual [S]
+- Hydra defaults list. https://hydra.cc/docs/advanced/defaults_list/ [V]</p>
+<p><strong>Literature</strong>
+- Stubbs A, Kotfila C, Uzuner Ö. Overview of the 2014 i2b2/UTHealth de-identification track. <em>JBI</em> 58 (2015) [V]
+- Stubbs A, Uzuner Ö. Annotating longitudinal clinical narratives for de-identification. <em>JBI</em> 58 (2015) [V]
+- Yang H, Garibaldi JM. Automatic detection of PHI from clinic narratives. <em>JBI</em> 58 (2015) [S]
+- Dehghan A, et al. Combining knowledge- and data-driven methods for de-identification. <em>JBI</em> 58 (2015) [V]
+- Dernoncourt F, et al. De-identification of patient notes with recurrent neural networks. <em>JAMIA</em> 24(3), 2017 [S]
+- Norgeot B, et al. Philter. <em>npj Digit Med</em> 3:57, 2020 [V]
+- Kim Y, Heider PM, Meystre SM. Ensemble-based de-identification. <em>AMIA</em> 2020 [V]
+- Kocaman V, et al. Beyond Accuracy: automated de-identification of large real-world clinical text. ML4H 2023 [V]
+- Fernandes AC, et al. De-identification for a mental-health case register (CRIS). <em>BMC MIDM</em> 13:71, 2013 [V]
+- Lee JY, et al. Feature-augmented neural networks for de-identification. ClinicalNLP 2016 [V]
+- Yang X, et al. Deep learning de-identification in cross-institute settings. <em>BMC MIDM</em> 19, 2019 [V]; sample-size study, medRxiv 2020 [V]
+- Cohn I, et al. Audio De-identification: a new entity recognition task. NAACL Industry 2019 [V]
+- Carrell D, et al. Hiding in plain sight. <em>JAMIA</em> 20(2), 2013 [V]; resilience to hostile re-identification. <em>JAMIA</em> 27(9), 2020 [V]
+- Osborne JD, et al. Markov chain replacement for surrogate identifiers. <em>Electronics</em> 14(19), 2025 [V]
+- Alrazihi LA, et al. Accuracy of automated anonymization tools. <em>Surg Neurol Int</em> 16:313, 2025 [S]
+- Ribeiro MT, et al. Beyond Accuracy: Behavioral Testing of NLP Models with CheckList. ACL 2020 [V]
+- Breck E, et al. The ML Test Score. IEEE BigData 2017 [V abstract]; Sculley D, et al. Hidden Technical Debt in ML Systems. NeurIPS 2015 [S]
+- Mitchell M, et al. Model Cards for Model Reporting. FAT<em> 2019 [S]; Gebru T, et al. Datasheets for Datasets. </em>CACM<em> 2021 [S]
+- Hanley JA, Lippman-Hand A. If nothing goes wrong, is everything all right? </em>JAMA<em> 249, 1983 [S]
+- Dror R, et al. Testing statistical significance in NLP. ACL 2018 [S]
+- Beyer B, et al. </em>Site Reliability Engineering*, Google, 2016 [S]</p></main><script>(function(){var b=document.getElementById('tg');var r=document.documentElement;
+function cur(){return r.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+b.onclick=function(){r.setAttribute('data-theme',cur()==='dark'?'light':'dark')}})();</script></body></html>

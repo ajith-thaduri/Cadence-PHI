@@ -1,0 +1,21 @@
+# TEST SUITES - owner: evaluation.
+suites:
+  english_v1:
+    path: eval_suites/english_v1
+    role: suite
+    holdout_fraction: 0.25
+    description: "Curated English prompt suite: groups A single-entity, B multi-entity clinical, C conversational,
+      D ASR-style, E contextual, F registry-scoped (with decoys), G edge cases, N negative. Expectations authored
+      blind (before any engine run)."
+  checklist_v1:
+    path: eval_suites/checklist_v1
+    role: suite
+    description: "CheckList behavioural tests generated from templates with conspicuous fake values:
+      MFT (every format of every entity), INV (case/punctuation/filler/ASR/chunk-boundary/name-origin
+      invariance), DIR (context cues raise evidence; negative contexts never redacted)."
+performance:
+  scenarios:
+    typical_call: {length_chars: 2000, documents: 50, concurrency: 1}
+    long_note:    {length_chars: 12000, documents: 20, concurrency: 1}
+    peak_load:    {length_chars: 2000, documents: 200, concurrency: 4}
+  soak_minutes: 60

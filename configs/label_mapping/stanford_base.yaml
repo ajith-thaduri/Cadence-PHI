@@ -1,0 +1,42 @@
+# Native -> canonical mapping for StanfordAIMI/stanford-deidentifier-base
+# Source of native labels: config.json id2label @ 661b9c1 (IO tag scheme).
+#
+# canonical: the single canonical label assigned to a prediction with this native label
+# covers:    canonical gold categories this native label is designed to capture
+#            full    = native label definition directly targets the category
+#            partial = category plausibly falls under the label but is not documented
+# A canonical category not listed under any native label is NOT COVERED.
+model: stanford_base
+label_provenance: native_trained
+outside_label: O
+native_labels:
+  PATIENT:
+    canonical: NAME
+    covers: {NAME: full, RELATIVE_NAME: partial}
+    rationale: Patient names. Relatives / other persons not documented.
+  HCW:
+    canonical: PROVIDER_NAME
+    covers: {PROVIDER_NAME: full, CARE_TEAM_MEMBER: partial}
+    rationale: Health-care worker names. Non-clinician care-team staff not documented.
+  HOSPITAL:
+    canonical: FACILITY_NAME
+    covers: {FACILITY_NAME: full}
+    rationale: Hospital / facility names.
+  VENDOR:
+    canonical: ORGANIZATION
+    covers: {ORGANIZATION: partial}
+    rationale: Vendor / company names (e.g. software, device vendors). Not employers in general.
+  DATE:
+    canonical: DATE
+    covers: {DATE: full, DOB: full}
+    rationale: Dates; DOB is not a separate label.
+  ID:
+    canonical: OTHER_UNIQUE_ID
+    covers: {MRN: full, OTHER_UNIQUE_ID: full, MEMBER_ID: partial, ACCOUNT_ID: partial, NPI: partial}
+    rationale: Generic identifier label; specific ID sub-types are not distinguished or documented.
+  PHONE:
+    canonical: PHONE
+    covers: {PHONE: full}
+    rationale: Phone numbers.
+# Canonical categories with NO native label here: ADDRESS, CITY, STATE, ZIP, EMAIL, URL,
+# EMPLOYER, LANGUAGE, GEOGRAPHIC_CONTEXT.

@@ -1,0 +1,17 @@
+{
+  "request_id": "req_example_0001",
+  "text": "CM: Can I confirm your name and date of birth?\nMEMBER: Maria Hernandez, twenty eighth March nineteen eighty five.\nCM: And the best number?\nMEMBER: Nine one seven, five five five, oh one two two. Dr. Alan Pierce wants me back next Tuesday. Um, my member ID is C, D, four four seven, one nine oh two.",
+  "language": "en",
+  "modality": "telephone",
+  "source": "cadence_call",
+  "normalization_profile": "asr",
+  "enabled_entities": null,
+  "enabled_recognizers": null,
+  "enabled_models": ["obi_roberta"],
+  "registry_context": {
+    "subject_context_id": "ctx_example_0001",
+    "provider_directory_version": "providers_2026_10"
+  },
+  "policy_profile": "cadence_default",
+  "options": {"mode": "debug", "include_candidates": true, "include_trace": true, "include_text": true}
+}

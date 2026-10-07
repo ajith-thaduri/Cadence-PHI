@@ -1,0 +1,39 @@
+{
+  "member": {
+    "name": "Desmond Okafor",
+    "member_ids": [
+      "QZM70291"
+    ],
+    "dob": "1971-11-05",
+    "phone": "312-555-0177",
+    "mrn": "MRN-2209371",
+    "email": "desmond.okafor@example.net",
+    "address": "77 Wabash Court",
+    "city": "Evanston",
+    "zip": "60201"
+  },
+  "contacts": [
+    "Ngozi Okafor",
+    "Chidi Okafor"
+  ],
+  "providers": [
+    {
+      "name": "Lawrence Feld",
+      "npi": "1932047751"
+    }
+  ],
+  "staff": [
+    "Tamsin Rourke"
+  ],
+  "facilities": [
+    {
+      "name": "Lakeshore Renal Center",
+      "aliases": [
+        "Lakeshore Renal"
+      ]
+    }
+  ],
+  "employers": [
+    "Northgate Transit"
+  ]
+}

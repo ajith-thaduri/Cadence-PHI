@@ -1,0 +1,1137 @@
+{
+  "contract_version": "1.0",
+  "request_id": "req_example_0001",
+  "engine_version": "phi-engine 1.0.0",
+  "policy_version": "cadence-policy 1.0",
+  "config_sha256": "aa8832ea553ab8c7",
+  "input": {
+    "text_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+    "text_length": 298,
+    "language": "en",
+    "resolved_language": "en",
+    "modality": "telephone"
+  },
+  "normalization": {
+    "profile": "asr",
+    "normalizers_applied": [
+      "spoken_digits",
+      "spoken_dates",
+      "spoken_address",
+      "spelled_names",
+      "spoken_email",
+      "asr_cleanup"
+    ],
+    "traces": [
+      {
+        "normalizer_id": "spoken_email",
+        "version": "2",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 0,
+        "mapping_quality": "exact_segment"
+      },
+      {
+        "normalizer_id": "spelled_names",
+        "version": "1",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 0,
+        "mapping_quality": "exact_segment"
+      },
+      {
+        "normalizer_id": "spoken_dates",
+        "version": "1",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 2,
+        "mapping_quality": "exact_segment"
+      },
+      {
+        "normalizer_id": "spoken_address",
+        "version": "1",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 0,
+        "mapping_quality": "exact_segment"
+      },
+      {
+        "normalizer_id": "spoken_digits",
+        "version": "1",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 2,
+        "mapping_quality": "exact_segment"
+      },
+      {
+        "normalizer_id": "asr_cleanup",
+        "version": "1",
+        "input_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0",
+        "output_sha256": "42fefa50302983076fda9aa49aa113c6f29fe9af2b95b29a96498c85c465461b",
+        "transformations": 1,
+        "mapping_quality": "exact_segment"
+      }
+    ],
+    "text_views": [
+      {
+        "view_id": "original",
+        "transformation_ids": [],
+        "mapping_quality": "identity"
+      },
+      {
+        "view_id": "normalized",
+        "transformation_ids": [
+          "asr_cleanup_v1",
+          "spoken_dates_v1",
+          "spoken_digits_v1"
+        ],
+        "mapping_quality": "exact_segment"
+      }
+    ],
+    "mapping_status": "ok"
+  },
+  "detections": [
+    {
+      "detection_id": "det_e2a8a21dde29a693",
+      "entity_type": "NAME",
+      "original_start": 55,
+      "original_end": 70,
+      "raw_text_available": true,
+      "text": "Maria Hernandez",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 1.0,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "registry_exact + ML + registry agreement",
+      "contributing_evidence_ids": [
+        "ev_04ae9fec5a4ae834",
+        "ev_5333f963270becf8",
+        "ev_69f6f72f5ff23b89",
+        "ev_61d9721b3f29a10c"
+      ],
+      "contributing_recognizers": [
+        "model_obi_roberta",
+        "registry_member"
+      ],
+      "rejected_evidence": [],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    },
+    {
+      "detection_id": "det_2684e3385de281f9",
+      "entity_type": "DOB",
+      "original_start": 72,
+      "original_end": 112,
+      "raw_text_available": true,
+      "text": "twenty eighth March nineteen eighty five",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 1.0,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "registry_normalized + ML + contextual_rule + registry + rule agreement; type conflict DATE/DOB -> DOB by precedence (registry_normalized); via normalized view",
+      "contributing_evidence_ids": [
+        "ev_1a3f7800b79397a6",
+        "ev_20b3c74a9e1ed9a3",
+        "ev_5645446fbb594ad7",
+        "ev_d1ad51e2818c3574",
+        "ev_40419e6604fbfc7c"
+      ],
+      "contributing_recognizers": [
+        "conv_ordinal_date",
+        "model_obi_roberta",
+        "registry_identifier",
+        "rule_date"
+      ],
+      "rejected_evidence": [
+        {
+          "evidence_id": "ev_8a579464fc5494d2",
+          "recognizer_id": "model_obi_roberta",
+          "entity_type": "OTHER_UNIQUE_ID",
+          "raw_score": 0.47373753786087036,
+          "score_type": "model_confidence",
+          "threshold_used": 0.5,
+          "reason": "below_threshold"
+        }
+      ],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    },
+    {
+      "detection_id": "det_b1edd2cdfe746a4f",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "raw_text_available": true,
+      "text": "Nine one seven, five five five, oh one two two",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 1.0,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "registry_normalized + contextual_rule + registry + rule agreement; via normalized view",
+      "contributing_evidence_ids": [
+        "ev_1b44c6ae2f3665dd",
+        "ev_510b106003b47830",
+        "ev_7506301962c09ee2",
+        "ev_c206557943be4a69"
+      ],
+      "contributing_recognizers": [
+        "conv_spoken_id",
+        "registry_identifier",
+        "rule_phone",
+        "rule_spoken_number"
+      ],
+      "rejected_evidence": [],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    },
+    {
+      "detection_id": "det_260fe64e949a94e9",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 195,
+      "original_end": 210,
+      "raw_text_available": true,
+      "text": "Dr. Alan Pierce",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 1.0,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "registry_exact + ML + registry + rule agreement",
+      "contributing_evidence_ids": [
+        "ev_56ab75a5f0da5f06",
+        "ev_01aa4d6b18911f5f",
+        "ev_264b26b404667018",
+        "ev_fd90050996f14ab3",
+        "ev_5b398160a472157c"
+      ],
+      "contributing_recognizers": [
+        "model_obi_roberta",
+        "registry_provider",
+        "rule_titled_name"
+      ],
+      "rejected_evidence": [],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    },
+    {
+      "detection_id": "det_23741b856b9b501d",
+      "entity_type": "DATE",
+      "original_start": 225,
+      "original_end": 237,
+      "raw_text_available": true,
+      "text": "next Tuesday",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 0.9,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "regex_match + ML + rule agreement",
+      "contributing_evidence_ids": [
+        "ev_1d7b75f85cd6ef05",
+        "ev_68f742d35a3898c0"
+      ],
+      "contributing_recognizers": [
+        "model_obi_roberta",
+        "rule_date"
+      ],
+      "rejected_evidence": [],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    },
+    {
+      "detection_id": "det_20d4e97f9d44a788",
+      "entity_type": "MEMBER_ID",
+      "original_start": 259,
+      "original_end": 297,
+      "raw_text_available": true,
+      "text": "C, D, four four seven, one nine oh two",
+      "redaction_action": "TOKENIZE",
+      "decision_score": 1.0,
+      "decision_score_type": "policy_aggregate",
+      "threshold": 0.0,
+      "decision": "REDACT",
+      "confidence_class": "high",
+      "decision_reason": "registry_normalized + contextual_rule + registry + rule agreement; type conflict MEMBER_ID/OTHER_UNIQUE_ID -> MEMBER_ID by precedence (registry_normalized); via normalized view",
+      "contributing_evidence_ids": [
+        "ev_8106449a6e546983",
+        "ev_634abd589ab45372",
+        "ev_92477ad36f94b2ca",
+        "ev_ae3b6ae06abae79a"
+      ],
+      "contributing_recognizers": [
+        "conv_spoken_id",
+        "registry_identifier",
+        "rule_identifier",
+        "rule_spoken_number"
+      ],
+      "rejected_evidence": [],
+      "policy_version": "cadence-policy 1.0",
+      "reconciliation_version": "overlap-union-wordexpand 1.0"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_69f6f72f5ff23b89",
+      "entity_type": "NAME",
+      "original_start": 55,
+      "original_end": 60,
+      "raw_score": 0.85,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_member",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "member:exact:single_token",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Maria",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "member",
+        "registry_version": "ctx_example_0001",
+        "single_token": true
+      }
+    },
+    {
+      "evidence_id": "ev_04ae9fec5a4ae834",
+      "entity_type": "NAME",
+      "original_start": 55,
+      "original_end": 70,
+      "raw_score": 0.9999860376151446,
+      "score_type": "model_confidence",
+      "recognizer_id": "model_obi_roberta",
+      "recognizer_version": "78f2152eb93d",
+      "model_id": "obi/deid_roberta_i2b2",
+      "model_revision": "78f2152eb93ddd817290ce8dbe46f1a6685e09fc",
+      "rule_id": null,
+      "source": "model",
+      "text_view_id": "original",
+      "threshold_used": 0.5,
+      "threshold_source": "thresholds.model.obi_roberta",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Maria Hernandez",
+      "metadata": {
+        "native_label": "PATIENT",
+        "chunks": 1
+      }
+    },
+    {
+      "evidence_id": "ev_5333f963270becf8",
+      "entity_type": "NAME",
+      "original_start": 55,
+      "original_end": 70,
+      "raw_score": 1.0,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_member",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "member:exact",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Maria Hernandez",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "member",
+        "registry_version": "ctx_example_0001",
+        "single_token": false
+      }
+    },
+    {
+      "evidence_id": "ev_61d9721b3f29a10c",
+      "entity_type": "NAME",
+      "original_start": 61,
+      "original_end": 70,
+      "raw_score": 0.85,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_member",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "member:exact:single_token",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Hernandez",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "member",
+        "registry_version": "ctx_example_0001",
+        "single_token": true
+      }
+    },
+    {
+      "evidence_id": "ev_20b3c74a9e1ed9a3",
+      "entity_type": "DOB",
+      "original_start": 72,
+      "original_end": 112,
+      "raw_score": 1.0,
+      "score_type": "registry_normalized",
+      "recognizer_id": "registry_identifier",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "record",
+      "source": "registry",
+      "text_view_id": "normalized",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "twenty eighth March nineteen eighty five",
+      "metadata": {
+        "match_type": "normalized",
+        "registry_type": "record",
+        "registry_version": "ctx_example_0001",
+        "single_token": false,
+        "transformations": [
+          "spoken_dates_v1"
+        ]
+      }
+    },
+    {
+      "evidence_id": "ev_1a3f7800b79397a6",
+      "entity_type": "DATE",
+      "original_start": 72,
+      "original_end": 112,
+      "raw_score": 1.0,
+      "score_type": "spoken_number_match",
+      "recognizer_id": "rule_date",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "day_month",
+      "source": "rule",
+      "text_view_id": "normalized",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "twenty eighth March nineteen eighty five",
+      "metadata": {
+        "transformations": [
+          "spoken_dates_v1"
+        ]
+      }
+    },
+    {
+      "evidence_id": "ev_40419e6604fbfc7c",
+      "entity_type": "DATE",
+      "original_start": 86,
+      "original_end": 100,
+      "raw_score": 0.9478130391798913,
+      "score_type": "model_confidence",
+      "recognizer_id": "model_obi_roberta",
+      "recognizer_version": "78f2152eb93d",
+      "model_id": "obi/deid_roberta_i2b2",
+      "model_revision": "78f2152eb93ddd817290ce8dbe46f1a6685e09fc",
+      "rule_id": null,
+      "source": "model",
+      "text_view_id": "original",
+      "threshold_used": 0.5,
+      "threshold_source": "thresholds.model.obi_roberta",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "March nineteen",
+      "metadata": {
+        "native_label": "DATE",
+        "chunks": 1
+      }
+    },
+    {
+      "evidence_id": "ev_d1ad51e2818c3574",
+      "entity_type": "DATE",
+      "original_start": 86,
+      "original_end": 112,
+      "raw_score": 0.8,
+      "score_type": "contextual_rule",
+      "recognizer_id": "conv_ordinal_date",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "en_spoken_full_date",
+      "source": "contextual_rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "March nineteen eighty five",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_5645446fbb594ad7",
+      "entity_type": "DATE",
+      "original_start": 86,
+      "original_end": 112,
+      "raw_score": 1.0,
+      "score_type": "regex_match",
+      "recognizer_id": "rule_date",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "month_year",
+      "source": "rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "March nineteen eighty five",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_8a579464fc5494d2",
+      "entity_type": "OTHER_UNIQUE_ID",
+      "original_start": 101,
+      "original_end": 107,
+      "raw_score": 0.47373753786087036,
+      "score_type": "model_confidence",
+      "recognizer_id": "model_obi_roberta",
+      "recognizer_version": "78f2152eb93d",
+      "model_id": "obi/deid_roberta_i2b2",
+      "model_revision": "78f2152eb93ddd817290ce8dbe46f1a6685e09fc",
+      "rule_id": null,
+      "source": "model",
+      "text_view_id": "original",
+      "threshold_used": 0.5,
+      "threshold_source": "thresholds.model.obi_roberta",
+      "accepted_as_candidate": false,
+      "rejection_reason": "below_threshold",
+      "text": "eighty",
+      "metadata": {
+        "native_label": "ID",
+        "chunks": 1
+      }
+    },
+    {
+      "evidence_id": "ev_7506301962c09ee2",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "raw_score": 0.8,
+      "score_type": "contextual_rule",
+      "recognizer_id": "conv_spoken_id",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "spoken_id:phone",
+      "source": "contextual_rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Nine one seven, five five five, oh one two two",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_c206557943be4a69",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "raw_score": 1.0,
+      "score_type": "registry_normalized",
+      "recognizer_id": "registry_identifier",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "identifier",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Nine one seven, five five five, oh one two two",
+      "metadata": {
+        "match_type": "normalized",
+        "registry_type": "identifier",
+        "registry_version": "ctx_example_0001",
+        "single_token": false
+      }
+    },
+    {
+      "evidence_id": "ev_510b106003b47830",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "raw_score": 0.7,
+      "score_type": "spoken_number_match",
+      "recognizer_id": "rule_phone",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "bare10",
+      "source": "rule",
+      "text_view_id": "normalized",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Nine one seven, five five five, oh one two two",
+      "metadata": {
+        "transformations": [
+          "spoken_digits_v1"
+        ]
+      }
+    },
+    {
+      "evidence_id": "ev_1b44c6ae2f3665dd",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "raw_score": 1.0,
+      "score_type": "regex_match",
+      "recognizer_id": "rule_spoken_number",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "spoken_10",
+      "source": "rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Nine one seven, five five five, oh one two two",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_56ab75a5f0da5f06",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 195,
+      "original_end": 210,
+      "raw_score": 1.0,
+      "score_type": "regex_match",
+      "recognizer_id": "rule_titled_name",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "title_provider",
+      "source": "rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Dr. Alan Pierce",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_fd90050996f14ab3",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 199,
+      "original_end": 203,
+      "raw_score": 0.85,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_provider",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "provider:exact:single_token",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Alan",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "provider",
+        "registry_version": "providers_2026_10",
+        "single_token": true
+      }
+    },
+    {
+      "evidence_id": "ev_01aa4d6b18911f5f",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 199,
+      "original_end": 210,
+      "raw_score": 0.9999964173359785,
+      "score_type": "model_confidence",
+      "recognizer_id": "model_obi_roberta",
+      "recognizer_version": "78f2152eb93d",
+      "model_id": "obi/deid_roberta_i2b2",
+      "model_revision": "78f2152eb93ddd817290ce8dbe46f1a6685e09fc",
+      "rule_id": null,
+      "source": "model",
+      "text_view_id": "original",
+      "threshold_used": 0.5,
+      "threshold_source": "thresholds.model.obi_roberta",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Alan Pierce",
+      "metadata": {
+        "native_label": "STAFF",
+        "chunks": 1
+      }
+    },
+    {
+      "evidence_id": "ev_264b26b404667018",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 199,
+      "original_end": 210,
+      "raw_score": 1.0,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_provider",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "provider:exact",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Alan Pierce",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "provider",
+        "registry_version": "providers_2026_10",
+        "single_token": false
+      }
+    },
+    {
+      "evidence_id": "ev_5b398160a472157c",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 204,
+      "original_end": 210,
+      "raw_score": 0.85,
+      "score_type": "registry_exact",
+      "recognizer_id": "registry_provider",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "provider:exact:single_token",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Pierce",
+      "metadata": {
+        "match_type": "exact",
+        "registry_type": "provider",
+        "registry_version": "providers_2026_10",
+        "single_token": true
+      }
+    },
+    {
+      "evidence_id": "ev_1d7b75f85cd6ef05",
+      "entity_type": "DATE",
+      "original_start": 225,
+      "original_end": 237,
+      "raw_score": 0.9,
+      "score_type": "regex_match",
+      "recognizer_id": "rule_date",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "relative_weekday",
+      "source": "rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "next Tuesday",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_68f742d35a3898c0",
+      "entity_type": "DATE",
+      "original_start": 230,
+      "original_end": 237,
+      "raw_score": 0.9996238897729199,
+      "score_type": "model_confidence",
+      "recognizer_id": "model_obi_roberta",
+      "recognizer_version": "78f2152eb93d",
+      "model_id": "obi/deid_roberta_i2b2",
+      "model_revision": "78f2152eb93ddd817290ce8dbe46f1a6685e09fc",
+      "rule_id": null,
+      "source": "model",
+      "text_view_id": "original",
+      "threshold_used": 0.5,
+      "threshold_source": "thresholds.model.obi_roberta",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "Tuesday",
+      "metadata": {
+        "native_label": "DATE",
+        "chunks": 1
+      }
+    },
+    {
+      "evidence_id": "ev_8106449a6e546983",
+      "entity_type": "MEMBER_ID",
+      "original_start": 259,
+      "original_end": 297,
+      "raw_score": 0.85,
+      "score_type": "contextual_rule",
+      "recognizer_id": "conv_spoken_id",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "spoken_id:member_id",
+      "source": "contextual_rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "C, D, four four seven, one nine oh two",
+      "metadata": {}
+    },
+    {
+      "evidence_id": "ev_92477ad36f94b2ca",
+      "entity_type": "MEMBER_ID",
+      "original_start": 265,
+      "original_end": 297,
+      "raw_score": 1.0,
+      "score_type": "registry_normalized",
+      "recognizer_id": "registry_identifier",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "identifier",
+      "source": "registry",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "four four seven, one nine oh two",
+      "metadata": {
+        "match_type": "normalized",
+        "registry_type": "identifier",
+        "registry_version": "ctx_example_0001",
+        "single_token": false
+      }
+    },
+    {
+      "evidence_id": "ev_634abd589ab45372",
+      "entity_type": "MEMBER_ID",
+      "original_start": 265,
+      "original_end": 297,
+      "raw_score": 0.9,
+      "score_type": "spoken_number_match",
+      "recognizer_id": "rule_identifier",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "kw_window_member_id",
+      "source": "rule",
+      "text_view_id": "normalized",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "four four seven, one nine oh two",
+      "metadata": {
+        "transformations": [
+          "spoken_digits_v1"
+        ]
+      }
+    },
+    {
+      "evidence_id": "ev_ae3b6ae06abae79a",
+      "entity_type": "OTHER_UNIQUE_ID",
+      "original_start": 265,
+      "original_end": 297,
+      "raw_score": 1.0,
+      "score_type": "regex_match",
+      "recognizer_id": "rule_spoken_number",
+      "recognizer_version": "1",
+      "model_id": null,
+      "model_revision": null,
+      "rule_id": "spoken_7",
+      "source": "rule",
+      "text_view_id": "original",
+      "threshold_used": 0.0,
+      "threshold_source": "thresholds.deterministic_default",
+      "accepted_as_candidate": true,
+      "rejection_reason": null,
+      "text": "four four seven, one nine oh two",
+      "metadata": {}
+    }
+  ],
+  "output": {
+    "mode": "debug",
+    "sanitized_text": null,
+    "tokenized_text": null,
+    "operator": null,
+    "vault_id": null
+  },
+  "summary": {
+    "entities_detected": 6,
+    "entities_by_type": {
+      "DATE": 1,
+      "DOB": 1,
+      "MEMBER_ID": 1,
+      "NAME": 1,
+      "PHONE": 1,
+      "PROVIDER_NAME": 1
+    },
+    "decisions": {
+      "REDACT": 6
+    },
+    "recognizers_used": [
+      "conv_language",
+      "conv_ordinal_date",
+      "conv_partial_phone",
+      "conv_spelled_name",
+      "conv_spoken_address",
+      "conv_spoken_id",
+      "model_obi_roberta",
+      "registry_contact",
+      "registry_employer",
+      "registry_facility",
+      "registry_identifier",
+      "registry_member",
+      "registry_provider",
+      "registry_staff",
+      "rule_address",
+      "rule_date",
+      "rule_email_url",
+      "rule_identifier",
+      "rule_phone",
+      "rule_spoken_number",
+      "rule_titled_name",
+      "rule_zip"
+    ],
+    "recognizers_disabled": [
+      "model_mednotes_gliner",
+      "model_stanford_v2",
+      "presidio_date",
+      "presidio_email",
+      "presidio_phone",
+      "presidio_url",
+      "presidio_us_mbi",
+      "presidio_us_npi",
+      "presidio_us_ssn"
+    ],
+    "models_used": [
+      "obi_roberta"
+    ],
+    "candidates": 25,
+    "candidates_accepted": 24,
+    "candidates_rejected": 1,
+    "overlap_groups": 6
+  },
+  "trace": [
+    {
+      "stage": "normalization",
+      "normalizers": [
+        "spoken_digits",
+        "spoken_dates",
+        "spoken_address",
+        "spelled_names",
+        "spoken_email",
+        "asr_cleanup"
+      ],
+      "views": [
+        "original",
+        "normalized"
+      ],
+      "ms": 0.622
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_language",
+      "ms": 0.401,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_ordinal_date",
+      "ms": 5.97,
+      "evidence": 1
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_partial_phone",
+      "ms": 0.017,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_spelled_name",
+      "ms": 0.141,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_spoken_address",
+      "ms": 13.561,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "conv_spoken_id",
+      "ms": 1.1,
+      "evidence": 2
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "model_obi_roberta",
+      "ms": 153.38,
+      "evidence": 5
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_contact",
+      "ms": 0.806,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_employer",
+      "ms": 0.776,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_facility",
+      "ms": 0.793,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_identifier",
+      "ms": 0.782,
+      "evidence": 3
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_member",
+      "ms": 1.239,
+      "evidence": 3
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_provider",
+      "ms": 0.811,
+      "evidence": 3
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "registry_staff",
+      "ms": 0.802,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_address",
+      "ms": 2.783,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_date",
+      "ms": 6.963,
+      "evidence": 3
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_email_url",
+      "ms": 0.518,
+      "evidence": 0
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_identifier",
+      "ms": 1.75,
+      "evidence": 1
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_phone",
+      "ms": 0.46,
+      "evidence": 1
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_spoken_number",
+      "ms": 0.092,
+      "evidence": 2
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_titled_name",
+      "ms": 0.769,
+      "evidence": 1
+    },
+    {
+      "stage": "recognizer",
+      "recognizer": "rule_zip",
+      "ms": 1.064,
+      "evidence": 0
+    },
+    {
+      "stage": "policy",
+      "accepted": 24,
+      "rejected": 1
+    },
+    {
+      "stage": "reconciliation",
+      "groups": 6,
+      "detections": 6
+    }
+  ],
+  "timings": {
+    "normalization_ms": 0.622,
+    "recognizer_ms": 41.597,
+    "model_ms": 153.38,
+    "reconciliation_ms": 0.126,
+    "policy_ms": 0.079,
+    "redaction_ms": 0.0,
+    "total_ms": 196.85,
+    "per_recognizer_ms": {
+      "rule_phone": 0.46,
+      "rule_spoken_number": 0.092,
+      "rule_email_url": 0.518,
+      "rule_identifier": 1.75,
+      "rule_zip": 1.064,
+      "rule_date": 6.963,
+      "rule_address": 2.783,
+      "rule_titled_name": 0.769,
+      "conv_spoken_id": 1.1,
+      "conv_partial_phone": 0.017,
+      "conv_ordinal_date": 5.97,
+      "conv_spoken_address": 13.561,
+      "conv_spelled_name": 0.141,
+      "conv_language": 0.401,
+      "model_obi_roberta": 153.38,
+      "registry_member": 1.239,
+      "registry_provider": 0.811,
+      "registry_staff": 0.802,
+      "registry_facility": 0.793,
+      "registry_employer": 0.776,
+      "registry_contact": 0.806,
+      "registry_identifier": 0.782
+    }
+  }
+}

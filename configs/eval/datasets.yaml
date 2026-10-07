@@ -1,0 +1,129 @@
+# DATASET MANIFEST - owner: evaluation / data governance. Never loaded by the runtime engine.
+# role decides what a dataset may be used for (calibration and rule development read ROLE, never names);
+# sha256 is verified before every evaluation (a changed file is an error until the manifest is re-signed
+# with `python -m harness_eval.manifests sign <id>` and the change logged).
+# phi_class: fabricated | public | real_governed. access_class governs where outputs may be written.
+manifest_version: 1
+roles:
+  dev: 'development: rule development, calibration, debugging'
+  test: 'frozen held-out: measured once per release candidate; every access logged in the ledger'
+  holdout: 'hidden subset: never shown in debugging views'
+  suite: curated regression / manual-evaluation suite (not a tuning set)
+  release: REAL governed Cadence data (T4) - the only release evidence; none registered yet
+  regression: baseline snapshots
+groups:
+  cadence_dev:
+  - cadence_dev_text
+  - cadence_dev_asr
+  cadence_test:
+  - cadence_text
+  - cadence_asr
+datasets:
+  cadence_dev_text:
+    path: data/cadence_realistic/cadence_dev_text.jsonl
+    role: dev
+    phi_class: fabricated
+    modality: mixed_text
+    provenance: authored by LLM agents from data/cadence_realistic/AUTHORING_SPEC.md (separate authors from test)
+    sha256: 1969bf7e5531642e488539cc2f42f7b6115a9e0d4698994751b44779b5a40479
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+  cadence_dev_asr:
+    path: data/cadence_realistic/cadence_dev_asr.jsonl
+    role: dev
+    phi_class: fabricated
+    modality: asr
+    provenance: cadence_dev_text spoken docs -> macOS TTS -> telephone channel -> Whisper-small (pinned)
+    sha256: ff379367736d575128450beb258060224e41e2b5aa6b76882bbb969ad1805adf
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+  cadence_text:
+    path: data/cadence_realistic/cadence_text.jsonl
+    role: test
+    phi_class: fabricated
+    modality: mixed_text
+    provenance: authored by LLM agents from AUTHORING_SPEC.md; frozen test split
+    sha256: 5ab67d2fd043f1a19aa70a1d5101f7fa22c1c0776c23e87e084056126b30db0f
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+  cadence_asr:
+    path: data/cadence_realistic/cadence_asr.jsonl
+    role: test
+    phi_class: fabricated
+    modality: asr
+    provenance: cadence_text spoken docs -> TTS -> telephone channel -> Whisper-small (pinned); frozen test split
+    sha256: 513e90ffd46bc7e1322a0e8a11b1f23e75eec173fdb644d1b6b4541c51d8672b
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+  cadence_asr_uncorrected:
+    path: data/cadence_realistic/cadence_asr_uncorrected.jsonl
+    role: test
+    phi_class: fabricated
+    modality: asr
+    provenance: sensitivity variant of cadence_asr (gold before deviation D1)
+    sha256: e7a0310f3dc38a13e1deb01865a6211b6192779774e62f2b4fc5d980bdb349ab
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+  user_cases_v1:
+    path: data/diagnostic/user_cases_v1.jsonl
+    role: dev
+    phi_class: fabricated
+    modality: note
+    provenance: user-supplied fabricated cases (2026-10-07) + span annotations; used to DISCOVER detection issues, so development data by definition
+      - never a held-out measure. Scored with python -m harness_eval.strict_eval.
+    sha256: bd9c6d52cc03ae54ee64e51511328fb31a189f08193031732b22ceeca4771364
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en
+    history:
+    - date: '2026-10-07T12:46:51'
+      old: '0000000000000000000000000000000000000000000000000000000000000000'
+      new: bd9c6d52cc03ae54ee64e51511328fb31a189f08193031732b22ceeca4771364
+      reason: register diagnostic cases used for detection v2 issue analysis (dev role)
+  user_cases_v2:
+    path: data/diagnostic/user_cases_v2.jsonl
+    role: dev
+    phi_class: fabricated
+    modality: note
+    provenance: second user-supplied fabricated batch (2026-10-07); first scored BEFORE any rule change (held-out check of detection v2). Any
+      rule developed from its failures makes it development data - re-role it to dev in that change.
+    sha256: 7f4d8c9b3a65b45dfda93314a4afbc7491525c762f268a569dd279e2ae01d634
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en
+    history:
+    - date: '2026-10-07T14:09:59'
+      old: '0000000000000000000000000000000000000000000000000000000000000000'
+      new: 7f4d8c9b3a65b45dfda93314a4afbc7491525c762f268a569dd279e2ae01d634
+      reason: held-out batch for detection v2, scored once before changes
+    - date: '2026-10-07T15:23:52'
+      role: test -> dev
+      reason: held-out score recorded (F1 88.4%); batch then used to develop detection v3
+  english_v1_suite:
+    path: eval_suites/english_v1/prompts.resolved.jsonl
+    role: suite
+    phi_class: fabricated
+    modality: mixed
+    provenance: eval_suites/english_v1 prompt suite (expectations authored blind); 25% holdout
+    sha256: 1fe0feda909f8ff3c22e51bdf5a228406ec86aff56e0a7d8262463f108c46775
+    access_class: internal_fabricated
+    license: internal
+    retention: indefinite (fabricated data)
+    language: en (filtered)
+    history:
+    - date: '2026-10-06T16:04:59'
+      old: null
+      new: 1fe0feda909f8ff3c22e51bdf5a228406ec86aff56e0a7d8262463f108c46775
+      reason: initial freeze of english_v1 prompt suite (authored blind; validated 215 prompts / 468 entities)

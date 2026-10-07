@@ -1,0 +1,48 @@
+# Benchmark-wide settings. Gates are INTERNAL ENGINEERING BENCHMARK GATES,
+# not claims about legal HIPAA compliance.
+datasets:
+  synthetic_dev:  {adapter: synthetic, path: data/synthetic/dev.jsonl}
+  synthetic_test: {adapter: synthetic, path: data/synthetic/test.jsonl}
+  cadence_text:   {adapter: tier3, path: data/cadence_realistic/cadence_text.jsonl}
+  cadence_asr:    {adapter: tier3, path: data/cadence_realistic/cadence_asr.jsonl}
+  cadence_dev_text: {adapter: tier3, path: data/cadence_realistic/cadence_dev_text.jsonl}   # DEVELOPMENT split
+  cadence_dev_asr:  {adapter: tier3, path: data/cadence_realistic/cadence_dev_asr.jsonl}    # DEVELOPMENT split
+  cadence_asr_uncorrected: {adapter: tier3, path: data/cadence_realistic/cadence_asr_uncorrected.jsonl}
+  meddocan_dev:   {adapter: meddocan, path: data/public/meddocan/meddocan}
+  meddocan_test:  {adapter: meddocan, path: data/public/meddocan/meddocan}
+  i2b2_2014:      {adapter: i2b2_2014, path: null}     # supply --data-path; never auto-downloaded
+  i2b2_2006:      {adapter: i2b2_2006, path: null}
+  physionet_deid: {adapter: physionet_deid, path: null}
+
+calibration:
+  dataset: synthetic_dev
+  # Thresholds are chosen on dev only. Criterion: maximise F2 (recall-weighted) of
+  # label-agnostic full-coverage detection. Reported as "best threshold on dev".
+  criterion: f2_full_coverage
+threshold_sweep: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90]
+
+matching:
+  partial_min_gold_coverage: 0.5      # PARTIAL mode: >=50% of gold core chars covered
+  title_tokens: [dr, dra, doctor, doctora, mr, mrs, ms, miss, sr, sra, srta, nurse, prof]
+
+high_risk_categories: [NAME, PROVIDER_NAME, FACILITY_NAME, DOB, ADDRESS, PHONE, EMAIL, MEMBER_ID, MRN, ACCOUNT_ID, NPI, DATE]
+id_categories: [MEMBER_ID, MRN, ACCOUNT_ID, NPI, OTHER_UNIQUE_ID]
+
+gates:
+  - {id: high_risk_recall_critical, metric: high_risk_recall, op: "<", value: 0.95, severity: CRITICAL}
+  - {id: high_risk_recall_warning,  metric: high_risk_recall, op: "<", value: 0.98, severity: WARNING}
+  - {id: name_recall,       metric: "category_recall.NAME",          op: "<", value: 0.95, severity: CRITICAL}
+  - {id: dob_recall,        metric: "category_recall.DOB",           op: "<", value: 0.95, severity: CRITICAL}
+  - {id: address_recall,    metric: "category_recall.ADDRESS",       op: "<", value: 0.95, severity: CRITICAL}
+  - {id: npi_recall,        metric: "category_recall.NPI",           op: "<", value: 0.95, severity: CRITICAL}
+  - {id: provider_recall,   metric: "category_recall.PROVIDER_NAME", op: "<", value: 0.95, severity: CRITICAL}
+  - {id: facility_recall,   metric: "category_recall.FACILITY_NAME", op: "<", value: 0.95, severity: CRITICAL}
+  - {id: phone_recall,      metric: "category_recall.PHONE",     op: "<", value: 0.95, severity: CRITICAL}
+  - {id: member_id_recall,  metric: "category_recall.MEMBER_ID", op: "<", value: 0.95, severity: CRITICAL}
+  - {id: mrn_recall,        metric: "category_recall.MRN",       op: "<", value: 0.95, severity: CRITICAL}
+  - {id: doc_sanitization,  metric: complete_document_sanitization_rate, op: "<", value: 0.90, severity: CRITICAL}
+
+benchmark:
+  warmup_iterations: 3
+  measured_iterations: 20
+  batch_size: 8

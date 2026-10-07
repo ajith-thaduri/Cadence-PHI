@@ -1,0 +1,247 @@
+[
+ {
+  "doc": "dev_call_en_02",
+  "start": 0,
+  "end": 46,
+  "text": "Priya dot raman nine one... at example dot net",
+  "label": "EMAIL"
+ },
+ {
+  "doc": "dev_call_en_03",
+  "start": 0,
+  "end": 25,
+  "text": "R W one one nine four six",
+  "label": "OTHER_UNIQUE_ID"
+ },
+ {
+  "doc": "dev_call_en_03",
+  "start": 0,
+  "end": 32,
+  "text": "Rural Route four, box ninety-one",
+  "label": "ADDRESS"
+ },
+ {
+  "doc": "dev_call_en_05",
+  "start": 0,
+  "end": 14,
+  "text": "Haitian Creole",
+  "label": "LANGUAGE"
+ },
+ {
+  "doc": "dev_call_en_08",
+  "start": 0,
+  "end": 38,
+  "text": "P A two six seven seven three one zero",
+  "label": "OTHER_UNIQUE_ID"
+ },
+ {
+  "doc": "dev_call_en_13",
+  "start": 0,
+  "end": 8,
+  "text": "Clarence",
+  "label": "NAME"
+ },
+ {
+  "doc": "dev_call_en_13",
+  "start": 20,
+  "end": 35,
+  "text": "Tecumseh Street",
+  "label": "ADDRESS"
+ },
+ {
+  "doc": "dev_call_en_15",
+  "start": 5,
+  "end": 11,
+  "text": "Hector",
+  "label": "NAME"
+ },
+ {
+  "doc": "dev_call_en_15",
+  "start": 13,
+  "end": 24,
+  "text": "Hector Ruiz",
+  "label": "NAME"
+ },
+ {
+  "doc": "dev_call_en_16",
+  "start": 0,
+  "end": 11,
+  "text": "Tuesday the",
+  "label": "DATE"
+ },
+ {
+  "doc": "dev_call_en_17",
+  "start": 11,
+  "end": 18,
+  "text": "Fenwick",
+  "label": "RELATIVE_NAME"
+ },
+ {
+  "doc": "dev_call_en_17",
+  "start": 25,
+  "end": 30,
+  "text": "Nadia",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "dev_call_en_17",
+  "start": 16,
+  "end": 24,
+  "text": "Elmhurst",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "dev_call_en_18",
+  "start": 49,
+  "end": 60,
+  "text": "Desmond Obi",
+  "label": "RELATIVE_NAME"
+ },
+ {
+  "doc": "dev_call_en_18",
+  "start": 62,
+  "end": 113,
+  "text": "three one four, five five five, zero one nine eight",
+  "label": "PHONE"
+ },
+ {
+  "doc": "dev_es_01",
+  "start": 0,
+  "end": 6,
+  "text": "Okafor",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "dev_es_01",
+  "start": 8,
+  "end": 29,
+  "text": "o, ka, o, efe, o, ere",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "dev_es_01",
+  "start": 10,
+  "end": 24,
+  "text": "señor Sandoval",
+  "label": "NAME"
+ },
+ {
+  "doc": "dev_es_03",
+  "start": 0,
+  "end": 55,
+  "text": "Yoleisy punto montes ocho ocho arroba example punto com",
+  "label": "EMAIL"
+ },
+ {
+  "doc": "dev_es_04",
+  "start": 0,
+  "end": 8,
+  "text": "Irizarry",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "dev_es_06",
+  "start": 0,
+  "end": 63,
+  "text": "Jota ge punto u zeta ce a te e ge u i, arroba example punto net",
+  "label": "EMAIL"
+ },
+ {
+  "doc": "dev_mix_01",
+  "start": 14,
+  "end": 18,
+  "text": "Dani",
+  "label": "NAME"
+ },
+ {
+  "doc": "dev_mix_01",
+  "start": 76,
+  "end": 97,
+  "text": "Fresh Harvest Packing",
+  "label": "EMPLOYER"
+ },
+ {
+  "doc": "dev_mix_01",
+  "start": 35,
+  "end": 48,
+  "text": "next Thursday",
+  "label": "DATE"
+ },
+ {
+  "doc": "dev_mix_02",
+  "start": 50,
+  "end": 64,
+  "text": "three days ago",
+  "label": "DATE"
+ },
+ {
+  "doc": "dev_mix_02",
+  "start": 90,
+  "end": 111,
+  "text": "Northside Urgent Care",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "dev_mix_02",
+  "start": 0,
+  "end": 17,
+  "text": "Lone Star Drywall",
+  "label": "EMPLOYER"
+ },
+ {
+  "doc": "dev_mix_03",
+  "start": 11,
+  "end": 17,
+  "text": "Jayden",
+  "label": "RELATIVE_NAME"
+ },
+ {
+  "doc": "dev_mix_03",
+  "start": 63,
+  "end": 70,
+  "text": "Lincoln",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "dev_mix_03",
+  "start": 74,
+  "end": 82,
+  "text": "Saturday",
+  "label": "DATE"
+ },
+ {
+  "doc": "dev_mix_03",
+  "start": 0,
+  "end": 49,
+  "text": "Nine one seven, five five five, zero one two nine",
+  "label": "PHONE"
+ },
+ {
+  "doc": "dev_mix_03",
+  "start": 67,
+  "end": 74,
+  "text": "Spanish",
+  "label": "LANGUAGE"
+ },
+ {
+  "doc": "dev_mix_04",
+  "start": 8,
+  "end": 20,
+  "text": "Lakshmi Iyer",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "dev_mix_04",
+  "start": 25,
+  "end": 54,
+  "text": "Junction Boulevard Pediatrics",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "dev_mix_06",
+  "start": 3,
+  "end": 8,
+  "text": "Óscar",
+  "label": "NAME"
+ }
+]

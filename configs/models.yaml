@@ -1,0 +1,319 @@
+# Model provenance registry (v2).
+#
+# This file records WHAT each artifact is. Published results (author-reported or
+# independent) are in configs/published_evidence.yaml. Our measurements live only in
+# results/. Inspection evidence: docs/model_inspection.md.
+#
+# evaluation_role:
+#   core                 - in the original comparison
+#   candidate            - added in v2 (Knowledgator PII/streaming, real-clinical-trained models)
+#   spanish_specialist   - Spanish-only model; reported mainly on Spanish data
+#   excluded             - not evaluated by default (see provenance_status)
+
+models:
+
+  stanford_base:
+    display_name: Stanford Base
+    model_id: StanfordAIMI/stanford-deidentifier-base
+    huggingface_url: https://huggingface.co/StanfordAIMI/stanford-deidentifier-base
+    revision: 661b9c1c717d3165512d440abc3700c386aefab6
+    evaluation_role: core
+    provenance_status: valid
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/stanford_base.yaml
+    architecture: BertForTokenClassification (PubMedBERT-style uncased BERT-base, 12 layers, hidden 768)
+    parameter_count: 108897800
+    license: MIT
+    commercial_use: "Permitted by MIT license (check MIDRC/NIH funding terms with counsel)"
+    model_card: "Minimal card; cites Chambon et al. JAMIA 2022; 'recommended weights'"
+    training_data_description: "Radiology + biomedical documents: 999 annotated chest X-ray/CT reports + 3,001 X-rays + 2,193 medical notes (6,193 docs, multi-institutional)."
+    clinical_data_evidence: "Trained on REAL clinical text (radiology reports, medical notes). Author-reported results on real data."
+    native_labels: [VENDOR, DATE, HCW, HOSPITAL, ID, PATIENT, PHONE]
+    inference:
+      tag_scheme: IO
+      max_tokens: 512
+      author: {mode: break_tokens, window: 508}          # MIDRC deidentifier_model.py
+      production: {window: 256, context: 64}
+    maximum_context: 512 wordpiece tokens
+    inference_requirements: "transformers; ~0.45 GB weights; CPU-feasible"
+    languages_documented: [en]
+    known_limitations:
+      - No native label for address/geo, email, URL, age.
+      - Radiology-dominant training data.
+      - English only; 512-token window.
+
+  stanford_v2:
+    display_name: Stanford V2
+    model_id: StanfordAIMI/stanford-deidentifier-v2
+    huggingface_url: https://huggingface.co/StanfordAIMI/stanford-deidentifier-v2
+    revision: 244fba67a64894533487fe4031232749c44f6216
+    evaluation_role: core
+    provenance_status: valid
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/stanford_v2.yaml
+    architecture: BertForTokenClassification fine-tuned from stanford-deidentifier-base
+    parameter_count: 108898569
+    license: MIT
+    commercial_use: "Permitted by MIT license"
+    model_card: "Paper link only (arXiv:2511.04079)"
+    training_data_description: "Two large annotated Stanford radiology corpora (X-ray, CT, MR); adds AGE."
+    clinical_data_evidence: "Trained on REAL radiology reports. Author-reported results on real radiology data."
+    native_labels: [VENDOR, DATE, HCW, HOSPITAL, ID, PATIENT, PHONE, AGE]
+    inference:
+      tag_scheme: IO
+      max_tokens: 512
+      author: {mode: break_tokens, window: 508}
+      production: {window: 256, context: 64}
+    maximum_context: 512 wordpiece tokens
+    inference_requirements: "transformers; ~0.44 GB; CPU-feasible"
+    languages_documented: [en]
+    known_limitations:
+      - Same label gaps as Base; radiology-focused.
+
+  stanford_i2b2:
+    display_name: Stanford +i2b2
+    model_id: StanfordAIMI/stanford-deidentifier-with-radiology-reports-and-i2b2
+    huggingface_url: https://huggingface.co/StanfordAIMI/stanford-deidentifier-with-radiology-reports-and-i2b2
+    revision: d9b30bc321de8c8fb866d35e9d1b4a86ab3af241
+    evaluation_role: candidate
+    provenance_status: valid
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/stanford_base.yaml
+    architecture: BertForTokenClassification (same architecture/labels as Base)
+    parameter_count: 108897800
+    license: MIT
+    commercial_use: "Permitted by MIT license; trained partly on i2b2 data (n2c2 DUA terms apply to the DATA, model released by authors)"
+    model_card: "Same citation as Base; name states training on radiology reports AND i2b2"
+    training_data_description: "Radiology reports + i2b2 (2006/2014) training notes (per model name; card gives no split detail)."
+    clinical_data_evidence: "Trained on REAL clinical notes (i2b2) and radiology reports. Added because i2b2 training is the strongest real-note signal among Stanford variants."
+    native_labels: [VENDOR, DATE, HCW, HOSPITAL, ID, PATIENT, PHONE]
+    inference:
+      tag_scheme: IO
+      max_tokens: 512
+      author: {mode: break_tokens, window: 508}
+      production: {window: 256, context: 64}
+    maximum_context: 512 wordpiece tokens
+    inference_requirements: "transformers; ~0.44 GB; CPU-feasible"
+    languages_documented: [en]
+    known_limitations:
+      - Same label gaps as Base (no address/email/URL).
+      - Not the card's 'recommended' weights.
+
+  obi_roberta:
+    display_name: OBI RoBERTa i2b2
+    model_id: obi/deid_roberta_i2b2
+    huggingface_url: https://huggingface.co/obi/deid_roberta_i2b2
+    revision: 78f2152eb93ddd817290ce8dbe46f1a6685e09fc
+    evaluation_role: candidate
+    provenance_status: valid
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/obi_roberta.yaml
+    architecture: RobertaForTokenClassification fine-tuned from roberta-large (24 layers, hidden 1024)
+    parameter_count: 354356269
+    license: MIT
+    commercial_use: "Permitted by MIT license"
+    model_card: "Describes BILOU tagging, i2b2 2014 training, 128-token sequences with 32-token context; Results section empty"
+    training_data_description: "i2b2 2014 de-identification TRAIN set (790 notes, 17,171 PHI); spaCy sentencized, 128-token sequences incl. 32+32 context tokens."
+    clinical_data_evidence: "Trained on REAL clinical notes (i2b2 2014). INDEPENDENTLY evaluated out-of-the-box on 3,650 real UK hospital records (Kuo et al., iScience 2025)."
+    native_labels: [AGE, DATE, EMAIL, HOSP, ID, LOC, OTHERPHI, PATIENT, PATORG, PHONE, STAFF]
+    inference:
+      tag_scheme: BILOU
+      max_tokens: 512
+      author: {mode: context, window: 64, context: 32}     # 128-token sequences incl. 32+32 context
+      production: {window: 256, context: 64}
+    maximum_context: 512 BPE tokens (trained on 128-token sequences)
+    inference_requirements: "transformers; ~1.4 GB; CPU-feasible but ~3x slower than BERT-base"
+    languages_documented: [en]
+    known_limitations:
+      - i2b2-specific label semantics; no URL label.
+      - Trained on 790 notes from 2 US institutions.
+
+  kindlab_roberta:
+    display_name: KindLab RoBERTa i2b2
+    model_id: KindLab/roberta-deid
+    huggingface_url: https://huggingface.co/KindLab/roberta-deid
+    revision: 551c727f1c2dddab4b5b5821d936826a051fffe4
+    evaluation_role: excluded
+    provenance_status: "valid provenance; CHECKPOINT DEGENERATE - predicts O for every token on every probe (max P(non-O) < 1e-5), incl. i2b2-style text; see docs/model_inspection.md"
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/kindlab_roberta.yaml
+    tokenizer_id: FacebookAI/roberta-base   # repo ships NO tokenizer; card says fine-tuned from roberta-base (assumption recorded)
+    architecture: RobertaForTokenClassification fine-tuned from roberta-base
+    parameter_count: null
+    license: "NOT DECLARED on the Hugging Face repo (card says 'released with the approval of i2b2')"
+    commercial_use: "UNKNOWN - no license declared"
+    model_card: "Short card: fine-tuned on i2b2 2014 training set from roberta-base"
+    training_data_description: "i2b2 2014 training set."
+    clinical_data_evidence: "Trained on REAL clinical notes. Pyclipse (Moore et al. 2023, same lab ecosystem) reports results for 'Transformer-DeID RoBERTa' on six REAL datasets; mapping to this exact checkpoint is LIKELY but not confirmed."
+    native_labels: [AGE, CONTACT, DATE, ID, LOCATION, NAME, PROFESSION]
+    inference:
+      tag_scheme: IO
+      max_tokens: 512
+      author: {mode: context, window: 384, context: 64}
+      production: {window: 256, context: 64}
+    maximum_context: 512 BPE tokens
+    inference_requirements: "transformers; ~0.5 GB; CPU-feasible"
+    languages_documented: [en]
+    known_limitations:
+      - License undeclared.
+      - Published cross-dataset name recall is low (0.14-0.82 outside i2b2 2014).
+
+  mednotes_gliner:
+    display_name: MedNotes GLiNER (LOGICAL)
+    model_id: Lekhansh/modern-gliner-large-mednotes-deidentifier
+    huggingface_url: https://huggingface.co/Lekhansh/modern-gliner-large-mednotes-deidentifier
+    revision: 222fe2b47dfc368c416b682a4e0a5c1ad9456447
+    evaluation_role: core
+    provenance_status: valid
+    adapter: gliner
+    gliner_config: configs/gliner/mednotes.yaml
+    label_mapping: configs/label_mapping/mednotes_gliner.yaml
+    architecture: GLiNER bi-encoder span (ModernBERT-large + bge-base-en label encoder), fine-tuned from knowledgator/modern-gliner-bi-large-v1.0
+    parameter_count: 529845248
+    license: MIT
+    commercial_use: "Permitted by MIT license"
+    model_card: "9 labels; 'must not be used as a standalone anonymization tool'"
+    training_data_description: "1,045 human-annotated psychiatric-hospital records (NIMHANS, India); this is the model the LOGICAL paper's tool loads."
+    clinical_data_evidence: "Trained on REAL clinical notes. Author-reported (LOGICAL paper) char-level micro F1 0.980 on a held-out real test set."
+    native_labels: [person, address, address state, address country, identification number, dates, languages, groups, company]
+    maximum_context: "2048 words per pass"
+    inference_requirements: "gliner>=0.2; ~2.1 GB; GPU/MPS recommended"
+    languages_documented: [en]
+    known_limitations:
+      - Indian psychiatric notes; US identifier formats unseen.
+      - dates label covers only fully specified dates.
+
+  kg_pii_large:
+    display_name: Knowledgator PII Large
+    model_id: knowledgator/gliner-pii-large-v1.0
+    huggingface_url: https://huggingface.co/knowledgator/gliner-pii-large-v1.0
+    revision: f847f54fbc97ad6e78bfa20ed9c5e5d5c43327b9
+    evaluation_role: candidate
+    provenance_status: valid
+    adapter: gliner
+    gliner_config: configs/gliner/kg_pii_large.yaml
+    label_mapping: configs/label_mapping/kg_pii.yaml
+    architecture: GLiNER uni-encoder TOKEN-level (UniEncoderTokenGLiNER) on microsoft/deberta-v3-large
+    parameter_count: 440220163
+    license: Apache-2.0
+    commercial_use: "Permitted by Apache-2.0 (card advertises separate enterprise models)"
+    model_card: "60+ predefined PII/PHI/PCI labels; benchmarks only on synthetic-multi-pii-ner-v1"
+    training_data_description: "Not described beyond 'fine-tuned for privacy use cases'; evaluation set synthetic."
+    clinical_data_evidence: "NONE published. No real clinical evaluation found."
+    native_labels: [name, first name, last name, name medical professional, dob, email address, phone number, url, location address, location street, location city, location state, location zip, account number, healthcare number, ssn, organization medical facility, passport number, driver license, username, vehicle id]
+    maximum_context: "768 words per pass"
+    inference_requirements: "gliner>=0.2.2x; ~1.7 GB; GPU/MPS recommended; ONNX exports available"
+    languages_documented: [en]
+    known_limitations:
+      - No trained generic 'date' label (only dob) - 'date' requested zero-shot.
+      - Token-level decoding: threshold changes span shapes (no exact filtering).
+
+  kg_pii_base:
+    display_name: Knowledgator PII Base
+    model_id: knowledgator/gliner-pii-base-v1.0
+    huggingface_url: https://huggingface.co/knowledgator/gliner-pii-base-v1.0
+    revision: 61726e0ad791dcab3e29339bbec3ad42ded65641
+    evaluation_role: candidate
+    provenance_status: valid
+    adapter: gliner
+    gliner_config: configs/gliner/kg_pii_base.yaml
+    label_mapping: configs/label_mapping/kg_pii.yaml
+    architecture: GLiNER uni-encoder span (UniEncoderSpanGLiNER) on microsoft/deberta-v3-small
+    parameter_count: 166023936
+    license: Apache-2.0
+    commercial_use: "Permitted by Apache-2.0"
+    model_card: "Same card family as Large; highest F1 (80.99%) on the authors' SYNTHETIC benchmark"
+    training_data_description: "Not described; evaluation synthetic."
+    clinical_data_evidence: "NONE published."
+    native_labels: [name, first name, last name, name medical professional, dob, email address, phone number, url, location address, location street, location city, location state, location zip, account number, healthcare number, ssn, organization medical facility, passport number, driver license, username, vehicle id]
+    maximum_context: "2048 words per pass"
+    inference_requirements: "gliner; ~0.7 GB; CPU-feasible"
+    languages_documented: [en]
+    known_limitations:
+      - No trained generic 'date' label.
+
+  kg_stream_pii:
+    display_name: Knowledgator Streaming PII
+    model_id: knowledgator/gliner-stream-pii-v1.0
+    huggingface_url: https://huggingface.co/knowledgator/gliner-stream-pii-v1.0
+    revision: e871777dc4b3b688747a0433fff8d94a36fcc7b0
+    evaluation_role: candidate
+    provenance_status: valid
+    adapter: gliner
+    gliner_config: configs/gliner/kg_stream_pii.yaml
+    label_mapping: configs/label_mapping/kg_stream_pii.yaml
+    architecture: GLiNER streaming-span (StreamingSpanGLiNER, markerV2) on Qwen/Qwen3-0.6B causal backbone; supports cached incremental sessions
+    parameter_count: 676575232
+    license: Apache-2.0
+    commercial_use: "Permitted by Apache-2.0 (Qwen3 base is Apache-2.0)"
+    model_card: "Open-label PII; PIIMB masking metrics on ai4privacy/gretel/nemotron/privy (non-clinical, largely synthetic)"
+    training_data_description: "Not described."
+    clinical_data_evidence: "NONE published. Evaluations are non-clinical PII benchmarks."
+    native_labels: []   # open-label; trained label vocabulary not published
+    maximum_context: "8192 words per pass"
+    inference_requirements: "gliner>=0.2.28; ~2.7 GB fp32; GPU/MPS recommended"
+    languages_documented: [en]
+    known_limitations:
+      - Trained label vocabulary undocumented; all labels treated as open-label.
+      - Card notes weak multilingual legal text performance.
+
+  labbiomedica_es:
+    display_name: LabBiomedica ES DeID
+    model_id: LabBiomedica/roberta-base-biomedical-clinical-es-finetuned-deid
+    huggingface_url: https://huggingface.co/LabBiomedica/roberta-base-biomedical-clinical-es-finetuned-deid
+    revision: f590c179cc159c60c8e55dac69f88297550b0c03
+    evaluation_role: spanish_specialist
+    provenance_status: valid
+    adapter: hf_token_classification
+    label_mapping: configs/label_mapping/labbiomedica_es.yaml
+    architecture: RobertaForTokenClassification fine-tuned from PlanTL-GOB-ES/roberta-base-biomedical-clinical-es
+    parameter_count: 125392903
+    license: Apache-2.0
+    commercial_use: "Permitted by Apache-2.0"
+    model_card: "BIO NAME / PROFESSION / LOCATION; card says dates, IDs, phones NOT covered"
+    training_data_description: "REAL clinical records of maternal patients, Clínica Universitaria Bolivariana (Medellín, Colombia)."
+    clinical_data_evidence: "Trained and author-evaluated on REAL Spanish clinical records (single institution)."
+    native_labels: [NAME, PROFESSION, LOCATION]
+    inference:
+      tag_scheme: BIO
+      max_tokens: 512
+      author: {mode: context, window: 510, context: 0}
+      production: {window: 256, context: 64}
+    maximum_context: 512 BPE tokens
+    inference_requirements: "transformers; ~0.5 GB; CPU-feasible"
+    languages_documented: [es]
+    known_limitations:
+      - Spanish only; 3 labels; no dates/IDs/phones (card).
+
+  logical_gliner:
+    display_name: BioMike 'logical' GLiNER (EXCLUDED)
+    model_id: BioMike/logical-modern-gliner-bi-large-v1.0
+    huggingface_url: https://huggingface.co/BioMike/logical-modern-gliner-bi-large-v1.0
+    revision: 2861fbf4702df37fc78219141135dca161fa5035
+    evaluation_role: excluded
+    provenance_status: "INVALID - NON-CLINICAL (logic-puzzle QA model; not the LOGICAL clinical model)"
+    adapter: gliner
+    gliner_config: configs/gliner/logical.yaml
+    label_mapping: configs/label_mapping/logical_gliner.yaml
+    architecture: GLiNER bi-encoder span (ModernBERT-large + bge-base-en)
+    parameter_count: 529845248
+    license: NOT DECLARED
+    commercial_use: "UNKNOWN - no license"
+    model_card: "None"
+    training_data_description: "Undocumented. Author's Space uses it with labels=['answer'] for logic puzzles."
+    clinical_data_evidence: "NONE. The clinical LOGICAL paper ships Lekhansh/modern-gliner-large-mednotes-deidentifier."
+    native_labels: []
+    maximum_context: "2048 words per pass"
+    inference_requirements: "gliner"
+    languages_documented: []
+    known_limitations:
+      - Provenance invalid for clinical PHI; v1 result (4.1% high-risk recall) must not be used to characterise GLiNER.
+
+# Candidates reviewed but NOT added (and why). Recorded so the omission is explicit.
+not_added:
+  - {model_id: nvidia/gliner-PII, reason: "Training and labels entirely synthetic (nemotron-pii); no real clinical evaluation; custom NVIDIA Open Model License."}
+  - {model_id: fastino/gliner2-privacy-filter-PII-multi, reason: "Trained on 4,910 synthetic texts; only SPY benchmark (synthetic); requires gliner2 library."}
+  - {model_id: urchade/gliner_multi_pii-v1, reason: "Synthetic multilingual PII training; no clinical validation."}
+  - {model_id: disi-unibo-nlp/openbioner-base-v2-deid, reason: "Author-evaluated on PhysioNet/i2b2-derived benchmark but trained on synthetic pii-masking data and requires the zshot framework; candidate for a later round."}
+  - {model_id: obi/deid_bert_i2b2, reason: "Same lab as obi/deid_roberta_i2b2; independently evaluated (Kuo 2025) as weaker than the RoBERTa variant."}
+  - {model_id: StanfordAIMI/stanford-deidentifier-only-i2b2, reason: "Variant covered by stanford_i2b2 (radiology + i2b2); evaluating all Stanford variants adds little."}

@@ -1,0 +1,21 @@
+# Redaction policy used for gold annotation, deterministic rules and scoring.
+# This is an engineering policy for the benchmark, not a legal determination.
+redact:
+  person_names: [patients/members, relatives, caregivers, providers, staff]   # incl. first-name-only / last-name-only
+  identifiers: [MRN, member/insurance ID, account, NPI/professional license, claim, SSN/DNI]
+  contact: [phone, email, URL]
+  locations_smaller_than_state: [street address, street name alone, intersection, city, ZIP, landmark]
+  state: true            # Safe Harbor permits states; Cadence redacts them as defense in depth
+  dates: [full dates, month+day, month+year, DOB, spoken dates]
+  relative_dates: [next/last/this <weekday>, bare appointment weekday, yesterday, tomorrow, N days/weeks ago]
+  organisations: [facilities, employers, community organisations]
+  languages: true        # preferred language is contextual PHI for Cadence
+do_not_redact:
+  - countries ("United States", "Mexico") - ignore spans in gold
+  - ages (no canonical AGE category) - ignore spans
+  - same-day references ("today", "tonight", "this afternoon", "hoy") - the call date is document metadata
+  - years alone, durations in months/years ("hace 12 años", "3 years ago"), follow-up intervals ("in 3 months")
+  - habitual weekdays ("open Monday through Friday", "on Tuesdays")
+  - eponyms and disease names (Parkinson, Bell palsy, Smith fracture, Lyme, Glasgow Coma Scale)
+  - clinical values that look like dates or IDs (BP 120/80, 1/2 tablet, pain 6/10)
+  - relation words without names ("her daughter", "su madre")

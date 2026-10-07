@@ -1,0 +1,2 @@
+# TEST: unit / contract tests use PLACEHOLDER thresholds so expectations do not move with calibration.
+apply_generated: false

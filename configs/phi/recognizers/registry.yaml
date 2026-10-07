@@ -1,0 +1,183 @@
+# REGISTRY RECOGNIZERS - owner: privacy (matching policy) + engineering.
+# A request carries only an opaque RegistryContext; RegistryStore resolves it to ONE subject's record plus
+# versioned directories. kind_entities: which entity each registry kind emits. matching: exact /
+# normalized / conservative fuzzy policy (edit distance limits, nicknames, particles, common words that
+# only match when capitalised).
+recognizers:
+  registry_member:
+    enabled: true
+    kinds:
+    - member
+    version: '1'
+  registry_provider:
+    enabled: true
+    kinds:
+    - provider
+    version: '1'
+  registry_staff:
+    enabled: true
+    kinds:
+    - staff
+    version: '1'
+  registry_facility:
+    enabled: true
+    kinds:
+    - facility
+    version: '1'
+  registry_employer:
+    enabled: true
+    kinds:
+    - employer
+    version: '1'
+  registry_contact:
+    enabled: true
+    kinds:
+    - contact
+    version: '1'
+  registry_identifier:
+    enabled: true
+    kinds:
+    - identifier
+    - record
+    version: '1'
+registry:
+  fuzzy: true
+  single_token_requires_capital: true
+  directories_path: data/registry
+  kind_entities:
+    member:
+    - NAME
+    provider:
+    - PROVIDER_NAME
+    staff:
+    - CARE_TEAM_MEMBER
+    facility:
+    - FACILITY_NAME
+    employer:
+    - EMPLOYER
+    contact:
+    - RELATIVE_NAME
+    identifier:
+    - MEMBER_ID
+    - MRN
+    - PHONE
+    - NPI
+    record:
+    - EMAIL
+    - ADDRESS
+    - CITY
+    - ZIP
+    - DOB
+  matching:
+    fuzzy: true
+    fuzzy_min_len: 5
+    fuzzy_max_edits: 1
+    fuzzy_max_edits_long: 2
+    fuzzy_long_len: 8
+    single_token_requires_capital: true
+    partial_token_min_len: 3
+    nicknames:
+      robert:
+      - bob
+      - rob
+      - bobby
+      william:
+      - bill
+      - will
+      - billy
+      patricia:
+      - pat
+      - patty
+      michael:
+      - mike
+      james:
+      - jim
+      - jimmy
+      daniel:
+      - dan
+      - danny
+      samuel:
+      - sam
+      dorothy:
+      - dot
+      - dottie
+      walter:
+      - walt
+      jessica:
+      - jess
+      elena:
+      - lena
+      teresa:
+      - tere
+    particles:
+    - al
+    - bin
+    - da
+    - das
+    - de
+    - del
+    - den
+    - der
+    - di
+    - do
+    - dos
+    - du
+    - e
+    - el
+    - la
+    - las
+    - le
+    - los
+    - mac
+    - mc
+    - san
+    - santa
+    - santo
+    - st
+    - van
+    - von
+    - y
+    common_words:
+    - amazon
+    - bill
+    - black
+    - bob
+    - brooks
+    - cedar
+    - dan
+    - dot
+    - general
+    - grant
+    - green
+    - grove
+    - hall
+    - hughes
+    - jefferson
+    - jess
+    - jim
+    - kim
+    - king
+    - lakeshore
+    - lane
+    - lena
+    - lincoln
+    - may
+    - memorial
+    - mercy
+    - mike
+    - north
+    - park
+    - pat
+    - price
+    - riverside
+    - rose
+    - sam
+    - south
+    - target
+    - tere
+    - valley
+    - walt
+    - washington
+    - white
+    - will
+    - young

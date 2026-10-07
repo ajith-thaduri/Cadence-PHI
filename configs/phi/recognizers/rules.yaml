@@ -1,0 +1,90 @@
+# DETERMINISTIC RULE FAMILIES (harness/shield/rules.py) - owner: engineering.
+# `emits` declares every entity a family may produce (entity responsibility). developed_on = data used to build it.
+recognizers:
+  rule_phone:
+    enabled: true
+    family: phones
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    - meddocan_dev
+    emits:
+    - PHONE
+  rule_spoken_number:
+    enabled: true
+    family: spoken_numbers
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    emits:
+    - PHONE
+    - MEMBER_ID
+    - MRN
+    - OTHER_UNIQUE_ID
+    - ZIP
+  rule_email_url:
+    enabled: true
+    family: emails_urls
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    emits:
+    - EMAIL
+    - URL
+  rule_identifier:
+    enabled: true
+    family: keyword_ids
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    - meddocan_dev
+    emits:
+    - MEMBER_ID
+    - MRN
+    - ACCOUNT_ID
+    - NPI
+    - OTHER_UNIQUE_ID
+    - PHONE
+  rule_zip:
+    enabled: true
+    family: zips
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    - meddocan_dev
+    emits:
+    - ZIP
+  rule_date:
+    enabled: true
+    family: dates
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    - meddocan_dev
+    emits:
+    - DATE
+    - DOB
+  rule_address:
+    enabled: true
+    family: addresses
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    - meddocan_dev
+    emits:
+    - VEHICLE_ID      # '<state> registration <plate>' (2026-10-07)
+    - ADDRESS
+    - CITY
+    - STATE
+    - ZIP
+  rule_titled_name:
+    enabled: true
+    family: titled_names
+    version: '1'
+    developed_on:
+    - synthetic_dev
+    emits:
+    - NAME
+    - PROVIDER_NAME
+    - RELATIVE_NAME
+    - CARE_TEAM_MEMBER

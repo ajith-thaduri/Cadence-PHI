@@ -1,0 +1,18 @@
+# METRIC DEFINITIONS - owner: evaluation. Used by harness_eval.scoring; never by the engine.
+gold:
+  edge_policy: trim_edge_function_words         # D3: lowercase articles/prepositions at span edges are not PHI
+  edge_words: [the, a, an, "on", "in", at, around, about, by, of, from, since, until, el, la, los, las, lo, del, de, en,
+               un, una, desde, hasta, para, y, and]
+views:
+  leak: "binary character- and token-level PHI recall on the REDACTED OUTPUT (residual PHI)"
+  entity_relaxed: "gold entity overlapped by a REDACT/REVIEW detection (any overlap); full = every core char covered"
+  entity_strict: "a REDACT/REVIEW detection whose span equals the gold span after edge normalisation"
+  document: "fully sanitized = no residual core char of any direct-tier entity in the redacted output"
+statistics:
+  bootstrap_replicates: 1000                     # cluster bootstrap over DOCUMENTS (never tokens)
+  ci_level: 0.95
+  seed: 13
+  proportion_interval: wilson
+  min_support_default: 300                       # below this, gates report "insufficient evidence" (rule of three)
+strata: [entity, risk_tier, gate_group, modality, doc_type, language, length_bucket]
+length_buckets: [500, 1500, 4000]                # characters; 4 buckets

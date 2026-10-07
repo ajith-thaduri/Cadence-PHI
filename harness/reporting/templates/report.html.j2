@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHI Model Benchmark</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb; --surface-2: #f3f2ee; --border: #e3e2dc;
+  --text: #0b0b0b; --text-2: #52514e; --accent: #2a78d6;
+  --crit-bg: #fde8e7; --crit: #a32221; --warn-bg: #fdf3dc; --warn: #7a5200;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface: #1a1a19; --surface-2: #232321; --border: #3a3936;
+    --text: #ffffff; --text-2: #c3c2b7; --accent: #3987e5;
+    --crit-bg: #3d1716; --crit: #ff9c9b; --warn-bg: #3a2d0c; --warn: #f2c766;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #1a1a19; --surface-2: #232321; --border: #3a3936;
+  --text: #ffffff; --text-2: #c3c2b7; --accent: #3987e5;
+  --crit-bg: #3d1716; --crit: #ff9c9b; --warn-bg: #3a2d0c; --warn: #f2c766;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--text);
+  font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+header h1 { font-size: 26px; margin: 0 0 4px; }
+.meta { color: var(--text-2); font-size: 12px; overflow-wrap: anywhere; }
+nav { margin: 18px 0 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+nav a { font-size: 12px; color: var(--text-2); text-decoration: none; border: 1px solid var(--border);
+  border-radius: 999px; padding: 3px 10px; }
+nav a:hover { color: var(--accent); border-color: var(--accent); }
+section { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 26px; }
+h2 { font-size: 19px; margin: 0 0 10px; }
+h3 { font-size: 13px; margin: 18px 0 6px; color: var(--text-2); text-transform: uppercase; letter-spacing: .04em; }
+p { max-width: 80ch; }
+ul { padding-left: 20px; } li { margin: 3px 0; max-width: 110ch; }
+.tbl { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; margin: 8px 0 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--surface-2); font-weight: 600; position: sticky; top: 0; }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sev-CRITICAL { background: var(--crit-bg); color: var(--crit); font-weight: 600; }
+.sev-WARNING { background: var(--warn-bg); color: var(--warn); }
+img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 8px; margin: 6px 0 14px;
+  background: #fcfcfb; }
+.note { color: var(--text-2); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>{{ meta.title }}</h1>
+  <div class="meta">Generated {{ meta.generated }} · dataset {{ meta.dataset }} ({{ meta.documents }} documents) · {{ meta.run_dir }}</div>
+  <p class="note">Evidence tags on every table: [PUBLISHED REAL DATA], [OUR SYNTHETIC BENCHMARK], [OUR PUBLIC-CORPUS TEST — MEDDOCAN] (real case text, synthetic PHI), [ENGINEERING INFERENCE], [UNKNOWN]. No result is a real-data reproduction. Synthetic and real results are never combined; no single winner score is computed.</p>
+</header>
+<nav>{% for s in sections %}<a href="#{{ s.id }}">{{ s.title }}</a>{% endfor %}</nav>
+{% for s in sections %}
+<section id="{{ s.id }}">
+  <h2>{{ s.title }}</h2>
+  {% for p in s.paras %}<p>{{ p }}</p>{% endfor %}
+  {% if s.bullets %}<ul>{% for b in s.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+  {% for t in s.tables %}
+    <h3>{{ t.title }}</h3>
+    {% if t.rows %}
+    <div class="tbl"><table>
+      <thead><tr>{% for c in t.columns %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for r in t.rows %}<tr>{% for c in r %}<td class="{% if c in ['CRITICAL','WARNING'] %}sev-{{ c }}{% elif c is number or (c is string and (c.endswith('%') or c.endswith(' ms'))) %}num{% endif %}">{{ c if c is not none else '' }}</td>{% endfor %}</tr>
+      {% endfor %}
+      </tbody></table></div>
+    {% else %}<p class="note">No rows.</p>{% endif %}
+  {% endfor %}
+  {% for img in s.images_b64 %}<img src="{{ img }}" alt="chart for {{ s.title }}; the same data is in the table above">{% endfor %}
+</section>
+{% endfor %}
+</div>
+</body>
+</html>

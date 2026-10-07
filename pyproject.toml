@@ -1,0 +1,46 @@
+[project]
+name = "clinical-phi-model-benchmark"
+version = "0.1.0"
+description = "Local, reproducible benchmark of public clinical PHI de-identification models (evaluation only)"
+requires-python = ">=3.10"
+dependencies = [
+  "torch==2.14.1",
+  "transformers==5.16.1",
+  "gliner==0.2.29",
+  "tokenizers==0.23.2",
+  "huggingface_hub==1.33.0",
+  "safetensors==0.8.0",
+  "sentencepiece==0.2.2",
+  "numpy==2.5.3",
+  "pandas==3.0.6",
+  "matplotlib==3.11.2",
+  "jinja2==3.1.6",
+  "pyyaml==6.0.3",
+  "pydantic==2.13.5",
+  "psutil==7.2.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+# operator console (python -m harness_ui); the web UI is built from frontend/ with scripts/build_ui.sh
+ui = ["fastapi==0.142.2", "starlette==1.7.0", "uvicorn==0.54.0", "python-multipart==0.0.32"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["harness*", "harness_eval*", "harness_ui*"]
+
+[tool.setuptools.package-data]
+harness = ["reporting/templates/*.j2"]
+harness_ui = ["static/*", "static/assets/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
+filterwarnings = ["ignore::FutureWarning", "ignore::UserWarning"]
+# tiers: default = fast (no model weights, < 1 min); `pytest -m model` = contextual-model tier (local weights,
+# offline); `pytest -m "model or not model"` = everything
+markers = ["model: needs the local contextual model weights (run with: pytest -m model)"]
+addopts = "-m 'not model'"

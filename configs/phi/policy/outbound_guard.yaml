@@ -1,0 +1,8 @@
+# OUTBOUND GUARD - owner: privacy. Independent last-line re-scan of SANITIZED text before it leaves the
+# trust boundary (e.g. to an LLM). Uses deterministic rules + the request's scoped registry only (no ML),
+# so it fails differently from the primary detector. Entities with catalog outbound_guard: block cause the
+# payload to be blocked on any hit; `flag` only records it.
+outbound_guard:
+  enabled: true
+  recognizers: []                           # empty = every enabled deterministic + registry recognizer
+  action: block

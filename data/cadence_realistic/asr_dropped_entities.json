@@ -1,0 +1,233 @@
+[
+ {
+  "doc": "call_en_01",
+  "start": 0,
+  "end": 11,
+  "text": "Hadley Drug",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "call_en_02",
+  "start": 0,
+  "end": 5,
+  "text": "Kwame",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "call_en_02",
+  "start": 0,
+  "end": 6,
+  "text": "Okafor",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "call_en_03",
+  "start": 0,
+  "end": 31,
+  "text": "Thirty-one twelve North Kimball",
+  "label": "ADDRESS"
+ },
+ {
+  "doc": "call_en_05",
+  "start": 105,
+  "end": 120,
+  "text": "Glendale office",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "call_en_05",
+  "start": 58,
+  "end": 63,
+  "text": "Mindy",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "call_en_18",
+  "start": 0,
+  "end": 5,
+  "text": "Aoife",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "call_en_22",
+  "start": 0,
+  "end": 14,
+  "text": "Twenty-seventh",
+  "label": "DATE"
+ },
+ {
+  "doc": "call_en_27",
+  "start": 36,
+  "end": 48,
+  "text": "Vernon Tibbs",
+  "label": "NAME"
+ },
+ {
+  "doc": "es_02",
+  "start": 9,
+  "end": 15,
+  "text": "DaVita",
+  "label": "FACILITY_NAME"
+ },
+ {
+  "doc": "es_02",
+  "start": 22,
+  "end": 29,
+  "text": "Tidwell",
+  "label": "ADDRESS"
+ },
+ {
+  "doc": "es_09",
+  "start": 9,
+  "end": 19,
+  "text": "don Santos",
+  "label": "NAME"
+ },
+ {
+  "doc": "mix_01",
+  "start": 0,
+  "end": 47,
+  "text": "Six one nine, five five five, zero one five two",
+  "label": "PHONE"
+ },
+ {
+  "doc": "mix_02",
+  "start": 22,
+  "end": 36,
+  "text": "Saturday night",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_03",
+  "start": 3,
+  "end": 10,
+  "text": "Marlene",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "mix_03",
+  "start": 17,
+  "end": 23,
+  "text": "Teresa",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "mix_03",
+  "start": 80,
+  "end": 100,
+  "text": "Rosa Elvira Quintero",
+  "label": "NAME"
+ },
+ {
+  "doc": "mix_03",
+  "start": 0,
+  "end": 3,
+  "text": "Two",
+  "label": "MRN"
+ },
+ {
+  "doc": "mix_03",
+  "start": 5,
+  "end": 8,
+  "text": "Dos",
+  "label": "MRN"
+ },
+ {
+  "doc": "mix_03",
+  "start": 32,
+  "end": 47,
+  "text": "September tenth",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_03",
+  "start": 58,
+  "end": 70,
+  "text": "last Tuesday",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_03",
+  "start": 0,
+  "end": 49,
+  "text": "Two one four, five five five, zero one nine three",
+  "label": "PHONE"
+ },
+ {
+  "doc": "mix_04",
+  "start": 32,
+  "end": 37,
+  "text": "Bryan",
+  "label": "RELATIVE_NAME"
+ },
+ {
+  "doc": "mix_06",
+  "start": 71,
+  "end": 77,
+  "text": "jueves",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_06",
+  "start": 104,
+  "end": 109,
+  "text": "Okoro",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "mix_07",
+  "start": 76,
+  "end": 82,
+  "text": "Chávez",
+  "label": "PROVIDER_NAME"
+ },
+ {
+  "doc": "mix_07",
+  "start": 87,
+  "end": 95,
+  "text": "Thursday",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_07",
+  "start": 0,
+  "end": 22,
+  "text": "Eleven twenty Montwood",
+  "label": "ADDRESS"
+ },
+ {
+  "doc": "mix_07",
+  "start": 24,
+  "end": 48,
+  "text": "seven nine nine two five",
+  "label": "ZIP"
+ },
+ {
+  "doc": "mix_08",
+  "start": 6,
+  "end": 10,
+  "text": "Memo",
+  "label": "NAME"
+ },
+ {
+  "doc": "mix_08",
+  "start": 21,
+  "end": 27,
+  "text": "Mañana",
+  "label": "DATE"
+ },
+ {
+  "doc": "mix_08",
+  "start": 54,
+  "end": 59,
+  "text": "Sofía",
+  "label": "CARE_TEAM_MEMBER"
+ },
+ {
+  "doc": "doc_en_09",
+  "start": 313,
+  "end": 317,
+  "text": "Walt",
+  "label": "RELATIVE_NAME"
+ }
+]

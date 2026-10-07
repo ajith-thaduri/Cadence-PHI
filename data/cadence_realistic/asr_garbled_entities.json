@@ -1,0 +1,1423 @@
+[
+ {
+  "doc": "call_en_01",
+  "label": "PROVIDER_NAME",
+  "ref": "Halvorsen",
+  "asr": "Alberson",
+  "similarity": 0.588
+ },
+ {
+  "doc": "call_en_01",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Renee",
+  "asr": "for today",
+  "similarity": 0.25
+ },
+ {
+  "doc": "call_en_02",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Kwame",
+  "asr": "Quim",
+  "similarity": 0.222
+ },
+ {
+  "doc": "call_en_02",
+  "label": "RELATIVE_NAME",
+  "ref": "Tanya",
+  "asr": "How here",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_02",
+  "label": "RELATIVE_NAME",
+  "ref": "Tanya Abernathy-Cole",
+  "asr": "How here ever had the call",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_02",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Kwame",
+  "asr": "Quim",
+  "similarity": 0.222
+ },
+ {
+  "doc": "call_en_02",
+  "label": "RELATIVE_NAME",
+  "ref": "Tanya",
+  "asr": "talk to",
+  "similarity": 0.444
+ },
+ {
+  "doc": "call_en_02",
+  "label": "RELATIVE_NAME",
+  "ref": "Tanya",
+  "asr": "Toggle",
+  "similarity": 0.182
+ },
+ {
+  "doc": "call_en_03",
+  "label": "NAME",
+  "ref": "V as in Victor, E-N-A-B-L-E",
+  "asr": "and Unlegable. Leigh-Anne Litchford, ENA VLE",
+  "similarity": 0.533
+ },
+ {
+  "doc": "call_en_03",
+  "label": "DATE",
+  "ref": "the ninth",
+  "asr": "the night",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_05",
+  "label": "PROVIDER_NAME",
+  "ref": "Ramaswamy",
+  "asr": "McWilloughby's",
+  "similarity": 0.174
+ },
+ {
+  "doc": "call_en_05",
+  "label": "NAME",
+  "ref": "Luis Bermudez",
+  "asr": "to release Mermuda's",
+  "similarity": 0.588
+ },
+ {
+  "doc": "call_en_05",
+  "label": "NAME",
+  "ref": "Luis Bermudez",
+  "asr": "for muted",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_06",
+  "label": "ADDRESS",
+  "ref": "Unit C",
+  "asr": "In the sea",
+  "similarity": 0.333
+ },
+ {
+  "doc": "call_en_07",
+  "label": "PROVIDER_NAME",
+  "ref": "Lindqvist",
+  "asr": "Lin",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_08",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Gus",
+  "asr": "good",
+  "similarity": 0.286
+ },
+ {
+  "doc": "call_en_08",
+  "label": "NAME",
+  "ref": "Lafleur",
+  "asr": "that",
+  "similarity": 0.182
+ },
+ {
+  "doc": "call_en_08",
+  "label": "NAME",
+  "ref": "L-A-F",
+  "asr": "lure over here",
+  "similarity": 0.286
+ },
+ {
+  "doc": "call_en_08",
+  "label": "NAME",
+  "ref": "L-A, F as in Frank, L-E-U-R",
+  "asr": "Allie, a pleasure friend. Allie, you are",
+  "similarity": 0.545
+ },
+ {
+  "doc": "call_en_10",
+  "label": "ADDRESS",
+  "ref": "Wentworth",
+  "asr": "wet",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_10",
+  "label": "ADDRESS",
+  "ref": "W-E-N-T-W-O-R-T-H",
+  "asr": "words, double E-L-E-F-T, double E-L-O-R-T-H",
+  "similarity": 0.429
+ },
+ {
+  "doc": "call_en_11",
+  "label": "PROVIDER_NAME",
+  "ref": "Delgado",
+  "asr": "For God's sake",
+  "similarity": 0.211
+ },
+ {
+  "doc": "call_en_12",
+  "label": "PROVIDER_NAME",
+  "ref": "Fenwick",
+  "asr": "Van Wijk",
+  "similarity": 0.571
+ },
+ {
+  "doc": "call_en_12",
+  "label": "NAME",
+  "ref": "Delacroix",
+  "asr": "I look",
+  "similarity": 0.308
+ },
+ {
+  "doc": "call_en_12",
+  "label": "NAME",
+  "ref": "D-E-L-A",
+  "asr": "life. C-E-L-A",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_14",
+  "label": "PROVIDER_NAME",
+  "ref": "Mahmoud",
+  "asr": "Momma's",
+  "similarity": 0.286
+ },
+ {
+  "doc": "call_en_15",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Leo",
+  "asr": "real",
+  "similarity": 0.286
+ },
+ {
+  "doc": "call_en_15",
+  "label": "NAME",
+  "ref": "Tremaine",
+  "asr": "for",
+  "similarity": 0.182
+ },
+ {
+  "doc": "call_en_15",
+  "label": "EMAIL",
+  "ref": "t dot w-h-i-t nine two at example dot com",
+  "asr": "Please like, double, rate, like, do, like, do it, it's NAML.com",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_15",
+  "label": "PROVIDER_NAME",
+  "ref": "Yoon",
+  "asr": "knew",
+  "similarity": 0.25
+ },
+ {
+  "doc": "call_en_15",
+  "label": "ADDRESS",
+  "ref": "Fourth",
+  "asr": "the board",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_16",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Ines",
+  "asr": "Aimee",
+  "similarity": 0.444
+ },
+ {
+  "doc": "call_en_16",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Ravi",
+  "asr": "Robbie",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_16",
+  "label": "ADDRESS",
+  "ref": "Route nine",
+  "asr": "Ruthenine",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_16",
+  "label": "PROVIDER_NAME",
+  "ref": "Strand",
+  "asr": "plan",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_16",
+  "label": "PROVIDER_NAME",
+  "ref": "Esposito",
+  "asr": "as for CEDO",
+  "similarity": 0.333
+ },
+ {
+  "doc": "call_en_16",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Ravi",
+  "asr": "Robbie. We",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_17",
+  "label": "NAME",
+  "ref": "Eugene",
+  "asr": "He was",
+  "similarity": 0.25
+ },
+ {
+  "doc": "call_en_17",
+  "label": "RELATIVE_NAME",
+  "ref": "Lorraine",
+  "asr": "Flaring",
+  "similarity": 0.533
+ },
+ {
+  "doc": "call_en_17",
+  "label": "PROVIDER_NAME",
+  "ref": "Thibodeaux",
+  "asr": "They were though",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_17",
+  "label": "NAME",
+  "ref": "Gene",
+  "asr": "Jean",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_17",
+  "label": "RELATIVE_NAME",
+  "ref": "Doug",
+  "asr": "He works at Maddox",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_17",
+  "label": "RELATIVE_NAME",
+  "ref": "Doug",
+  "asr": "back",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_18",
+  "label": "NAME",
+  "ref": "Jacqueline",
+  "asr": "Natalie",
+  "similarity": 0.471
+ },
+ {
+  "doc": "call_en_18",
+  "label": "NAME",
+  "ref": "Jacqueline",
+  "asr": "a limb",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_18",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Aoife",
+  "asr": "out",
+  "similarity": 0.25
+ },
+ {
+  "doc": "call_en_18",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "A-O-I-F-E",
+  "asr": "it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_18",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Eef",
+  "asr": "it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air, it's air",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_18",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Aoife",
+  "asr": "Adam",
+  "similarity": 0.222
+ },
+ {
+  "doc": "call_en_19",
+  "label": "NAME",
+  "ref": "Albert Ngata",
+  "asr": "Alfred Gutter",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_19",
+  "label": "NAME",
+  "ref": "Ngata",
+  "asr": "Goddard",
+  "similarity": 0.333
+ },
+ {
+  "doc": "call_en_19",
+  "label": "RELATIVE_NAME",
+  "ref": "Leilani",
+  "asr": "on me",
+  "similarity": 0.222
+ },
+ {
+  "doc": "call_en_19",
+  "label": "PROVIDER_NAME",
+  "ref": "Kahananui",
+  "asr": "for cat anomaly",
+  "similarity": 0.375
+ },
+ {
+  "doc": "call_en_19",
+  "label": "RELATIVE_NAME",
+  "ref": "Leilani",
+  "asr": "allow me",
+  "similarity": 0.333
+ },
+ {
+  "doc": "call_en_20",
+  "label": "RELATIVE_NAME",
+  "ref": "Minh",
+  "asr": "Mid",
+  "similarity": 0.571
+ },
+ {
+  "doc": "call_en_20",
+  "label": "RELATIVE_NAME",
+  "ref": "Minh",
+  "asr": "Mid",
+  "similarity": 0.571
+ },
+ {
+  "doc": "call_en_20",
+  "label": "RELATIVE_NAME",
+  "ref": "Minh",
+  "asr": "Lynn",
+  "similarity": 0.25
+ },
+ {
+  "doc": "call_en_20",
+  "label": "PROVIDER_NAME",
+  "ref": "Pham",
+  "asr": "Dr",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_21",
+  "label": "RELATIVE_NAME",
+  "ref": "Darlene",
+  "asr": "the lead",
+  "similarity": 0.364
+ },
+ {
+  "doc": "call_en_23",
+  "label": "NAME",
+  "ref": "Mister Haddad",
+  "asr": "Mr. Patton",
+  "similarity": 0.5
+ },
+ {
+  "doc": "call_en_23",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Bea",
+  "asr": "me",
+  "similarity": 0.4
+ },
+ {
+  "doc": "call_en_23",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Bea",
+  "asr": "see",
+  "similarity": 0.333
+ },
+ {
+  "doc": "call_en_23",
+  "label": "NAME",
+  "ref": "Nabil",
+  "asr": "level",
+  "similarity": 0.2
+ },
+ {
+  "doc": "call_en_23",
+  "label": "NAME",
+  "ref": "Mister Haddad",
+  "asr": "Mr. Adams",
+  "similarity": 0.545
+ },
+ {
+  "doc": "call_en_25",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Yolanda",
+  "asr": "be longer",
+  "similarity": 0.308
+ },
+ {
+  "doc": "call_en_25",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Nico",
+  "asr": "Michael",
+  "similarity": 0.364
+ },
+ {
+  "doc": "call_en_25",
+  "label": "ADDRESS",
+  "ref": "Hoyt",
+  "asr": "point",
+  "similarity": 0.444
+ },
+ {
+  "doc": "call_en_25",
+  "label": "ADDRESS",
+  "ref": "Fulton",
+  "asr": "both",
+  "similarity": 0.2
+ },
+ {
+  "doc": "call_en_25",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Nico",
+  "asr": "Michael",
+  "similarity": 0.364
+ },
+ {
+  "doc": "call_en_26",
+  "label": "NAME",
+  "ref": "Toby",
+  "asr": "told you",
+  "similarity": 0.545
+ },
+ {
+  "doc": "call_en_26",
+  "label": "DATE",
+  "ref": "Wednesday",
+  "asr": "Wednesday's",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_26",
+  "label": "DATE",
+  "ref": "Wednesday",
+  "asr": "'s me",
+  "similarity": 0.0
+ },
+ {
+  "doc": "call_en_27",
+  "label": "FACILITY_NAME",
+  "ref": "Baptist East",
+  "asr": "that city",
+  "similarity": 0.533
+ },
+ {
+  "doc": "call_en_28",
+  "label": "NAME",
+  "ref": "Chukwuemeka",
+  "asr": "Shikwu and Mika",
+  "similarity": 0.583
+ },
+ {
+  "doc": "call_en_28",
+  "label": "NAME",
+  "ref": "Chukwuemeka",
+  "asr": "Chick-Woo Amika",
+  "similarity": 0.583
+ },
+ {
+  "doc": "call_en_28",
+  "label": "NAME",
+  "ref": "Emeka",
+  "asr": "Nico",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_02",
+  "label": "RELATIVE_NAME",
+  "ref": "Chuy",
+  "asr": "tu",
+  "similarity": 0.333
+ },
+ {
+  "doc": "es_02",
+  "label": "CITY",
+  "ref": "Houston",
+  "asr": "grado, 8",
+  "similarity": 0.167
+ },
+ {
+  "doc": "es_02",
+  "label": "DATE",
+  "ref": "mañana",
+  "asr": "Magiana",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_02",
+  "label": "NAME",
+  "ref": "don Ramón",
+  "asr": "un",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_02",
+  "label": "DATE",
+  "ref": "lunes",
+  "asr": "mundo",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_03",
+  "label": "DATE",
+  "ref": "junio",
+  "asr": "cumio",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_03",
+  "label": "ZIP",
+  "ref": "Diez cuatro cincuenta y dos, no, cincuenta y uno",
+  "asr": "Mine eso",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_03",
+  "label": "DATE",
+  "ref": "veintiocho",
+  "asr": "28",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_04",
+  "label": "MEMBER_ID",
+  "ref": "Cuatro",
+  "asr": "en el cuadro",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_04",
+  "label": "GEOGRAPHIC_CONTEXT",
+  "ref": "East LA",
+  "asr": "al Flá",
+  "similarity": 0.5
+ },
+ {
+  "doc": "es_04",
+  "label": "EMAIL",
+  "ref": "Pancho punto herrera sesenta y uno arroba example punto com",
+  "asr": "PANCHO.ERREGRACENTRAIUNOARROBAICAMBLES.COM",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_05",
+  "label": "DATE",
+  "ref": "veintidós",
+  "asr": "28",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_05",
+  "label": "DATE",
+  "ref": "veintiuno",
+  "asr": "2",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_06",
+  "label": "EMPLOYER",
+  "ref": "Pearl",
+  "asr": "ciudad",
+  "similarity": 0.182
+ },
+ {
+  "doc": "es_07",
+  "label": "NAME",
+  "ref": "Yesenia",
+  "asr": "comienza",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_07",
+  "label": "RELATIVE_NAME",
+  "ref": "doña Chayo",
+  "asr": "El amigo",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_07",
+  "label": "PROVIDER_NAME",
+  "ref": "Kim",
+  "asr": "quema",
+  "similarity": 0.25
+ },
+ {
+  "doc": "es_07",
+  "label": "DATE",
+  "ref": "diecisiete",
+  "asr": "17",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_07",
+  "label": "GEOGRAPHIC_CONTEXT",
+  "ref": "Pinebrook",
+  "asr": "de Neurohout",
+  "similarity": 0.556
+ },
+ {
+  "doc": "es_09",
+  "label": "RELATIVE_NAME",
+  "ref": "Kenia",
+  "asr": "qué mía",
+  "similarity": 0.25
+ },
+ {
+  "doc": "es_09",
+  "label": "PROVIDER_NAME",
+  "ref": "Boudreaux",
+  "asr": "Volcredos",
+  "similarity": 0.333
+ },
+ {
+  "doc": "es_09",
+  "label": "DATE",
+  "ref": "miércoles",
+  "asr": "huércoles",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_09",
+  "label": "DATE",
+  "ref": "miércoles",
+  "asr": "un",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_10",
+  "label": "DATE",
+  "ref": "nueve",
+  "asr": "duele",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_10",
+  "label": "DATE",
+  "ref": "julio",
+  "asr": "túnel",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_10",
+  "label": "EMPLOYER",
+  "ref": "Sun Valley Roofing",
+  "asr": "tumba del rojo",
+  "similarity": 0.545
+ },
+ {
+  "doc": "es_10",
+  "label": "RELATIVE_NAME",
+  "ref": "Güera",
+  "asr": "hueva",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_10",
+  "label": "RELATIVE_NAME",
+  "ref": "Güera",
+  "asr": "vuelta",
+  "similarity": 0.364
+ },
+ {
+  "doc": "es_10",
+  "label": "RELATIVE_NAME",
+  "ref": "Araceli",
+  "asr": "hará challenge",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_10",
+  "label": "RELATIVE_NAME",
+  "ref": "Güera",
+  "asr": "nueva",
+  "similarity": 0.4
+ },
+ {
+  "doc": "es_10",
+  "label": "DATE",
+  "ref": "veintisiete",
+  "asr": "27",
+  "similarity": 0.0
+ },
+ {
+  "doc": "es_10",
+  "label": "DATE",
+  "ref": "veintisiete",
+  "asr": "27",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Daniel Reyes",
+  "asr": "Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete",
+  "similarity": 0.4
+ },
+ {
+  "doc": "mix_01",
+  "label": "NAME",
+  "ref": "Mr. Alvarado",
+  "asr": "Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Sus",
+  "similarity": 0.167
+ },
+ {
+  "doc": "mix_01",
+  "label": "DATE",
+  "ref": "jueves",
+  "asr": "si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "DATE",
+  "ref": "jueves",
+  "asr": "si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si, si",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "DATE",
+  "ref": "Thursday the eighth",
+  "asr": "es, ser David",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "ADDRESS",
+  "ref": "Third Avenue",
+  "asr": "Cerda Benio",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "RELATIVE_NAME",
+  "ref": "Carmen",
+  "asr": "el",
+  "similarity": 0.25
+ },
+ {
+  "doc": "mix_01",
+  "label": "ADDRESS",
+  "ref": "Broadway",
+  "asr": "hueis",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "ADDRESS",
+  "ref": "three forty-one Naples Street",
+  "asr": "estilo y fortiguana plezestris",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "ADDRESS",
+  "ref": "Three forty-one",
+  "asr": "de cortis o",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_01",
+  "label": "ADDRESS",
+  "ref": "Apartment B",
+  "asr": "hasta el final",
+  "similarity": 0.381
+ },
+ {
+  "doc": "mix_01",
+  "label": "DATE",
+  "ref": "Thursday",
+  "asr": "de hoy",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "NAME",
+  "ref": "Jesús",
+  "asr": "zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh, zieh",
+  "similarity": 0.222
+ },
+ {
+  "doc": "mix_02",
+  "label": "NAME",
+  "ref": "Chuy",
+  "asr": "ja",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "NAME",
+  "ref": "Jesús",
+  "asr": "nowotnika",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "NAME",
+  "ref": "Chuy",
+  "asr": "Sorris",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "PROVIDER_NAME",
+  "ref": "Hollis",
+  "asr": "lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo",
+  "similarity": 0.25
+ },
+ {
+  "doc": "mix_02",
+  "label": "DATE",
+  "ref": "a week from Friday",
+  "asr": "y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y lo salvo y",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "EMAIL",
+  "ref": "chuy dot ortega nine arroba example dot com",
+  "asr": "ropa de crámole.com",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "EMAIL",
+  "ref": "Chuy dot ortega nine at example dot com",
+  "asr": "Cuál es tu hijo por ser el mire al Tecnábulo? ¿Cómo? A",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_02",
+  "label": "ADDRESS",
+  "ref": "Federal",
+  "asr": "va el",
+  "similarity": 0.444
+ },
+ {
+  "doc": "mix_02",
+  "label": "ADDRESS",
+  "ref": "Federal and Tenth",
+  "asr": "General Anderson",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_03",
+  "label": "GEOGRAPHIC_CONTEXT",
+  "ref": "Oak Cliff",
+  "asr": "no aquí",
+  "similarity": 0.444
+ },
+ {
+  "doc": "mix_03",
+  "label": "PHONE",
+  "ref": "two one four, five five five, zero one nine three",
+  "asr": "y ome por, sube, sube, sube, se rome y me frees",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_03",
+  "label": "ADDRESS",
+  "ref": "Twenty-two eighteen West Jefferson, unit five",
+  "asr": "Suende tu ID en web que perdón, con mis tuiles",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_03",
+  "label": "ADDRESS",
+  "ref": "Bonnie View",
+  "asr": "comienzo homo",
+  "similarity": 0.429
+ },
+ {
+  "doc": "mix_03",
+  "label": "PROVIDER_NAME",
+  "ref": "Adeyemi",
+  "asr": "no, no, no, no, no, no, no, no, no",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_03",
+  "label": "DATE",
+  "ref": "Wednesday the fourteenth",
+  "asr": "a little while before the end",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_03",
+  "label": "RELATIVE_NAME",
+  "ref": "Yolanda",
+  "asr": "You'll have",
+  "similarity": 0.471
+ },
+ {
+  "doc": "mix_03",
+  "label": "FACILITY_NAME",
+  "ref": "Parkland",
+  "asr": "Canto",
+  "similarity": 0.308
+ },
+ {
+  "doc": "mix_03",
+  "label": "DATE",
+  "ref": "today",
+  "asr": "j'ai",
+  "similarity": 0.222
+ },
+ {
+  "doc": "mix_03",
+  "label": "LANGUAGE",
+  "ref": "Spanish",
+  "asr": "para",
+  "similarity": 0.364
+ },
+ {
+  "doc": "mix_03",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Marlene",
+  "asr": "all for the moment",
+  "similarity": 0.462
+ },
+ {
+  "doc": "mix_04",
+  "label": "ORGANIZATION",
+  "ref": "Sunrise Home Care",
+  "asr": "Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete",
+  "similarity": 0.471
+ },
+ {
+  "doc": "mix_04",
+  "label": "DATE",
+  "ref": "last Thursday",
+  "asr": "we Turgdaj",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "DATE",
+  "ref": "today",
+  "asr": "firmeras",
+  "similarity": 0.154
+ },
+ {
+  "doc": "mix_04",
+  "label": "DOB",
+  "ref": "December nineteen, nineteen thirty-nine",
+  "asr": "Das sind wir in den Sehnen, in den Sehnen, in den Türkeh, in den Sehnen",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "CITY",
+  "ref": "Santa Ana",
+  "asr": "oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh, oh",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "ADDRESS",
+  "ref": "nine oh two",
+  "asr": "ella sin irne",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "DATE",
+  "ref": "August",
+  "asr": "j tėj tėj tėj tėj tėj tėj tėj tėj tėj",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "PHONE",
+  "ref": "seven one four, five five five, zero one two one",
+  "asr": "till det. Det är om jag är till och om jag får. Fyra fyra fyra. Det är om jag är till och om jag",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_04",
+  "label": "RELATIVE_NAME",
+  "ref": "Bryan",
+  "asr": "Perfecto",
+  "similarity": 0.154
+ },
+ {
+  "doc": "mix_04",
+  "label": "DATE",
+  "ref": "tomorrow",
+  "asr": "y",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "NAME",
+  "ref": "Mr. Figueroa",
+  "asr": "a Libia",
+  "similarity": 0.308
+ },
+ {
+  "doc": "mix_05",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Alicia Burgos",
+  "asr": "Suscríbete a",
+  "similarity": 0.182
+ },
+ {
+  "doc": "mix_05",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Alicia",
+  "asr": "a",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "NAME",
+  "ref": "Luis",
+  "asr": "muy",
+  "similarity": 0.286
+ },
+ {
+  "doc": "mix_05",
+  "label": "FACILITY_NAME",
+  "ref": "Cedar Crest Rehab",
+  "asr": "llegar crecer",
+  "similarity": 0.545
+ },
+ {
+  "doc": "mix_05",
+  "label": "DATE",
+  "ref": "agosto",
+  "asr": "Si",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "DATE",
+  "ref": "Monday the nineteenth",
+  "asr": "ondra y zen en",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Mr. Okonkwo",
+  "asr": "alguien",
+  "similarity": 0.143
+ },
+ {
+  "doc": "mix_05",
+  "label": "MEMBER_ID",
+  "ref": "Five seven zero eight",
+  "asr": "Si les he metido",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "FACILITY_NAME",
+  "ref": "CVS",
+  "asr": "este",
+  "similarity": 0.286
+ },
+ {
+  "doc": "mix_05",
+  "label": "ADDRESS",
+  "ref": "Park Street",
+  "asr": "el mes",
+  "similarity": 0.25
+ },
+ {
+  "doc": "mix_05",
+  "label": "PROVIDER_NAME",
+  "ref": "Hayes",
+  "asr": "Ahí es lo que dice",
+  "similarity": 0.571
+ },
+ {
+  "doc": "mix_05",
+  "label": "DATE",
+  "ref": "today",
+  "asr": "Pero, tibetis, tibetis, tibetis, tibetis",
+  "similarity": 0.222
+ },
+ {
+  "doc": "mix_05",
+  "label": "PHONE",
+  "ref": "eight six zero, five five five, zero one five nine",
+  "asr": "tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis, tibetis",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "ADDRESS",
+  "ref": "Wethersfield Avenue",
+  "asr": "muy tertiéndome",
+  "similarity": 0.435
+ },
+ {
+  "doc": "mix_05",
+  "label": "ADDRESS",
+  "ref": "three twelve, second floor",
+  "asr": "plato, resuelves, te conozco el",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_05",
+  "label": "NAME",
+  "ref": "Luis",
+  "asr": "si, si, si, si, si, si, si, si, si, si, si",
+  "similarity": 0.333
+ },
+ {
+  "doc": "mix_06",
+  "label": "GEOGRAPHIC_CONTEXT",
+  "ref": "Chinatown Plaza",
+  "asr": "sind jetzt in",
+  "similarity": 0.4
+ },
+ {
+  "doc": "mix_06",
+  "label": "EMAIL",
+  "ref": "t, villanueva, eight two, at example dot net",
+  "asr": "Tv kommer",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_06",
+  "label": "EMAIL",
+  "ref": "T villanueva eight two at example dot net",
+  "asr": "www.cebillanueva.net",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Paulina Ortiz",
+  "asr": "En",
+  "similarity": 0.222
+ },
+ {
+  "doc": "mix_07",
+  "label": "RELATIVE_NAME",
+  "ref": "Danny",
+  "asr": "Si, si, perdón, nani. Si, si, perdón, nani. Si, si",
+  "similarity": 0.444
+ },
+ {
+  "doc": "mix_07",
+  "label": "DATE",
+  "ref": "Saturday",
+  "asr": "ella",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "DATE",
+  "ref": "jueves",
+  "asr": "poema",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "RELATIVE_NAME",
+  "ref": "Danny",
+  "asr": "da",
+  "similarity": 0.571
+ },
+ {
+  "doc": "mix_07",
+  "label": "EMPLOYER",
+  "ref": "Fort Bliss",
+  "asr": "Gliedsleicht-Dai",
+  "similarity": 0.353
+ },
+ {
+  "doc": "mix_07",
+  "label": "DATE",
+  "ref": "Thursday",
+  "asr": "Dais",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "RELATIVE_NAME",
+  "ref": "Licha",
+  "asr": "Aterdei",
+  "similarity": 0.167
+ },
+ {
+  "doc": "mix_07",
+  "label": "ADDRESS",
+  "ref": "fifty-three oh one Alameda",
+  "asr": "Silvis y Trioguan Alameda",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "DATE",
+  "ref": "March",
+  "asr": "Si",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "ADDRESS",
+  "ref": "eleven twenty Montwood Drive",
+  "asr": "mueve en el mismo marco",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "ZIP",
+  "ref": "seven nine nine two five",
+  "asr": "se mueve en el mismo marco",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_07",
+  "label": "PHONE",
+  "ref": "Nine one five, five five five, zero one three eight",
+  "asr": "plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus, plus",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_08",
+  "label": "CARE_TEAM_MEMBER",
+  "ref": "Sofía",
+  "asr": "propiedad",
+  "similarity": 0.286
+ },
+ {
+  "doc": "mix_08",
+  "label": "PROVIDER_NAME",
+  "ref": "Whitfield",
+  "asr": "Witz",
+  "similarity": 0.462
+ },
+ {
+  "doc": "mix_08",
+  "label": "ADDRESS",
+  "ref": "Alisal Street",
+  "asr": "al fresco",
+  "similarity": 0.5
+ },
+ {
+  "doc": "mix_08",
+  "label": "DATE",
+  "ref": "November first",
+  "asr": "el revés puerco",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_08",
+  "label": "PROVIDER_NAME",
+  "ref": "Whitfield",
+  "asr": "huísquiel",
+  "similarity": 0.444
+ },
+ {
+  "doc": "mix_08",
+  "label": "ADDRESS",
+  "ref": "two-oh-five East Laurel Drive",
+  "asr": "Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete! ¡Suscríbete",
+  "similarity": 0.0
+ },
+ {
+  "doc": "mix_08",
+  "label": "ADDRESS",
+  "ref": "Apartment C",
+  "asr": "al",
+  "similarity": 0.182
+ },
+ {
+  "doc": "mix_08",
+  "label": "PHONE",
+  "ref": "eight three one, five five five, zero one zero four",
+  "asr": "argumento es cotiz",
+  "similarity": 0.0
+ },
+ {
+  "doc": "doc_en_01",
+  "label": "RELATIVE_NAME",
+  "ref": "Lorraine",
+  "asr": "full reign",
+  "similarity": 0.471
+ },
+ {
+  "doc": "doc_en_03",
+  "label": "CITY",
+  "ref": "Houma",
+  "asr": "Palma",
+  "similarity": 0.4
+ },
+ {
+  "doc": "doc_en_04",
+  "label": "GEOGRAPHIC_CONTEXT",
+  "ref": "Saint Casimir's",
+  "asr": "St. Cosmeters",
+  "similarity": 0.571
+ },
+ {
+  "doc": "doc_en_05",
+  "label": "NAME",
+  "ref": "Haynes",
+  "asr": "Tain",
+  "similarity": 0.4
+ },
+ {
+  "doc": "doc_en_05",
+  "label": "NAME",
+  "ref": "Mister Haynes",
+  "asr": "Mr. Tain",
+  "similarity": 0.5
+ },
+ {
+  "doc": "doc_en_05",
+  "label": "RELATIVE_NAME",
+  "ref": "Tyrese",
+  "asr": "Fareed",
+  "similarity": 0.5
+ },
+ {
+  "doc": "doc_en_05",
+  "label": "RELATIVE_NAME",
+  "ref": "Tyrese",
+  "asr": "Fareed",
+  "similarity": 0.5
+ },
+ {
+  "doc": "doc_en_07",
+  "label": "FACILITY_NAME",
+  "ref": "Clark County Neurology",
+  "asr": "Dr",
+  "similarity": 0.286
+ },
+ {
+  "doc": "doc_en_08",
+  "label": "ADDRESS",
+  "ref": "Fifth Street",
+  "asr": "VIPs",
+  "similarity": 0.0
+ },
+ {
+  "doc": "doc_en_09",
+  "label": "CITY",
+  "ref": "Bend",
+  "asr": "then",
+  "similarity": 0.5
+ },
+ {
+  "doc": "doc_en_10",
+  "label": "PROVIDER_NAME",
+  "ref": "doctor Chau",
+  "asr": "Dr",
+  "similarity": 0.5
+ }
+]

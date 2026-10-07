@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gold annotated sample (one JSON object per line)",
+  "type": "object",
+  "required": ["id", "text", "entities", "metadata"],
+  "properties": {
+    "id": {"type": "string"},
+    "text": {"type": "string"},
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end", "text", "label"],
+        "properties": {
+          "start": {"type": "integer", "minimum": 0},
+          "end": {"type": "integer"},
+          "text": {"type": "string", "description": "must equal text[start:end]"},
+          "label": {"enum": ["NAME", "RELATIVE_NAME", "PROVIDER_NAME", "FACILITY_NAME", "ADDRESS", "CITY", "STATE", "ZIP", "DATE", "DOB", "PHONE", "EMAIL", "MEMBER_ID", "MRN", "ACCOUNT_ID", "NPI", "URL", "OTHER_UNIQUE_ID", "EMPLOYER", "ORGANIZATION", "LANGUAGE", "GEOGRAPHIC_CONTEXT", "CARE_TEAM_MEMBER"]},
+          "difficulty": {"enum": ["easy", "medium", "hard", "unknown"]},
+          "tags": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "ignore_spans": {
+      "type": "array",
+      "items": {"type": "object", "required": ["start", "end", "reason"],
+                "properties": {"start": {"type": "integer"}, "end": {"type": "integer"}, "reason": {"type": "string"}}}
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["subset", "language", "source"],
+      "properties": {
+        "subset": {"type": "string"},
+        "language": {"enum": ["en", "es", "mixed"]},
+        "noise_level": {"enum": ["clean", "low", "medium", "high", "real"]},
+        "source": {"enum": ["synthetic", "public"]}
+      }
+    }
+  }
+}

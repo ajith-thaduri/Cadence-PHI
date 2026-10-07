@@ -1,0 +1,123 @@
+# DECLARATIVE PATTERN RECOGNIZERS - owner: engineering (review: privacy).
+# Adding a deterministic entity needs NO code: a catalog entry (entities.yaml) + a pattern recognizer here.
+# Fields: entity, patterns [{name, regex, group, score, flags, requires_context}], validators (named, see
+# harness/phi/recognizers/patterns.py: luhn, npi_luhn, ssn_valid, ipv4_valid, vin_checksum, age_over_89),
+# context {words, window, required, negative_words}. A failing validator drops the candidate; a passing
+# checksum validator yields score_type checksum_valid.
+# These recognizers were written from the published identifier formats (SSA, IETF, ISO 3779 VIN,
+# HIPAA Safe Harbor), NOT from any evaluation set. A new pattern starts disabled and is enabled only by a
+# reviewed change after it passes the behavioural (CheckList MFT/INV/DIR) suite with no new dev-split false
+# positives. All six below were enabled 2026-10-06 on that evidence (docs/rule_changelog.md).
+recognizers:
+  pattern_ssn:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: SSN
+    developed_on: [format_spec:SSA]
+    patterns:
+      - {name: ssn_separated, regex: '\b(?!000|666|9\d\d)\d{3}[- ](?!00)\d{2}[- ](?!0000)\d{4}\b', score: 0.9}
+      - {name: ssn_compact, regex: '\b(?!000|666|9\d\d)\d{3}(?!00)\d{2}(?!0000)\d{4}\b', score: 0.7, requires_context: true}
+    validators: [ssn_valid]
+    context: {words: [ssn, social security, social, ss number, "ss#"], window: 40}
+  pattern_ip_address:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: IP_ADDRESS
+    developed_on: [format_spec:IETF]
+    patterns:
+      - {name: ipv4, regex: '\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b', score: 0.85}
+      - {name: ipv6, regex: '\b(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\b', score: 0.85}
+    validators: [ipv4_valid]
+    context: {words: [ip, address, logged in from, device, connected], window: 40, negative_words: [version, v., release]}
+  pattern_license_cert:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: LICENSE_CERT_ID
+    developed_on: [format_spec:state_DL_formats]
+    patterns:
+      - {name: license_alnum, regex: '\b[A-Z]{1,2}\d{5,9}\b', score: 0.8, requires_context: true}
+      - {name: license_digits, regex: '\b\d{7,9}\b', score: 0.7, requires_context: true}
+    context:
+      words: ["driver's license", "drivers license", "driver license", "license number", "license no", "license #", "DL",
+              "medical license", "certificate number", "certification number"]
+      window: 40
+  pattern_vehicle:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: VEHICLE_ID
+    developed_on: [format_spec:ISO_3779]
+    patterns:
+      - {name: vin, regex: '\b[A-HJ-NPR-Z0-9]{17}\b', score: 0.85, flags: [IGNORECASE]}
+      - {name: plate, regex: '\b(?=[A-Z0-9 -]*[A-Z])(?=[A-Z0-9 -]*\d)[A-Z0-9]{2,4}[- ]?[A-Z0-9]{3,4}\b', score: 0.7, requires_context: true}
+    validators: [vin_checksum]
+    context: {words: [vin, vehicle, plate, license plate, tag number, tags], window: 40, max_words_between: 3}
+  pattern_device:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: DEVICE_ID
+    developed_on: [format_spec:udi_serials]
+    patterns:
+      - {name: serial, regex: '\b(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{5,19}\b', score: 0.75, requires_context: true, flags: [IGNORECASE]}
+    context: {words: [serial, "s/n", sn, device id, device number, udi, pacemaker, pump, monitor, cgm, defibrillator], window: 40}
+  pattern_age_over_89:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: AGE_OVER_89
+    developed_on: [format_spec:hipaa_safe_harbor]
+    patterns:
+      - {name: years_old, regex: '\b(9\d|1[01]\d)(?:[- ](?:year|yr)s?[- ]old|\s*(?:y/?o|yo)\b)', score: 0.9, flags: [IGNORECASE]}
+      - {name: aged, regex: '\b(?:age|aged)\s*(?:of\s*)?(9\d|1[01]\d)\b', group: 1, score: 0.85, flags: [IGNORECASE]}
+    validators: [age_over_89]
+
+  # ---- 2026-10-07: formats with no detector before (docs/rule_changelog.md). Written from the published formats
+  # (IEEE 802 MAC, 3GPP IMEI + Luhn, ISO 13616 IBAN, decimal-degree coordinates), not from any evaluation set.
+  pattern_mac_address:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: DEVICE_ID
+    developed_on: [format_spec:IEEE_802]
+    patterns:
+      # six octets with ONE consistent separator; not glued to further hex/separators (times have 3 groups)
+      - {name: mac_colon_hyphen, regex: '(?<![0-9A-Fa-f:\-])[0-9A-Fa-f]{2}([:\-])(?:[0-9A-Fa-f]{2}\1){4}[0-9A-Fa-f]{2}(?![0-9A-Fa-f:\-])', score: 0.9}
+      - {name: mac_cisco, regex: '(?<![0-9A-Fa-f.])[0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4}(?![0-9A-Fa-f]|\.[0-9A-Fa-f])', score: 0.8, requires_context: true}
+    context: {words: [mac, mac address, hardware address, ethernet, wifi, wi-fi, bluetooth, device], window: 40, max_words_between: 4}
+  pattern_imei:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: DEVICE_ID
+    developed_on: [format_spec:3GPP_TS_23.003]
+    patterns:
+      - {name: imei, regex: '(?<![\d\-])\d{2}[ \-]?\d{6}[ \-]?\d{6}[ \-]?\d(?![\d\-])', score: 0.85, requires_context: true}
+    validators: [luhn]
+    context: {words: [imei, meid, handset, device id, device identifier, phone serial], window: 40, max_words_between: 3}
+  pattern_iban:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: ACCOUNT_ID
+    developed_on: [format_spec:ISO_13616]
+    patterns:
+      - {name: iban_compact, regex: '\b[A-Z]{2}\d{2}[A-Z0-9]{11,30}\b', score: 0.9, flags: [IGNORECASE]}
+      - {name: iban_grouped, regex: '\b[A-Z]{2}\d{2}(?: [A-Z0-9]{4}){2,7}(?: [A-Z0-9]{1,4})?\b', score: 0.9, flags: [IGNORECASE]}
+    validators: [iban_mod97]
+  pattern_geo_coordinates:
+    type: pattern
+    enabled: true
+    version: "1"
+    entity: GEO_COORDINATES
+    developed_on: [format_spec:decimal_degrees]
+    patterns:
+      # decimal degrees "lat, lon" with >= 3 decimals each: requires a location cue (ratios / lab pairs look alike)
+      - {name: decimal_pair, regex: '(?<![\d.\-])-?\d{1,2}\.\d{3,8}\s*,\s*-?\d{1,3}\.\d{3,8}(?!\d|\.\d)', score: 0.85, requires_context: true}
+      # hemisphere / degree-sign form is unambiguous without a cue
+      - {name: hemisphere_pair, regex: '\b\d{1,2}(?:\.\d+)?\s?°?\s?[NS],?\s*\d{1,3}(?:\.\d+)?\s?°?\s?[EW]\b', score: 0.9, flags: [IGNORECASE]}
+    validators: [latlon_valid]
+    context: {words: [gps, coordinates, coordinate, location, position, lat, latitude, long, longitude, geolocation, geo, located at, lat/long, lat/lon], window: 60, max_words_between: 5}

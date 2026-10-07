@@ -1,0 +1,32 @@
+# migrated from configs/phi_harness.yaml
+policy_profiles:
+  cadence_default:
+    operator: TOKENIZE
+    review_band: 0.0
+    redact_review: true
+    confidence:
+      high_score_types:
+      - registry_exact
+      - checksum_valid
+      - registry_normalized
+      medium_margin: 0.2
+  evaluation:
+    operator: TOKENIZE
+    review_band: 0.0
+    redact_review: true
+    confidence:
+      high_score_types:
+      - registry_exact
+      - checksum_valid
+      - registry_normalized
+      medium_margin: 0.2
+  research:
+    operator: TOKENIZE
+    review_band: 0.1
+    redact_review: true
+    confidence:
+      high_score_types:
+      - registry_exact
+      - checksum_valid
+      - registry_normalized
+      medium_margin: 0.2

@@ -1,0 +1,225 @@
+# LEGACY SINGLE-FILE CONFIGURATION - superseded by the layered configuration in configs/phi/ (phi.yaml).
+# Kept loadable for reproducing pre-migration runs; tests assert it is behaviourally equivalent to the
+# layered config (tests/test_config_layered.py). Do NOT edit - change configs/phi/ instead.
+# PHI detection engine configuration (contract: docs/engine_contract.md).
+#
+# DEFAULT PRODUCTION PROFILE (this phase): English only; OBI RoBERTa is the ONLY enabled model;
+# deterministic + English conversational rules + scoped registry + normalizers enabled;
+# Stanford V2 / MedNotes GLiNER are optional experimental adapters (disabled).
+#
+# Everything here can change without touching Python. Most of it can also be overridden per
+# request (DetectionRequest.enabled_entities / enabled_recognizers / enabled_models /
+# normalization_profile / policy_profile) or from the CLI (--entities --enable --disable --model
+# --preset --set key=value).
+#
+# Scores are NOT calibrated probabilities. A model softmax, a regex hit and a registry match are
+# different kinds of evidence (score_type), and nothing here converts one into another.
+# Values marked PLACEHOLDER are untuned. Tuned values come only from `harness.calibrate` on
+# DEVELOPMENT data and are applied as an overlay (configs/thresholds_calibrated.yaml).
+
+version: 2
+engine:
+  policy_version: "cadence-policy 1.0"
+  reconciliation_version: "overlap-union-wordexpand 1.0"
+
+languages:                  # SCOPE (this phase): ENGLISH ONLY. Requests in other languages are refused.
+  supported: [en, en-US]      # request languages the engine accepts
+  map: {en: en, en-US: en}    # request language -> recognizer language (Presidio registry language)
+
+entities:                   # canonical Cadence taxonomy (harness/taxonomy.py); PERSON is an alias
+  NAME:               {enabled: true}
+  RELATIVE_NAME:      {enabled: true}
+  PROVIDER_NAME:      {enabled: true}
+  CARE_TEAM_MEMBER:   {enabled: true}
+  FACILITY_NAME:      {enabled: true}
+  ADDRESS:            {enabled: true}
+  CITY:               {enabled: true}
+  STATE:              {enabled: true}
+  ZIP:                {enabled: true}
+  GEOGRAPHIC_CONTEXT: {enabled: true}
+  DATE:               {enabled: true}
+  DOB:                {enabled: true}
+  PHONE:              {enabled: true}
+  EMAIL:              {enabled: true}
+  URL:                {enabled: true}
+  MEMBER_ID:          {enabled: true}
+  MRN:                {enabled: true}
+  ACCOUNT_ID:         {enabled: true}
+  NPI:                {enabled: true}
+  OTHER_UNIQUE_ID:    {enabled: true}
+  EMPLOYER:           {enabled: true}
+  ORGANIZATION:       {enabled: true}
+  LANGUAGE:           {enabled: true}
+
+aliases:                    # usable anywhere an entity name is accepted (requests, CLI, YAML)
+  PERSON: [NAME, RELATIVE_NAME, CARE_TEAM_MEMBER]
+  PROVIDER: [PROVIDER_NAME]
+  FACILITY: [FACILITY_NAME]
+  LOCATION: [ADDRESS, CITY, STATE, ZIP, GEOGRAPHIC_CONTEXT]
+  IDENTIFIER: [MEMBER_ID, MRN, ACCOUNT_ID, NPI, OTHER_UNIQUE_ID]
+  CONTACT: [PHONE, EMAIL, URL]
+  DATES: [DATE, DOB]
+
+# THRESHOLDS - resolution order (most specific wins; the winning key is logged with every evidence item):
+#   model_confidence evidence:   model_entity[m][E] > entity[E] > model[m] > recognizer[r] > default
+#   deterministic / registry evidence (regex, checksum, registry, contextual rules):
+#                                recognizer[r] > deterministic_default
+# Entity / model thresholds therefore never silently drop a regex or registry hit.
+thresholds:
+  default: 0.50                 # PLACEHOLDER
+  deterministic_default: 0.0    # rules and registry: accepted when they fire
+  applies_to_score_types: [model_confidence]
+  recognizer: {}
+  model:
+    obi_roberta: 0.50           # PLACEHOLDER
+    stanford_v2: 0.50           # PLACEHOLDER
+    mednotes_gliner: 0.50       # PLACEHOLDER
+  entity: {}
+  model_entity: {}
+
+# Evidence precedence for the entity TYPE when overlapping evidence disagrees.
+# (The redaction EXTENT is always the union of accepted evidence - recall first.)
+precedence: [registry_exact, checksum_valid, registry_normalized, regex_match, spoken_number_match,
+             contextual_rule, registry_fuzzy, model_confidence]
+
+# ALLOW LIST: exact (case-insensitive) spans that are known NOT to be PHI in this deployment, e.g. the
+# organisation's own name ("Cadence") or program names. Evidence on such a span is rejected with
+# reason allow_listed (still visible in the evidence chain). Empty by default: deployment decision.
+allow_list: []
+
+# When accepted evidence in one group disagrees between a general type and a more specific
+# subtype of it, the subtype wins (e.g. a rule says DATE, the model says DOB -> DOB).
+type_refinements:
+  DATE: [DOB]
+  NAME: [RELATIVE_NAME, PROVIDER_NAME, CARE_TEAM_MEMBER]
+  ORGANIZATION: [FACILITY_NAME, EMPLOYER]
+
+recognizers:
+  # ---- deterministic (harness/shield/rules.py families) ----------------------------------------
+  rule_phone:         {enabled: true, family: phones,         version: "1", developed_on: [synthetic_dev, meddocan_dev]}
+  rule_spoken_number: {enabled: true, family: spoken_numbers, version: "1", developed_on: [synthetic_dev]}
+  rule_email_url:     {enabled: true, family: emails_urls,    version: "1", developed_on: [synthetic_dev]}
+  rule_identifier:    {enabled: true, family: keyword_ids,    version: "1", developed_on: [synthetic_dev, meddocan_dev]}
+  rule_zip:           {enabled: true, family: zips,           version: "1", developed_on: [synthetic_dev, meddocan_dev]}
+  rule_date:          {enabled: true, family: dates,          version: "1", developed_on: [synthetic_dev, meddocan_dev]}
+  rule_address:       {enabled: true, family: addresses,      version: "1", developed_on: [synthetic_dev, meddocan_dev]}
+  rule_titled_name:   {enabled: true, family: titled_names,   version: "1", developed_on: [synthetic_dev]}
+  # ---- contextual / conversational (harness/phi/recognizers/conversational.py) -----------------
+  #      developed ONLY on cadence_dev (docs/rule_changelog.md); enabled after dev evaluation 2026-10-05
+  conv_spoken_id:      {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  conv_partial_phone:  {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  conv_ordinal_date:   {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  conv_spoken_address: {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  conv_spelled_name:   {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  conv_language:       {enabled: true,  contextual: true, version: "1", developed_on: [cadence_dev], evaluated_on_dev: "2026-10-05"}
+  # ---- registry (scoped by DetectionRequest.registry_context; resolved via RegistryStore) -------
+  registry_member:     {enabled: true, kinds: [member],             version: "1"}
+  registry_provider:   {enabled: true, kinds: [provider],           version: "1"}
+  registry_staff:      {enabled: true, kinds: [staff],              version: "1"}
+  registry_facility:   {enabled: true, kinds: [facility],           version: "1"}
+  registry_employer:   {enabled: true, kinds: [employer],           version: "1"}
+  registry_contact:    {enabled: true, kinds: [contact],            version: "1"}
+  registry_identifier: {enabled: true, kinds: [identifier, record], version: "1"}
+  # ---- Presidio predefined recognizers (comparison only; off) ----------------------------------
+  presidio_email: {enabled: false, presidio_class: EmailRecognizer, entity_map: {EMAIL_ADDRESS: EMAIL}, version: "presidio"}
+  presidio_phone: {enabled: false, presidio_class: PhoneRecognizer, entity_map: {PHONE_NUMBER: PHONE}, version: "presidio"}
+  presidio_url:   {enabled: false, presidio_class: UrlRecognizer,   entity_map: {URL: URL},            version: "presidio"}
+  presidio_date:  {enabled: false, presidio_class: DateRecognizer,  entity_map: {DATE_TIME: DATE},     version: "presidio"}
+  presidio_us_mbi: {enabled: false, presidio_class: UsMbiRecognizer, entity_map: {US_MBI: MEMBER_ID},  version: "presidio"}
+  presidio_us_npi: {enabled: false, presidio_class: UsNpiRecognizer, entity_map: {US_NPI: NPI},        version: "presidio"}
+  presidio_us_ssn: {enabled: false, presidio_class: UsSsnRecognizer, entity_map: {US_SSN: OTHER_UNIQUE_ID}, version: "presidio"}
+
+registry:
+  fuzzy: true                           # conservative: edit distance <= 1 (<= 2 for tokens >= 8 chars), person names only
+  single_token_requires_capital: true   # unless the whole document is lowercase ASR output
+  directories_path: data/registry       # versioned provider / facility / staff directories (local only)
+
+models:                       # each enabled model is its own Presidio EntityRecognizer (ModelRecognizerAdapter)
+  obi_roberta:     {enabled: true,  candidate_floor: 0.1}
+  stanford_v2:     {enabled: false, candidate_floor: 0.1}
+  mednotes_gliner: {enabled: false, candidate_floor: 0.1}
+  # adding a model: register it in configs/models.yaml (HF token-classification or GLiNER) and add it here
+
+# NORMALIZERS produce derived TextViews; the request text is never modified.
+normalizers:
+  spoken_digits:  {enabled: true, version: "1"}   # "five five five, oh one two" -> "555012" (phones, IDs, ZIPs)
+  spoken_dates:   {enabled: true, version: "1"}   # "the twenty eighth" -> "the 28th"; "nineteen fifty two" -> "1952"
+  spoken_address: {enabled: true, version: "1"}   # "fourteen fifty Maple Street" -> "1450 Maple Street"
+  spelled_names:  {enabled: true, version: "1"}   # "D-E-L-A-C-R-O-I-X", "V as in Victor, A, N" -> one word
+  spoken_email:   {enabled: true, version: "2"}   # "priya dot raman nine one at example dot net" -> address
+  asr_cleanup:    {enabled: true, version: "1"}   # drop fillers (um, uh, eh) and immediate stutter repeats
+normalized_views_feed: [rule, contextual_rule, registry]   # models always read the ORIGINAL text
+
+normalization_profiles:
+  none: []
+  default: [spoken_email]
+  asr: [spoken_digits, spoken_dates, spoken_address, spelled_names, spoken_email, asr_cleanup]
+  aggressive: [spoken_digits, spoken_dates, spoken_address, spelled_names, spoken_email, asr_cleanup]
+
+policy_profiles:
+  cadence_default:
+    operator: TOKENIZE          # deterministic reversible tokens; the map stays in the TokenVault
+    review_band: 0.0            # >0: model-only evidence within [thr - band, thr) becomes REVIEW
+    redact_review: true
+    confidence: {high_score_types: [registry_exact, checksum_valid, registry_normalized], medium_margin: 0.2}
+  evaluation:
+    operator: TOKENIZE
+    review_band: 0.0
+    redact_review: true
+    confidence: {high_score_types: [registry_exact, checksum_valid, registry_normalized], medium_margin: 0.2}
+  research:
+    operator: TOKENIZE
+    review_band: 0.1
+    redact_review: true
+    confidence: {high_score_types: [registry_exact, checksum_valid, registry_normalized], medium_margin: 0.2}
+
+# FAIL-CLOSED POLICY (NIST SP 800-53 SC-24 / SI-17). Actions: block | conservative_fallback | reject.
+# block: no detections and no sanitized text are returned (status "blocked"); callers MUST NOT forward
+# the input. conservative_fallback (model errors / timeouts only): rules + registry only, status
+# "fallback". Never pass-through, never silent truncation.
+failure:
+  on_model_error: block
+  on_recognizer_error: block
+  on_timeout: block
+  on_oversize_input: reject
+  on_unsupported_language: reject
+  on_registry_unavailable: block
+  on_vault_unavailable: block
+  on_key_unavailable: block
+  on_redaction_error: block
+  on_internal_error: block
+  deadline_ms: {total: 30000, model: 20000}
+  max_input_chars: 50000
+  startup_self_test:
+    required: true          # the engine refuses to construct if any sentinel case fails
+    cases:                  # conspicuously fake sentinel values (NIST SP 800-188 4.4); rule-detectable
+      - text: "SELFTEST: call 415-555-0100, email sentinel.one@example.com, MRN 00000001, DOB 01/01/1900."
+        entities: [PHONE, EMAIL, MRN, DOB]
+        must_redact: ["415-555-0100", "sentinel.one@example.com", "00000001", "01/01/1900"]
+      - text: "SELFTEST spoken: my number is four one five, five five five, oh one zero zero."
+        normalization_profile: asr
+        entities: [PHONE]
+        must_redact: ["four one five, five five five, oh one zero zero"]
+
+presidio:
+  context_enhancement: false    # LemmaContextAwareEnhancer needs tokens/lemmas (unavailable with the NoOp NLP engine)
+  nlp_engine: no_op
+
+output:
+  show_text: auto               # evaluation outputs: auto = text for fabricated data, masked for real/public data
+
+# PRESETS for ablations - configuration only, never special-cased in code.
+# Keys: models (list), rules / contextual / registry / normalization (bool), set (dotted overrides).
+presets:
+  RULES_ONLY:          {models: [], registry: false, contextual: false, normalization: false}
+  REGISTRY_ONLY:       {models: [], rules: false, contextual: false, normalization: false}
+  RULES_REGISTRY:      {models: [], contextual: false, normalization: false}
+  OBI_ONLY:            {models: [obi_roberta], rules: false, registry: false, contextual: false, normalization: false}
+  OBI_RULES:           {models: [obi_roberta], registry: false, contextual: false, normalization: false}
+  OBI_FULL_BASELINE:   {models: [obi_roberta], contextual: false, normalization: false}
+  OBI_FULL_NORMALIZED: {models: [obi_roberta], contextual: false}
+  OBI_FULL:            {models: [obi_roberta], contextual: true}
+  STANFORD_FULL:       {models: [stanford_v2], contextual: true}
+  MEDNOTES_FULL:       {models: [mednotes_gliner], contextual: true}
+  OBI_STANFORD_FULL:   {models: [obi_roberta, stanford_v2], contextual: true}
+  OBI_MEDNOTES_FULL:   {models: [obi_roberta, mednotes_gliner], contextual: true}

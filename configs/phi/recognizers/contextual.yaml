@@ -1,0 +1,137 @@
+# CONVERSATIONAL / ASR RECOGNIZERS (harness/phi/recognizers/conversational.py) - owner: engineering.
+# Developed ONLY on cadence_dev (docs/rule_changelog.md). `contextual_params` holds every keyword table
+# the rules use (regex alternations), so cue words can be reviewed and changed without code changes.
+# Any change here must be re-evaluated on dev data and logged in docs/rule_changelog.md.
+recognizers:
+  conv_spoken_id:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - PHONE
+    - MEMBER_ID
+    - MRN
+    - ACCOUNT_ID
+    - NPI
+    - OTHER_UNIQUE_ID
+  conv_partial_phone:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - PHONE
+    - MEMBER_ID
+  conv_ordinal_date:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - DATE
+    - DOB
+  conv_spoken_address:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - ADDRESS
+    - ZIP
+  conv_spelled_name:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - NAME
+    - EMAIL
+    - ADDRESS
+  conv_language:
+    enabled: true
+    contextual: true
+    version: '1'
+    developed_on:
+    - cadence_dev
+    evaluated_on_dev: '2026-10-05'
+    emits:
+    - LANGUAGE
+contextual_params:
+  id_labels:
+  - - \b(?:phone|cell|number to reach|call(?:back)? (?:me|you|her|him)? ?at|text me|tel[eé]fono|celular|n[uú]mero (?:de )?(?:tel|cel)|best
+      number|contact number|direct line|reach (?:me|her|him)|línea)\b
+    - PHONE
+  - - \b(?:m ?r ?n|medical record|record number|expediente|historia cl[ií]nica|n ?h ?c)\b
+    - MRN
+  - - \b(?:member (?:id|i d|number)|member\b|medicaid|medicare|card|tarjeta|n[uú]mero de (?:miembro|socio)|insurance|seguro|eligibility|ahcccs|subscriber|policy)\b
+    - MEMBER_ID
+  - - \b(?:account|cuenta)\b
+    - ACCOUNT_ID
+  - - \bn ?p ?i\b
+    - NPI
+  generic_id_keywords: \b(?:confirmation|order|reference|ticket|claim|case|work order|complaint|serial|tracking|prescription|rx|service
+    number|gate code|code|n[uú]mero de (?:receta|reclamo|caso|orden))\b
+  dob_cues: date of birth|birth ?date|birthday|born|d\.?o\.?b\.?|fecha de nacimiento|naci[óo]|cumpleaños
+  unit_keywords: apartment|apt\.?|unit|suite|ste\.?|lote|lot|box|p\.? ?o\.? box|building|bldg\.?|apartamento|apto\.?|depto\.?|piso|trailer|space
+  unit_context: address|live|house|apartment|street|calle|deliver|ship|mail|drive|route|road|avenue|lane
+  language_names:
+  - Spanish
+  - English
+  - Haitian Creole
+  - Creole
+  - Kreyòl
+  - Portuguese
+  - Mandarin
+  - Cantonese
+  - Chinese
+  - Vietnamese
+  - Tagalog
+  - Korean
+  - Arabic
+  - Russian
+  - Polish
+  - French
+  - Somali
+  - Amharic
+  - Tamil
+  - Hindi
+  - Urdu
+  - Bengali
+  - Punjabi
+  - Gujarati
+  - Farsi
+  - Dari
+  - Pashto
+  - Nepali
+  - Burmese
+  - Hmong
+  - Khmer
+  - Lao
+  - Swahili
+  - Quechua
+  - K'iche'
+  - Mam
+  - ASL
+  - American Sign Language
+  - espa[nñ]ol
+  - ingl[eé]s
+  - portugu[eé]s
+  - 'criollo(?: haitiano)?'
+  - franc[eé]s
+  - chino
+  - mandar[ií]n
+  - quechua
+  - k'iche'
+  language_cues: 'prefer\w*|pref\.? ?lang\w*|preferred language|language(?: at home)?(?: is)?(?: mostly)?|idioma(?: preferido)?|lengua(?:
+    materna)?|prefiere|prefer[ií]a|better in|mejor en'

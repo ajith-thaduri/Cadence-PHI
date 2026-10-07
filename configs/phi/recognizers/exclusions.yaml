@@ -1,0 +1,25 @@
+# EXCLUSIONS - owner: privacy. Exact (case-insensitive) spans known NOT to be PHI in this deployment
+# (e.g. the organisation's own name, program names). Evidence on such a span is rejected with reason
+# allow_listed and stays visible in the evidence chain. Every entry needs a documented reason.
+allow_list: []
+
+# NON-PHI PHRASES - spans that look like names / places but are not identifiers. Evidence entirely inside one is
+# rejected (reason non_phi) and stays in the evidence chain. VEHICLE_ID evidence is never rejected by this.
+non_phi_phrases:
+  - id: vehicle_make_model
+    reason: "a vehicle make / model (and model year) is not an identifier; the VIN and plate are"
+    # public list of vehicle manufacturers / marques sold in the US (not derived from any evaluation document)
+    terms: [Acura, Alfa Romeo, Aston Martin, Audi, Bentley, BMW, Buick, Cadillac, Chevrolet, Chevy, Chrysler, Dodge, Ferrari,
+            Fiat, Ford, Genesis, GMC, Honda, Hummer, Hyundai, Infiniti, Isuzu, Jaguar, Jeep, Kia, Lamborghini, Land Rover,
+            Lexus, Lincoln, Lucid, Maserati, Mazda, McLaren, Mercedes-Benz, Mercedes, Mini, Mitsubishi, Nissan, Polestar,
+            Pontiac, Porsche, Ram, Rivian, Saab, Saturn, Scion, Subaru, Suzuki, Tesla, Toyota, Volkswagen, VW, Volvo]
+    max_tail_tokens: 2
+    require_year_or_tail: true     # "Ford", "Lincoln", "Mercedes" alone are usually people or places
+    cues: [vehicle, car, truck, suv, van, minivan, sedan, drives, driving, drove, transportation, transport, courier, plate,
+           vin, registration, model year, parked, towed]
+    window: 40
+non_phi_patterns:
+  DATE: ['(?:19|20)\d{2}']        # a year alone is not redacted (annotation policy; Safe Harbor permits the year)
+# typed text only: speech-to-text can turn a spoken date into a number ("the eighteenth" -> "2018"), so on spoken /
+# ASR modalities a year-shaped number stays redacted (recall first)
+non_phi_pattern_modalities: [typed, note, imported_text]

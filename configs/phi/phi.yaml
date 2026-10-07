@@ -1,0 +1,39 @@
+# COMPOSITION ROOT of the PHI engine configuration (docs/config_guide.md).
+# Files are composed in `includes` order; a key defined in two files is an error. Then environment
+# overlays (environments/base.yaml + environments/<env>.yaml; env from PHI_ENV or default_environment)
+# and generated overlays (dev-calibrated thresholds, provenance-checked) are applied. The resolved
+# config is strictly validated and hashed; the hash is stamped on every response.
+version: 2
+engine:
+  policy_version: cadence-policy 1.0
+  reconciliation_version: overlap-union-wordexpand 1.0
+languages:
+  supported:
+  - en
+  - en-US
+  map:
+    en: en
+    en-US: en
+default_environment: base
+environments: environments
+includes:
+- entities.yaml
+- recognizers/rules.yaml
+- recognizers/contextual.yaml
+- recognizers/registry.yaml
+- recognizers/external.yaml
+- recognizers/patterns.yaml
+- recognizers/labelled.yaml
+- recognizers/exclusions.yaml
+- models.yaml
+- normalization.yaml
+- reconciliation.yaml
+- policy/thresholds.yaml
+- policy/profiles.yaml
+- policy/redaction.yaml
+- policy/failure.yaml
+- policy/outbound_guard.yaml
+- policy/monitoring.yaml
+- runtime.yaml
+generated:
+- generated/thresholds_calibrated.yaml

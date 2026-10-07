@@ -1,0 +1,69 @@
+# RELEASE GATES (go / no-go) - owner: risk owner / privacy officer. Plan §15.
+# STATUS: PROPOSED numbers (plan §19 decision 1 is open). Changing a number is a reviewed change, recorded in
+# the ledger with the release decision; numbers are NEVER moved after seeing the results they gate.
+# The release decision is the MINIMUM across gates: any FAIL or INSUFFICIENT_EVIDENCE -> NO-GO.
+# evidence: which test tier may satisfy the gate. T4 (real, governed, double-annotated data) cannot be
+# replaced by fabricated data - without it G1-G3/G6 report INSUFFICIENT_EVIDENCE.
+gates_version: 1
+status: proposed
+
+gates:
+  G1:
+    name: direct identifiers
+    evidence: [T4]
+    metric: per entity x modality character-level recall, 95% CI lower bound (cluster bootstrap over documents)
+    entities: {risk_tier: direct}
+    min_lower_bound: {typed: 0.99, note: 0.99, dictation: 0.99, telephone: 0.97, asr: 0.97}
+    min_support_mentions: 300
+  G2:
+    name: quasi identifiers
+    evidence: [T4]
+    metric: per entity recall, 95% CI lower bound
+    entities: {risk_tier: quasi}
+    min_lower_bound: 0.95
+    min_support_mentions: 100
+  G3:
+    name: document sanitisation
+    evidence: [T4]
+    metric: direct-identifier document sanitisation rate, 95% CI lower bound
+    min_lower_bound: 0.99
+    min_documents: 300
+  G4:
+    name: regression
+    evidence: [T1, T2, T4]
+    metric: new direct-identifier misses vs the reviewed baselines
+    max_new_misses: 0
+    baselines: [eval_suites/english_v1/baseline_fast.json, eval_suites/english_v1/baseline.json]
+  G5:
+    name: behavioural
+    evidence: [T1]
+    metric: CheckList MFT pass rate for every enabled entity (fast + model tiers)
+    min_pass_rate: 1.0
+  G6:
+    name: utility
+    evidence: [T4]
+    metric: over-redaction rate (non-PHI characters redacted) and negative-suite false positives
+    max_over_redaction_rate: 0.03
+    max_negative_suite_fp: 0
+  G7:
+    name: fail-closed and security
+    evidence: [T5, T6]
+    metric: fault-injection and privacy test pass rate
+    min_pass_rate: 1.0
+    test_files: [tests/test_failsafe.py, tests/test_telemetry_privacy.py, tests/test_boundaries.py, tests/test_vault.py,
+                 tests/test_outbound_guard.py, tests/test_shadow_mode.py, tests/test_monitoring.py]
+  G8:
+    name: performance
+    evidence: [T7]
+    metric: end-to-end latency percentiles on the typical bucket; soak memory stability; determinism
+    typical_bucket: "<=4000"
+    max_p95_ms: {cpu: 500, mps: 500, cuda: 250}
+    max_p99_ms: {cpu: 1500, mps: 1500, cuda: 750}
+    max_rss_growth_mb_per_hour: 50
+    min_soak_seconds: 3600          # shorter soaks are reported but cannot satisfy the gate
+    determinism: exact_spans        # same spans / types / decisions across runs on one device
+  G9:
+    name: operations
+    evidence: [T8]
+    metric: monitoring baseline exported, canaries configured, system card issued
+    required_artifacts: [results/monitoring/baseline.json, configs/phi/policy/monitoring.yaml, docs/system_card.md]

@@ -1,0 +1,43 @@
+# Native -> canonical mapping for Lekhansh/modern-gliner-large-mednotes-deidentifier
+# Source of native labels: model card @ 222fe2b and LOGICAL tool app.py (identical 9 labels).
+# Label definitions quoted from the model card / LOGICAL paper (arXiv:2510.19346).
+model: mednotes_gliner
+label_provenance: native_trained
+native_labels:
+  person:
+    canonical: NAME
+    covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}
+    rationale: '"HCW, patient or others. Does not capture salutations without names."'
+  address:
+    canonical: ADDRESS
+    covers: {ADDRESS: full, CITY: full, GEOGRAPHIC_CONTEXT: full, ZIP: partial}
+    rationale: '"Geographical entity smaller than a state: cities, districts, taluqs, landmarks and locations within them." ZIP/PIN codes not mentioned.'
+  address state:
+    canonical: STATE
+    covers: {STATE: full}
+    rationale: Indian states and UTs (card). US states not documented in training data.
+  address country:
+    canonical: GEOGRAPHIC_CONTEXT
+    covers: {GEOGRAPHIC_CONTEXT: partial}
+    rationale: Country names.
+  identification number:
+    canonical: OTHER_UNIQUE_ID
+    covers: {MEMBER_ID: full, MRN: full, ACCOUNT_ID: full, NPI: full, OTHER_UNIQUE_ID: full, PHONE: partial}
+    rationale: '"Any numeric or alphanumeric identifier." Paper definition includes phone numbers; card does not mention phones.'
+  dates:
+    canonical: DATE
+    covers: {DATE: partial, DOB: full}
+    rationale: '"Only fully specified dates or date ranges." Partial/relative dates intentionally excluded.'
+  languages:
+    canonical: LANGUAGE
+    covers: {LANGUAGE: full}
+    rationale: Names of languages.
+  groups:
+    canonical: UNMAPPED
+    covers: {}
+    rationale: Religion, caste, tribal, political groups. No canonical Cadence category.
+  company:
+    canonical: ORGANIZATION
+    covers: {FACILITY_NAME: full, EMPLOYER: full, ORGANIZATION: full}
+    rationale: '"Named places of occupation or health care facilities."'
+# Not covered: EMAIL, URL (paper defined "email URL" but had 0 training examples; not in released label set).

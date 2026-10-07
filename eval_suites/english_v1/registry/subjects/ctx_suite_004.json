@@ -1,0 +1,38 @@
+{
+  "member": {
+    "name": "Ruth Ellingsworth",
+    "member_ids": [
+      "XKR88310"
+    ],
+    "dob": "1963-02-14",
+    "phone": "503-555-0186",
+    "mrn": "MRN-6612078",
+    "email": "ruth.ellingsworth@example.com",
+    "address": "2250 Cedar Hollow Drive",
+    "city": "Salem",
+    "zip": "97301"
+  },
+  "contacts": [
+    "Iris Ellingsworth"
+  ],
+  "providers": [
+    {
+      "name": "Mateo Villareal",
+      "npi": "1205948836"
+    }
+  ],
+  "staff": [
+    "Brynn Castellano"
+  ],
+  "facilities": [
+    {
+      "name": "Willamette Heart Institute",
+      "aliases": [
+        "Willamette Heart"
+      ]
+    }
+  ],
+  "employers": [
+    "Cascade Paper Mill"
+  ]
+}

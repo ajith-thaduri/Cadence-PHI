@@ -1,0 +1,3 @@
+# BASE environment overlay. Environment overlays may only set allow-listed keys
+# (harness/phi/config/loader.py ENV_ALLOWED) - never thresholds, entities, recognizers or failure actions.
+apply_generated: true

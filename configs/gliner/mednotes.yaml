@@ -1,0 +1,14 @@
+# GLiNER inference settings for Lekhansh/modern-gliner-large-mednotes-deidentifier.
+# Mirrors the LOGICAL tool (github.com/Lekhansh/LOGIC-... app.py @ be468e7).
+native_trained_labels: [person, address, address state, address country, identification number, dates, languages, groups, company]
+labels: [person, address, address state, address country, identification number, dates, languages, groups, company]   # requested labels
+threshold: 0.2              # default operating point used by the LOGICAL tool
+max_length: 2048            # words, from gliner_config.json max_len
+aggregation:
+  strategy: chunk           # chunk | truncate
+  chunk_words: 2000         # LOGICAL tool chunk size
+  overlap_words: 25         # LOGICAL tool overlap
+overlap_policy: flat_ner    # greedy non-overlapping decoding by score (GLiNER flat_ner=True)
+multi_label: false
+add_prefix_space: true      # LOGICAL tool sets data_processor.transformer_tokenizer.add_prefix_space=True
+production: {chunk_words: 256, overlap_words: 64}

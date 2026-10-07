@@ -1,0 +1,80 @@
+# Published evidence registry. NONE of these numbers were measured by this harness.
+#
+# real_clinical:   true  = real patient notes/reports (PHI possibly surrogate-replaced)
+#                  false = synthetic or non-clinical
+# evaluator:       authors | independent | third_party_same_institution
+# checkpoint_identity: exact     = paper/eval names this exact HF model ID
+#                      likely    = strong match but not stated
+#                      uncertain = may be a different checkpoint
+# held_out:        true/false/unknown - evaluation data excluded from training
+entries:
+  # ---------------- Stanford -----------------------------------------------------------
+  - {model: stanford_base, source: "Chambon et al., JAMIA 2022 (doi:10.1093/jamia/ocac219)", evaluator: authors,
+     dataset: "i2b2 2014 test", real_clinical: true, held_out: true, metric: "F1 (token)", value: 98.9,
+     checkpoint_identity: uncertain,
+     note: "Paper's 'best model'; several models trained (incl. with i2b2 data). Card does not map this HF checkpoint to a paper row."}
+  - {model: stanford_base, source: "Chambon et al., JAMIA 2022", evaluator: authors, dataset: "i2b2 2006 test",
+     real_clinical: true, held_out: true, metric: "F1 (token)", value: 99.5, checkpoint_identity: uncertain, note: "as above"}
+  - {model: stanford_base, source: "Chambon et al., JAMIA 2022", evaluator: authors, dataset: "Radiology reports, new institution",
+     real_clinical: true, held_out: true, metric: "F1", value: 99.6, checkpoint_identity: uncertain, note: ""}
+  - {model: stanford_base, source: "Posada et al., SHIELD, arXiv:2605.03301 (2026)", evaluator: third_party_same_institution,
+     dataset: "i2b2 2014 (span-level, >=80% gold coverage)", real_clinical: true, held_out: unknown,
+     metric: "recall DOCTOR / PATIENT / DATE / PHONE / ID / HOSPITAL / LOCATION",
+     value: "0.25 / 0.56 / 0.94 / 0.94 / 0.81 / 0.87 / 0.00", checkpoint_identity: uncertain,
+     note: "Reported as 'AIMI v1'. The paper describes AIMI v1/v2 as DeBERTa-based, but the HF checkpoints are BERT - identity NOT confirmed."}
+  - {model: stanford_base, source: "Posada et al., SHIELD (2026)", evaluator: third_party_same_institution,
+     dataset: "SHIELD (1,381 Stanford notes, surrogate PHI)", real_clinical: true, held_out: true,
+     metric: "recall DOCTOR / PATIENT / DATE / PHONE / ID / LOCATION / WEB", value: "0.46 / 0.78 / 0.95 / 0.92 / 0.95 / 0.00 / 0.00",
+     checkpoint_identity: uncertain, note: "AIMI v1; see identity caveat."}
+  - {model: stanford_v2, source: "Prakash et al., arXiv:2511.04079", evaluator: authors, dataset: "Penn radiology test",
+     real_clinical: true, held_out: true, metric: F1, value: 97.3, checkpoint_identity: likely, note: "Card links this paper."}
+  - {model: stanford_v2, source: "Prakash et al., arXiv:2511.04079", evaluator: authors, dataset: "Stanford radiology test",
+     real_clinical: true, held_out: true, metric: F1, value: 99.6, checkpoint_identity: likely, note: ""}
+  - {model: stanford_v2, source: "Posada et al., SHIELD (2026)", evaluator: third_party_same_institution,
+     dataset: "i2b2 2014 (span-level)", real_clinical: true, held_out: unknown,
+     metric: "recall DOCTOR / PATIENT / DATE / PHONE / ID / HOSPITAL / LOCATION", value: "0.23 / 0.54 / 0.94 / 0.88 / 0.80 / 0.84 / 0.00",
+     checkpoint_identity: uncertain, note: "Reported as 'AIMI v2'; identity NOT confirmed (paper says DeBERTa-based)."}
+  - {model: stanford_i2b2, source: "Chambon et al., JAMIA 2022", evaluator: authors, dataset: "i2b2 2014 / 2006 test",
+     real_clinical: true, held_out: true, metric: "F1", value: "98.9 / 99.5 (paper best model)", checkpoint_identity: uncertain,
+     note: "Variant trained with i2b2; plausibly closer to the paper's i2b2 numbers than Base, but not stated."}
+  # ---------------- OBI -------------------------------------------------------------------
+  - {model: obi_roberta, source: "Kuo et al., iScience 28:113732 (2025)", evaluator: independent,
+     dataset: "3,650 real UK hospital records (Oxford), dual clinician-annotated", real_clinical: true, held_out: true,
+     metric: "recall names / dates / MRN / phone (out-of-the-box)", value: "0.979 / 0.972 / 0.924 / 0.994",
+     checkpoint_identity: exact, note: "Model named as obi/deid_roberta_i2b2. Overall F1 lies between GPT-3.5 (0.831) and GPT-4 (0.898) per text; exact value in Table S3 (not retrieved)."}
+  - {model: obi_roberta, source: "Model card", evaluator: authors, dataset: "i2b2 2014 test (514 notes)", real_clinical: true,
+     held_out: true, metric: "-", value: "Results section empty on card", checkpoint_identity: exact, note: ""}
+  # ---------------- KindLab / Transformer-DeID ---------------------------------------------
+  - {model: kindlab_roberta, source: "Moore et al., Pyclipse, arXiv:2311.02748", evaluator: third_party_same_institution,
+     dataset: "i2b2 2014 / i2b2 2006 / PhysioNet / OpenDeID / RR-SK / RR-HHS", real_clinical: true, held_out: true,
+     metric: "token binary F1", value: "0.924 / 0.743 / 0.625 / 0.786 / 0.789 / 0.823", checkpoint_identity: likely,
+     note: "'Transformer-DeID RoBERTa' (kind-lab). Pyclipse is from the same research ecosystem."}
+  - {model: kindlab_roberta, source: "Moore et al., Pyclipse", evaluator: third_party_same_institution,
+     dataset: "same six real datasets", real_clinical: true, held_out: true, metric: "NAME recall",
+     value: "0.722 / 0.625 / 0.386 / 0.817 / 0.142 / 0.631", checkpoint_identity: likely,
+     note: "Large drop outside the training distribution."}
+  # ---------------- MedNotes / LOGICAL -------------------------------------------------------
+  - {model: mednotes_gliner, source: "Shivaprakash, Shukla et al., arXiv:2510.19346 (LOGICAL)", evaluator: authors,
+     dataset: "NIMHANS psychiatric notes test (376 instances)", real_clinical: true, held_out: true,
+     metric: "char-level micro F1", value: 0.980, checkpoint_identity: likely,
+     note: "Paper's tool loads this ID; card/paper split counts differ."}
+  - {model: mednotes_gliner, source: "Model card", evaluator: authors, dataset: "validation (386 records)", real_clinical: true,
+     held_out: true, metric: F1, value: 0.998, checkpoint_identity: exact, note: ""}
+  # ---------------- Knowledgator ---------------------------------------------------------------
+  - {model: kg_pii_base, source: "Model card", evaluator: authors, dataset: "synthetic-multi-pii-ner-v1",
+     real_clinical: false, held_out: unknown, metric: F1, value: 80.99, checkpoint_identity: exact, note: "SYNTHETIC, non-clinical."}
+  - {model: kg_pii_large, source: "Model card", evaluator: authors, dataset: "synthetic-multi-pii-ner-v1",
+     real_clinical: false, held_out: unknown, metric: "F1 (table)", value: "see card", checkpoint_identity: exact, note: "SYNTHETIC, non-clinical."}
+  - {model: kg_stream_pii, source: "Model card (PIIMB v0.3.0)", evaluator: authors, dataset: "PIIMB English average (ai4privacy, gretel, nemotron, privy)",
+     real_clinical: false, held_out: unknown, metric: "masking recall / F2", value: "91.55% / 90.53%", checkpoint_identity: exact,
+     note: "Non-clinical, largely synthetic PII benchmarks."}
+  # ---------------- LabBiomedica --------------------------------------------------------------
+  - {model: labbiomedica_es, source: "Model card", evaluator: authors, dataset: "held-out real maternal clinical records (Colombia)",
+     real_clinical: true, held_out: true, metric: "precision / recall / macro F1", value: "0.953 / 0.947 / 0.949",
+     checkpoint_identity: exact, note: "Single institution; NAME/PROFESSION/LOCATION only."}
+
+# Field-level published findings relevant to the ARCHITECTURE question (not model-specific).
+field_findings:
+  - {source: "Moore et al., Pyclipse (2023)", finding: "Combining Transformer-DeID RoBERTa with rule-based PyDeID (recall-maximising merge) reached recall 0.988 on i2b2 2014 and 0.910 on i2b2 2006, above either component alone.", real_clinical: true}
+  - {source: "Posada et al., SHIELD (2026)", finding: "Universal structured categories (DATE, ID, PHONE) transfer across institutions; institution-specific entities (HOSPITAL, LOCATION) and names transfer poorly; LOCATION recall <= 0.66 even for frontier LLMs.", real_clinical: true}
+  - {source: "Kuo et al., iScience (2025)", finding: "Task-specific de-id models were more stable across datasets than small LLMs; local adaptation improved both classes; no system matched clinician agreement everywhere.", real_clinical: true}

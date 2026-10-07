@@ -1,0 +1,38 @@
+# migrated from configs/phi_harness.yaml
+failure:
+  on_model_error: block
+  on_recognizer_error: block
+  on_timeout: block
+  on_oversize_input: reject
+  on_unsupported_language: reject
+  on_registry_unavailable: block
+  on_vault_unavailable: block
+  on_key_unavailable: block
+  on_redaction_error: block
+  on_internal_error: block
+  deadline_ms:
+    total: 30000
+    model: 20000
+  max_input_chars: 50000
+  startup_self_test:
+    required: true
+    cases:
+    - text: 'SELFTEST: call 415-555-0100, email sentinel.one@example.com, MRN 00000001,
+        DOB 01/01/1900.'
+      entities:
+      - PHONE
+      - EMAIL
+      - MRN
+      - DOB
+      must_redact:
+      - 415-555-0100
+      - sentinel.one@example.com
+      - '00000001'
+      - 01/01/1900
+    - text: 'SELFTEST spoken: my number is four one five, five five five, oh one zero
+        zero.'
+      normalization_profile: asr
+      entities:
+      - PHONE
+      must_redact:
+      - four one five, five five five, oh one zero zero

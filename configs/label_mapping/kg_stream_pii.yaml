@@ -1,0 +1,20 @@
+# knowledgator/gliner-stream-pii-v1.0 - OPEN-LABEL model; trained label vocabulary is not
+# published, so every requested label is recorded as zero_shot (coverage symbol Z).
+model: kg_stream_pii
+label_provenance: zero_shot_requested
+native_labels:
+  person: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}, rationale: "Card example label."}
+  organization: {canonical: ORGANIZATION, covers: {ORGANIZATION: full, EMPLOYER: full, FACILITY_NAME: full}, rationale: ""}
+  street address: {canonical: ADDRESS, covers: {ADDRESS: full}, rationale: "Card example label."}
+  city: {canonical: CITY, covers: {CITY: full}, rationale: ""}
+  state: {canonical: STATE, covers: {STATE: full}, rationale: ""}
+  zip code: {canonical: ZIP, covers: {ZIP: full}, rationale: ""}
+  phone number: {canonical: PHONE, covers: {PHONE: full}, rationale: "Card example label."}
+  email address: {canonical: EMAIL, covers: {EMAIL: full}, rationale: "Card example label."}
+  url: {canonical: URL, covers: {URL: full}, rationale: ""}
+  date: {canonical: DATE, covers: {DATE: full}, rationale: ""}
+  date of birth: {canonical: DOB, covers: {DOB: full}, rationale: ""}
+  medical record number: {canonical: MRN, covers: {MRN: full}, rationale: ""}
+  member id: {canonical: MEMBER_ID, covers: {MEMBER_ID: full}, rationale: ""}
+  account number: {canonical: ACCOUNT_ID, covers: {ACCOUNT_ID: full}, rationale: "Card example (recompute) label."}
+  identification number: {canonical: OTHER_UNIQUE_ID, covers: {OTHER_UNIQUE_ID: full, NPI: full}, rationale: ""}

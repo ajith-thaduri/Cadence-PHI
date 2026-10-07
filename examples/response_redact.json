@@ -1,0 +1,69 @@
+{
+  "request_id": "req_example_0001",
+  "sanitized_text": "CM: Can I confirm your name and date of birth?\nMEMBER: [NAME_1], [DOB_1].\nCM: And the best number?\nMEMBER: [PHONE_1]. [PROVIDER_NAME_1] wants me back [DATE_1]. Um, my member ID is [MEMBER_ID_1].",
+  "operator": "TOKENIZE",
+  "replacements": [
+    {
+      "detection_id": "det_e2a8a21dde29a693",
+      "entity_type": "NAME",
+      "original_start": 55,
+      "original_end": 70,
+      "output_start": 55,
+      "output_end": 63,
+      "operator": "TOKENIZE",
+      "replacement": "[NAME_1]"
+    },
+    {
+      "detection_id": "det_2684e3385de281f9",
+      "entity_type": "DOB",
+      "original_start": 72,
+      "original_end": 112,
+      "output_start": 65,
+      "output_end": 72,
+      "operator": "TOKENIZE",
+      "replacement": "[DOB_1]"
+    },
+    {
+      "detection_id": "det_b1edd2cdfe746a4f",
+      "entity_type": "PHONE",
+      "original_start": 147,
+      "original_end": 193,
+      "output_start": 107,
+      "output_end": 116,
+      "operator": "TOKENIZE",
+      "replacement": "[PHONE_1]"
+    },
+    {
+      "detection_id": "det_260fe64e949a94e9",
+      "entity_type": "PROVIDER_NAME",
+      "original_start": 195,
+      "original_end": 210,
+      "output_start": 118,
+      "output_end": 135,
+      "operator": "TOKENIZE",
+      "replacement": "[PROVIDER_NAME_1]"
+    },
+    {
+      "detection_id": "det_23741b856b9b501d",
+      "entity_type": "DATE",
+      "original_start": 225,
+      "original_end": 237,
+      "output_start": 150,
+      "output_end": 158,
+      "operator": "TOKENIZE",
+      "replacement": "[DATE_1]"
+    },
+    {
+      "detection_id": "det_20d4e97f9d44a788",
+      "entity_type": "MEMBER_ID",
+      "original_start": 259,
+      "original_end": 297,
+      "output_start": 180,
+      "output_end": 193,
+      "operator": "TOKENIZE",
+      "replacement": "[MEMBER_ID_1]"
+    }
+  ],
+  "vault_id": "vault_23c3074952ea3f5b",
+  "original_sha256": "a480ec5b14b980a67aa63bf546be46b905c8ee89752669b59d12b95b965950b0"
+}

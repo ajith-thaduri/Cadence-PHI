@@ -1,0 +1,9 @@
+# LabBiomedica/roberta-base-biomedical-clinical-es-finetuned-deid @ f590c17 - BIO NAME/PROFESSION/LOCATION.
+model: labbiomedica_es
+label_provenance: native_trained
+outside_label: O
+native_labels:
+  NAME: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}, rationale: "Person names."}
+  LOCATION: {canonical: ADDRESS, covers: {ADDRESS: partial, CITY: full, STATE: full, GEOGRAPHIC_CONTEXT: full, FACILITY_NAME: partial}, rationale: "Geographic locations (card example: city)."}
+  PROFESSION: {canonical: UNMAPPED, covers: {}, rationale: "Professions (also tags titles such as 'Dr.'); not a canonical category."}
+# Card: dates, ID numbers, phone numbers NOT covered.

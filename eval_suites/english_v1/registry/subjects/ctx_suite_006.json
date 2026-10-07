@@ -1,0 +1,37 @@
+{
+  "member": {
+    "name": "Lillian Fairweather",
+    "member_ids": [
+      "LFW33092",
+      "HP-7720415"
+    ],
+    "dob": "1938-12-01",
+    "phone": "615-555-0129",
+    "mrn": "MRN-9904126",
+    "address": "14 Magnolia Bend",
+    "city": "Franklin",
+    "zip": "37064"
+  },
+  "contacts": [
+    "June Fairweather",
+    "Oscar Pell"
+  ],
+  "providers": [
+    {
+      "name": "Rashid Karimi",
+      "npi": "1740088392"
+    }
+  ],
+  "staff": [
+    "Delia Huang"
+  ],
+  "facilities": [
+    {
+      "name": "Harpeth River Hospital",
+      "aliases": [
+        "Harpeth River"
+      ]
+    }
+  ],
+  "employers": []
+}

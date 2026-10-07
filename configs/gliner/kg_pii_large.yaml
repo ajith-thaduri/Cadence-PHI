@@ -1,0 +1,14 @@
+# Knowledgator PII (kg_pii_large). Requested labels = identifier labels from the card's predefined list
+# (+ 'date', 'medical record number', 'organization' zero-shot; see label_mapping/kg_pii.yaml).
+native_trained_labels: [name, first name, last name, name medical professional, dob, email address, phone number, url, location address, location street, location city, location state, location zip, account number, healthcare number, ssn, organization medical facility, passport number, driver license]
+labels: [name, first name, last name, name medical professional, dob, date, email address, phone number, url, location address, location street, location city, location state, location zip, account number, healthcare number, medical record number, ssn, organization medical facility, organization]
+threshold: 0.3              # card: "Recommended starting point for production"
+max_length: 768
+aggregation:
+  strategy: chunk
+  chunk_words: 700
+  overlap_words: 50
+production: {chunk_words: 256, overlap_words: 64}
+overlap_policy: flat_ner
+multi_label: false
+add_prefix_space: false

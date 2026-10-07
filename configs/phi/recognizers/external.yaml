@@ -1,0 +1,44 @@
+# migrated from configs/phi_harness.yaml
+recognizers:
+  presidio_email:
+    enabled: false
+    presidio_class: EmailRecognizer
+    entity_map:
+      EMAIL_ADDRESS: EMAIL
+    version: presidio
+  presidio_phone:
+    enabled: false
+    presidio_class: PhoneRecognizer
+    entity_map:
+      PHONE_NUMBER: PHONE
+    version: presidio
+  presidio_url:
+    enabled: false
+    presidio_class: UrlRecognizer
+    entity_map:
+      URL: URL
+    version: presidio
+  presidio_date:
+    enabled: false
+    presidio_class: DateRecognizer
+    entity_map:
+      DATE_TIME: DATE
+    version: presidio
+  presidio_us_mbi:
+    enabled: false
+    presidio_class: UsMbiRecognizer
+    entity_map:
+      US_MBI: MEMBER_ID
+    version: presidio
+  presidio_us_npi:
+    enabled: false
+    presidio_class: UsNpiRecognizer
+    entity_map:
+      US_NPI: NPI
+    version: presidio
+  presidio_us_ssn:
+    enabled: false
+    presidio_class: UsSsnRecognizer
+    entity_map:
+      US_SSN: OTHER_UNIQUE_ID
+    version: presidio

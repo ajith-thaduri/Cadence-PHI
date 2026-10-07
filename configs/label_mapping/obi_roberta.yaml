@@ -1,0 +1,17 @@
+# obi/deid_roberta_i2b2 @ 78f2152 - BILOU tags over 11 i2b2-style PHI types (config.json id2label).
+# Label semantics: OBI AnnotationGuidelines.md (github.com/obi-ml-public/ehr_deidentification).
+model: obi_roberta
+label_provenance: native_trained
+outside_label: O
+native_labels:
+  PATIENT: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: partial}, rationale: "Patient names; family names not separately documented."}
+  STAFF: {canonical: PROVIDER_NAME, covers: {PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}, rationale: "Hospital staff / clinicians."}
+  HOSP: {canonical: FACILITY_NAME, covers: {FACILITY_NAME: full}, rationale: "Hospitals and care facilities."}
+  PATORG: {canonical: ORGANIZATION, covers: {ORGANIZATION: full, EMPLOYER: full}, rationale: "Patient organisations (e.g. employer, school)."}
+  LOC: {canonical: ADDRESS, covers: {ADDRESS: full, CITY: full, STATE: full, ZIP: full, GEOGRAPHIC_CONTEXT: full}, rationale: "Locations incl. street, city, state, zip."}
+  DATE: {canonical: DATE, covers: {DATE: full, DOB: full}, rationale: "All dates."}
+  PHONE: {canonical: PHONE, covers: {PHONE: full}, rationale: "Phone / fax."}
+  EMAIL: {canonical: EMAIL, covers: {EMAIL: full}, rationale: "E-mail (4 training examples only)."}
+  ID: {canonical: OTHER_UNIQUE_ID, covers: {MRN: full, MEMBER_ID: full, ACCOUNT_ID: full, OTHER_UNIQUE_ID: full, NPI: partial}, rationale: "Medical record, health plan, account, license IDs."}
+  OTHERPHI: {canonical: OTHER_UNIQUE_ID, covers: {OTHER_UNIQUE_ID: partial, URL: partial}, rationale: "Other PHI (2 training examples)."}
+  AGE: {canonical: UNMAPPED, covers: {}, rationale: "No canonical AGE category; ages are ignore spans."}

@@ -1,0 +1,16 @@
+# GLiNER inference settings for BioMike/logical-modern-gliner-bi-large-v1.0.
+# No native clinical labels are documented. Requested labels are borrowed (zero-shot)
+# from the LOGICAL clinical paper so this checkpoint is tested under the same label
+# semantics as the model the paper actually released.
+native_trained_labels: []   # only documented usage: ["answer"] (logic puzzles, BioMike/Logical_GLiNER Space)
+labels: [person, address, address state, address country, identification number, dates, languages, groups, company]
+threshold: 0.3              # threshold used in the author's Space and the base knowledgator model card
+max_length: 2048
+aggregation:
+  strategy: chunk
+  chunk_words: 2000
+  overlap_words: 25
+overlap_policy: flat_ner
+multi_label: false
+add_prefix_space: true      # kept identical to mednotes for a like-for-like comparison
+production: {chunk_words: 256, overlap_words: 64}

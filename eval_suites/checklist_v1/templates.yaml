@@ -1,0 +1,243 @@
+# CheckList behavioural tests (Ribeiro et al., ACL 2020) for the PHI engine - version 1.
+# Values are FABRICATED and conspicuous: 555-01xx phones, example.* emails, documentation IP ranges
+# (RFC 5737), SSA-valid but fictional SSNs, checksum-valid fictional VINs. Nothing here is derived from
+# any evaluation set. tier: fast = deterministic / conversational / registry only (no model weights);
+# model = needs the contextual model (OBI).
+version: 1
+
+mft:            # minimum functionality: each value in each template must be FULLY redacted
+  PHONE:
+    tier: fast
+    values: ["415-555-0100", "(415) 555-0101", "415.555.0102", "415 555 0103", "4155550104", "+1 415-555-0105",
+             "1-415-555-0106", "415-555-0107 ext. 12"]
+    templates: ["Call me at {v}.", "My cell is {v}", "Phone: {v}", "Fax results to {v} today."]
+  EMAIL:
+    tier: fast
+    values: ["sentinel.one@example.com", "j.doe_42@example.org", "first.last+tag@example.net", "ADMIN@EXAMPLE.COM"]
+    templates: ["Email me at {v}.", "Contact: {v}", "Send it to {v} please."]
+  URL:
+    tier: fast
+    values: ["https://example.com/patient/9921", "www.example.org/members/ab12", "http://example.net/p?id=77"]
+    templates: ["Her portal link is {v}.", "See {v} for the record."]
+  ZIP:
+    tier: fast
+    values: ["93701", "93701-1234"]
+    templates: ["She lives in Fresno, CA {v}.", "Mailing ZIP code {v}."]
+  DOB:
+    tier: fast
+    values: ["04/12/1985", "4/12/85", "1985-04-12", "April 12, 1985", "12 April 1985", "Apr 12 1985"]
+    templates: ["DOB {v}.", "Date of birth: {v}", "She was born on {v}."]
+  DATE:
+    tier: fast
+    values: ["03/14/2026", "March 14, 2026", "2026-03-14", "Mar 14", "14 March 2026"]
+    templates: ["Admitted on {v}.", "Follow-up appointment {v}.", "Discharged {v} after surgery."]
+  MRN:
+    tier: fast
+    values: ["4471-2290", "00012345", "MRN-7781023", "A1234567"]
+    templates: ["MRN {v}", "Medical record number: {v}.", "MRN: {v}, seen today."]
+  MEMBER_ID:
+    tier: fast
+    values: ["ABC12345", "HPV48213Q", "3RM7TK2PW48", "W123456789"]
+    templates: ["Member ID {v}", "Her member ID is {v}.", "Policy number: {v}"]
+  ACCOUNT_ID:
+    tier: fast
+    values: ["ACCT-55120", "88120034", "A-99231-X"]
+    templates: ["Account number {v}", "Billing account: {v}."]
+  NPI:
+    tier: fast
+    values: ["1234567893", "1245319599"]
+    templates: ["NPI {v}", "Provider NPI: {v}."]
+  ADDRESS:
+    tier: fast
+    values: ["123 Main Street", "4410 Larkspur Lane, Apt 3B", "PO Box 4417", "77 Harbor View Rd", "1182 Oak Ave, Suite 210"]
+    templates: ["She lives at {v}.", "Address: {v}, Fresno CA.", "Mail it to {v}."]
+  SSN:
+    tier: fast
+    values: ["219-09-9999", "318 62 9947", "529-18-4730"]
+    templates: ["SSN {v}", "Social security number: {v}.", "Her SSN is {v}."]
+  IP_ADDRESS:
+    tier: fast
+    values: ["198.51.100.23", "203.0.113.7", "192.0.2.144"]
+    templates: ["Portal login from IP {v}.", "The device connected from {v}."]
+  LICENSE_CERT_ID:
+    tier: fast
+    values: ["D1234567", "Y9876543", "MD48213"]
+    templates: ["Driver's license {v}.", "License number: {v}", "Her medical license is {v}."]
+  VEHICLE_ID:
+    tier: fast
+    values: ["1FTFW1E50KFA12345", "2T1BURHE8JC123456", "5YJ3E1EA7PF123456"]
+    templates: ["VIN {v}.", "The vehicle VIN is {v}."]
+  DEVICE_ID:
+    tier: fast
+    values: ["PMX-448812", "SN77812AB", "CGM-90123-Q"]
+    templates: ["Pacemaker serial number {v}.", "Insulin pump serial {v} was replaced.", "Device ID: {v}"]
+  AGE_OVER_89:
+    tier: fast
+    values: ["93-year-old", "97 y/o", "101 years old"]    # the age is the identifier; "aged" is not
+    templates: ["Patient is a {v} woman.", "A {v} male with CHF.", "The member, {v}, lives alone."]
+  NAME:
+    tier: model
+    values: ["Maria Alvarez", "Nguyen Van An", "Oluwaseun Adeyemi", "Priya Raghunathan", "Jamal Washington",
+             "Aiyana Redcloud", "Wei Zhang", "Fatima Al-Sayed", "Siobhan O'Neill", "Dmitri Volkov"]
+    templates: ["Patient {v} reports chest pain.", "I spoke with {v} this morning.", "{v} missed her appointment."]
+  PROVIDER_NAME:
+    tier: model
+    values: ["Dr. Michael Anderson", "Dr. Leila Haddad", "Dr. Kenji Watanabe"]
+    templates: ["She will see {v} on Friday.", "Referred by {v}."]
+  FACILITY_NAME:
+    tier: model
+    values: ["Riverside Methodist Hospital", "Mercy Valley Clinic", "Lakeshore Rehabilitation Center"]
+    templates: ["She was admitted to {v}.", "Follow-up at {v} next week."]
+
+  # ---- 2026-10-07 additions: formats and field labels with no or generic detection before (rule_changelog).
+  # Values are freshly fabricated (checksum-valid where the format has a checksum); none comes from an evaluation set.
+  DEVICE_ID@mac:
+    tier: fast
+    values: ["3a-1f-09-c4-7e-22", "0C:9D:92:A1:77:FE", "0c9d.92a1.77fe"]
+    templates: ["The tablet's MAC address is {v}.", "Wi-Fi adapter MAC: {v}", "Bluetooth device {v} was paired."]
+  DEVICE_ID@imei:
+    tier: fast
+    values: ["913450844021025", "28-566588-042690-9"]
+    templates: ["Handset IMEI {v} was flagged.", "IMEI: {v}", "The phone's IMEI is {v}."]
+  GEO_COORDINATES@decimal:
+    tier: fast
+    values: ["51.50735, -0.12776", "-33.86785,151.20732", "40.71280, -74.00600"]
+    templates: ["GPS coordinates {v}.", "Pickup location: {v}", "Her position was logged as {v}."]
+  GEO_COORDINATES@hemisphere:
+    tier: fast
+    values: ["33.8688° S, 151.2093° E", "40.7128 N, 74.0060 W"]
+    templates: ["Coordinates {v}.", "Found at {v} by the paramedics."]
+  ACCOUNT_ID@iban:
+    tier: fast
+    values: ["DE84351499914288117031", "FR19 8221 5359 7309 5480 3800 100", "BE80618600258170"]
+    templates: ["Refund to IBAN {v}.", "IBAN: {v}", "Please wire it to {v} today."]
+  ACCOUNT_ID@labelled:
+    tier: fast
+    values: ["BL-55012", "77310492", "INV-20931-B"]
+    templates: ["Billing number {v}", "Bank account no. {v} on file.", "The billing reference is {v}."]
+  LICENSE_CERT_ID@labelled:
+    tier: fast
+    values: ["RN-55210-OH", "MK4471823", "PA-ML-20931"]
+    templates: ["Her nursing license number is {v}.", "DEA registration {v}", "Medical license: {v}"]
+  MEMBER_ID@labelled:
+    tier: fast
+    values: ["7XK2-PQ9-WM44", "GRP/5512-C", "BNF-30219877"]
+    templates: ["Beneficiary ID: {v}", "Insurance policy {v} was active.", "Health-plan member number {v}"]
+  VEHICLE_ID@labelled:
+    tier: fast
+    values: ["WVWZZZ1JZXW000001", "SALGA2BE6EA123456", "KR 4421"]
+    templates: ["The vehicle VIN reads {v}.", "Vehicle identification number: {v}", "License plate {v}"]
+  IP_ADDRESS@private:
+    tier: fast
+    values: ["10.4.22.190", "172.31.0.12", "192.168.40.7"]
+    templates: ["Remote login came from IP {v}.", "Workstation IP address: {v}"]
+  STATE@city_state:
+    tier: fast
+    # a lower-case / wrapped two-letter state code is ambiguous with English words ("or", "in", "me", "id"); detecting
+    # it would trade many false positives for a non-Safe-Harbor field, so these transformations are out of spec here
+    skip_inv: [lowercase, filler_before, parentheses, quotes]
+    values: ["ID", "WA", "DC", "Oregon"]
+    templates: ["Clinic in Boise, {v} 83702.", "Mail it to Springfield, {v} 20001."]
+  CITY@before_state:
+    tier: fast
+    # without capitalisation the deterministic tier has no signal for a city name; lower-case cities are model-tier
+    skip_inv: [lowercase]
+    values: ["Washington", "Kansas City", "Georgetown"]
+    templates: ["Office in {v}, DC 20001.", "Moved to {v}, MO last year."]
+  ZIP@after_state:
+    tier: fast
+    values: ["83702", "20001-4401"]
+    templates: ["Clinic in Boise, ID {v}.", "Seen in Tampa, Florida {v} by Dr. Ines Ortega."]
+  RELATIVE_NAME@cue:
+    tier: model
+    values: ["Priya Raman", "Tomasz Nowak", "Grace Okafor"]
+    templates: ["Her emergency contact is {v}.", "My daughter {v} drives me.", "His next of kin, {v}, was called."]
+  EMPLOYER@cue:
+    tier: model
+    values: ["Cascade Logistics Group", "Harbor Freight Partners"]
+    templates: ["Her employer, {v}, was notified.", "He works for {v} downtown."]
+
+  # ---- 2026-10-07 (detection v3) additions - fresh values; open label classes, credentials, vehicle registration
+  LICENSE_CERT_ID@any_profession:
+    tier: fast
+    values: ["DH-55120", "PBT-90213", "EMT-P-30417"]
+    templates: ["Her dental-hygienist license {v} is current.", "Phlebotomy certification {v}", "Paramedic credential reference: {v}"]
+  MEMBER_ID@identifier:
+    tier: fast
+    values: ["QX-OR-55821904", "WC-77310452", "3HT7-KD21-P08"]
+    templates: ["Insurance identifier {v} was verified.", "Workers'-comp/health-plan identifier {v}", "Insurer member identifier {v}"]
+  VEHICLE_ID@registration:
+    tier: fast
+    values: ["TKR-482", "8MJW227"]
+    templates: ["Utah registration {v} was renewed.", "Vehicle registration number {v}"]
+  ADDRESS@usps_suffix:
+    tier: fast
+    values: ["44 Harbor Square", "910 Elm Crossing", "12 Market Plaza"]
+    templates: ["Clinic at {v}, Mesa, AZ 85201.", "Mail it to {v}."]
+  ORGANIZATION@payer:
+    tier: fast
+    # a lower-case organisation name has no capitalisation signal for the deterministic tier (model-tier concern)
+    skip_inv: [lowercase]
+    values: ["Northwind Mutual", "Cedar Valley Health Plan"]
+    templates: ["Insurer {v} approved the claim.", "The payer, {v}, requested records."]
+  PROVIDER_NAME@credential:
+    tier: fast
+    skip_inv: [lowercase]      # lower-case names carry no capitalisation signal for the deterministic tier
+    values: ["Jordan B. Kessler", "Ana P. Ortiz", "Lena Hart"]
+    templates: ["Treating physician {v}, MD signed.", "Seen by {v}, NP today."]
+
+spoken_mft:     # conversational / ASR forms (normalization profile asr)
+  PHONE:
+    tier: fast
+    values: ["four one five, five five five, oh one zero zero", "four one five five five five zero one zero one",
+             "six one four, double five five, oh one eight three"]
+    templates: ["My number is {v}.", "you can reach me at {v}"]
+  DOB:
+    tier: fast
+    values: ["April twelfth, nineteen eighty-five", "four, twelve, eighty-five"]
+    templates: ["Date of birth? {v}.", "my date of birth is {v}"]
+  MEMBER_ID:
+    tier: fast
+    values: ["A B C, one two three four five", "W B, seven seven two, four one nine oh"]
+    templates: ["My member ID is {v}.", "member id {v}"]
+  EMAIL:
+    tier: fast
+    values: ["j dot rivera at example dot com", "sentinel one at example dot org"]
+    templates: ["My email is {v}.", "email {v}"]
+
+inv:            # invariance transformations applied to every fast-tier MFT case (outcome must not change)
+  - {name: lowercase, op: lower}
+  - {name: no_punctuation, op: strip_punct}
+  - {name: filler_before, op: prefix_value, arg: "um, "}
+  - {name: parentheses, op: wrap_value, arg: ["(", ")"]}
+  - {name: quotes, op: wrap_value, arg: ["\"", "\""]}
+  - {name: chunk_boundary, op: pad_before, arg: 2400}       # PHI after ~512 model tokens of neutral filler
+
+name_origin_inv:  # fairness invariance (model tier): same template, names of different origins
+  templates: ["Patient {v} reports chest pain.", "{v} missed her appointment."]
+
+dir:            # directional / negative expectations
+  context_required:          # value must NOT be redacted without its cue, and MUST be with it
+    - {entity: LICENSE_CERT_ID, value: "D1234567", without: "Order D1234567 shipped.", with: "Driver's license D1234567."}
+    - {entity: DEVICE_ID, value: "PMX-448812", without: "Part PMX-448812 in stock.", with: "Pacemaker serial PMX-448812."}
+  must_not_redact:            # clinical / non-PHI values that must survive
+    - "The appointment lasted 30 minutes."
+    - "The patient received 500 mg of metformin twice a day."
+    - "The hospital reported 20 admissions."
+    - "BP 128/82, HR 76, A1c 7.2%."
+    - "She is a 67-year-old woman with Parkinson's disease."
+    - "Dialysis on Mondays, Wednesdays and Fridays."
+    - "Recheck labs in 2 weeks; ICD-10 E11.9."
+    - "Software version 2.4.1 was installed in 2019."
+    - "Take 2 tablets at 08:30 and 20:30."
+    - "The ratio was 0.4521, 0.3312 in the two study arms."
+    - "Meeting at 10:30:45 in room 12."
+    - "Taking into account 3 factors, the plate count was 250000."
+    - "Serial measurements of 120 and 135 were taken."
+    - "The policy was updated in 2026."
+    - "Hemoglobin 13.5 and platelets 250 on the panel."
+    - "The 2019 guidelines were updated."
+    - "He drives a 2015 Mazda CX-5 to work."
+    - "The license to practice was renewed and a birth certificate was filed."
+    - "Insurance coverage was confirmed by the payer."
+    - "Registration for the program opens soon."

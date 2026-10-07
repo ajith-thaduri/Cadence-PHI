@@ -1,0 +1,10 @@
+# MODELS - owner: engineering (ML). Each model runs behind ModelRecognizerAdapter (pinned revision in
+# configs/models.yaml). mode: production (evidence used for decisions) | shadow (evidence recorded and
+# evaluated, never changes a decision). weights_sha256: when set, the engine verifies the local weight
+# files at startup and refuses to serve on mismatch (supply-chain integrity).
+models:
+  obi_roberta:     {enabled: true,  mode: production, candidate_floor: 0.1,
+                    # SHA-256 over the pinned revision's weight files (validated 2026-10-06); mismatch = refuse to serve
+                    weights_sha256: 557152273204b0a28593da47b423dd0206e87c3b94839bd28ff8d6d90f0cf261}
+  stanford_v2:     {enabled: false, mode: production, candidate_floor: 0.1}   # experimental adapter only
+  mednotes_gliner: {enabled: false, mode: production, candidate_floor: 0.1}   # experimental adapter only

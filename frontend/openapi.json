@@ -1,0 +1,2005 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "PHI Engine Console",
+  "version": "1.0.0"
+ },
+ "paths": {
+  "/api/v1/healthz": {
+   "get": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Healthz",
+    "description": "Liveness / readiness (no authentication, no details).",
+    "operationId": "healthz_api_v1_healthz_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Healthz Api V1 Healthz Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/session": {
+   "get": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Session",
+    "operationId": "session_api_v1_session_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Session Api V1 Session Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Login",
+    "operationId": "login_api_v1_session_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LoginIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Login Api V1 Session Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Logout",
+    "operationId": "logout_api_v1_session_delete",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Logout Api V1 Session Delete"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/status": {
+   "get": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Status",
+    "description": "Everything the overview page needs: engine state, provenance, permissions, limits.",
+    "operationId": "status_api_v1_status_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Status Api V1 Status Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/metrics": {
+   "get": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Metrics",
+    "operationId": "metrics_api_v1_metrics_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Metrics Api V1 Metrics Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/audit": {
+   "get": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Audit",
+    "operationId": "audit_api_v1_audit_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 300,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": true
+         },
+         "title": "Response Audit Api V1 Audit Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/engine/reload": {
+   "post": {
+    "tags": [
+     "system"
+    ],
+    "summary": "Reload",
+    "description": "Re-read configs/phi after a reviewed configuration change has been deployed.",
+    "operationId": "reload_api_v1_engine_reload_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Reload Api V1 Engine Reload Post"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/analyze": {
+   "post": {
+    "tags": [
+     "workbench"
+    ],
+    "summary": "Analyze",
+    "operationId": "analyze_api_v1_analyze_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AnalyzeIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AnalyzeOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/restore": {
+   "post": {
+    "tags": [
+     "workbench"
+    ],
+    "summary": "Restore",
+    "description": "Re-identify tokens in downstream text (e.g. an LLM answer). Audited; only tokens issued by that vault.",
+    "operationId": "restore_api_v1_restore_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RestoreIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RestoreOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/batch": {
+   "post": {
+    "tags": [
+     "workbench"
+    ],
+    "summary": "Batch",
+    "operationId": "batch_api_v1_batch_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_batch_api_v1_batch_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Batch Api V1 Batch Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/job-types": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Job Types",
+    "operationId": "job_types_api_v1_job_types_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Job Types Api V1 Job Types Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "List Jobs",
+    "operationId": "list_jobs_api_v1_jobs_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "type": "array",
+         "title": "Response List Jobs Api V1 Jobs Get"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Submit",
+    "operationId": "submit_api_v1_jobs_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/JobIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Submit Api V1 Jobs Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs/{jid}": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Get Job",
+    "operationId": "get_job_api_v1_jobs__jid__get",
+    "parameters": [
+     {
+      "name": "jid",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Jid"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Get Job Api V1 Jobs  Jid  Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs/{jid}/log": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Job Log",
+    "operationId": "job_log_api_v1_jobs__jid__log_get",
+    "parameters": [
+     {
+      "name": "jid",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Jid"
+      }
+     },
+     {
+      "name": "offset",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 0,
+       "title": "Offset"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Job Log Api V1 Jobs  Jid  Log Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs/{jid}/cancel": {
+   "post": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Cancel",
+    "operationId": "cancel_api_v1_jobs__jid__cancel_post",
+    "parameters": [
+     {
+      "name": "jid",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Jid"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Cancel Api V1 Jobs  Jid  Cancel Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs/{jid}/download": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Download",
+    "operationId": "download_api_v1_jobs__jid__download_get",
+    "parameters": [
+     {
+      "name": "jid",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Jid"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/jobs/{jid}/summary": {
+   "get": {
+    "tags": [
+     "jobs"
+    ],
+    "summary": "Batch Summary",
+    "operationId": "batch_summary_api_v1_jobs__jid__summary_get",
+    "parameters": [
+     {
+      "name": "jid",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Jid"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Batch Summary Api V1 Jobs  Jid  Summary Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs": {
+   "get": {
+    "tags": [
+     "results"
+    ],
+    "summary": "Runs",
+    "operationId": "runs_api_v1_runs_get",
+    "parameters": [
+     {
+      "name": "kind",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Kind"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": true
+         },
+         "title": "Response Runs Api V1 Runs Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/runs/{kind}/{name}": {
+   "get": {
+    "tags": [
+     "results"
+    ],
+    "summary": "Run",
+    "operationId": "run_api_v1_runs__kind___name__get",
+    "parameters": [
+     {
+      "name": "kind",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Kind"
+      }
+     },
+     {
+      "name": "name",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Name"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": true,
+         "title": "Response Run Api V1 Runs  Kind   Name  Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/ledger": {
+   "get": {
+    "tags": [
+     "results"
+    ],
+    "summary": "Ledger",
+    "operationId": "ledger_api_v1_ledger_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 300,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": true
+         },
+         "title": "Response Ledger Api V1 Ledger Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/gates/latest": {
+   "get": {
+    "tags": [
+     "results"
+    ],
+    "summary": "Gates Latest",
+    "operationId": "gates_latest_api_v1_gates_latest_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "anyOf": [
+          {
+           "additionalProperties": true,
+           "type": "object"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Response Gates Latest Api V1 Gates Latest Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/config": {
+   "get": {
+    "tags": [
+     "config"
+    ],
+    "summary": "Config",
+    "operationId": "config_api_v1_config_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Config Api V1 Config Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/config/resolved": {
+   "get": {
+    "tags": [
+     "config"
+    ],
+    "summary": "Resolved",
+    "operationId": "resolved_api_v1_config_resolved_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Resolved Api V1 Config Resolved Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/config/validate": {
+   "post": {
+    "tags": [
+     "config"
+    ],
+    "summary": "Validate",
+    "operationId": "validate_api_v1_config_validate_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         "type": "array",
+         "title": "Response Validate Api V1 Config Validate Post"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/monitoring": {
+   "get": {
+    "tags": [
+     "monitoring"
+    ],
+    "summary": "Monitoring",
+    "operationId": "monitoring_api_v1_monitoring_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Monitoring Api V1 Monitoring Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/monitoring/canaries": {
+   "post": {
+    "tags": [
+     "monitoring"
+    ],
+    "summary": "Canaries",
+    "operationId": "canaries_api_v1_monitoring_canaries_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": true,
+         "type": "object",
+         "title": "Response Canaries Api V1 Monitoring Canaries Post"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/docs-index": {
+   "get": {
+    "tags": [
+     "docs"
+    ],
+    "summary": "Docs Index",
+    "operationId": "docs_index_api_v1_docs_index_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "additionalProperties": {
+           "type": "string"
+          },
+          "type": "object"
+         },
+         "type": "array",
+         "title": "Response Docs Index Api V1 Docs Index Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/v1/docs-page/{slug}": {
+   "get": {
+    "tags": [
+     "docs"
+    ],
+    "summary": "Docs Page",
+    "operationId": "docs_page_api_v1_docs_page__slug__get",
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Slug"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "object",
+         "additionalProperties": {
+          "type": "string"
+         },
+         "title": "Response Docs Page Api V1 Docs Page  Slug  Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AnalyzeIn": {
+    "properties": {
+     "text": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Text"
+     },
+     "modality": {
+      "type": "string",
+      "enum": [
+       "typed",
+       "note",
+       "dictation",
+       "telephone",
+       "face_to_face",
+       "asr",
+       "imported_text"
+      ],
+      "title": "Modality",
+      "default": "typed"
+     },
+     "normalization_profile": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Normalization Profile",
+      "description": "default: asr for telephone/asr/face_to_face, else default"
+     },
+     "policy_profile": {
+      "type": "string",
+      "title": "Policy Profile",
+      "default": "cadence_default"
+     },
+     "operator": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "REDACT",
+         "TOKENIZE",
+         "PSEUDONYMIZE",
+         "ENCRYPT"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Operator"
+     },
+     "conversation_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9_\\-:.]*$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Conversation Id"
+     },
+     "known": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/KnownDetails"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "what_if": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/WhatIf"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "run_guard": {
+      "type": "boolean",
+      "title": "Run Guard",
+      "default": true
+     },
+     "include_evidence": {
+      "type": "boolean",
+      "title": "Include Evidence",
+      "default": false
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text"
+    ],
+    "title": "AnalyzeIn"
+   },
+   "AnalyzeOut": {
+    "properties": {
+     "request_id": {
+      "type": "string",
+      "title": "Request Id"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "failure": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Failure"
+     },
+     "sanitized_text": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sanitized Text"
+     },
+     "operator": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Operator"
+     },
+     "vault_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vault Id"
+     },
+     "detections": {
+      "items": {
+       "$ref": "#/components/schemas/DetectionOut"
+      },
+      "type": "array",
+      "title": "Detections"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/EvidenceOut"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "summary": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Summary"
+     },
+     "timings": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Timings"
+     },
+     "guard": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/GuardOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "what_if": {
+      "type": "boolean",
+      "title": "What If"
+     },
+     "notices": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notices"
+     },
+     "config_sha256": {
+      "type": "string",
+      "title": "Config Sha256"
+     },
+     "stamps": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Stamps"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "request_id",
+     "status",
+     "failure",
+     "sanitized_text",
+     "operator",
+     "vault_id",
+     "detections",
+     "evidence",
+     "summary",
+     "timings",
+     "guard",
+     "what_if",
+     "notices",
+     "config_sha256",
+     "stamps"
+    ],
+    "title": "AnalyzeOut"
+   },
+   "Body_batch_api_v1_batch_post": {
+    "properties": {
+     "files": {
+      "items": {
+       "type": "string",
+       "contentMediaType": "application/octet-stream"
+      },
+      "type": "array",
+      "title": "Files"
+     },
+     "modality": {
+      "type": "string",
+      "title": "Modality",
+      "default": "typed"
+     },
+     "operator": {
+      "type": "string",
+      "title": "Operator",
+      "default": ""
+     },
+     "policy_profile": {
+      "type": "string",
+      "title": "Policy Profile",
+      "default": "cadence_default"
+     }
+    },
+    "type": "object",
+    "required": [
+     "files"
+    ],
+    "title": "Body_batch_api_v1_batch_post"
+   },
+   "DetectionOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "start": {
+      "type": "integer",
+      "title": "Start"
+     },
+     "end": {
+      "type": "integer",
+      "title": "End"
+     },
+     "decision": {
+      "type": "string",
+      "title": "Decision"
+     },
+     "confidence_class": {
+      "type": "string",
+      "title": "Confidence Class"
+     },
+     "decision_score": {
+      "type": "number",
+      "title": "Decision Score"
+     },
+     "threshold": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Threshold"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "recognizers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Recognizers"
+     },
+     "sources": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Sources"
+     },
+     "action": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Action"
+     },
+     "rejected": {
+      "items": {
+       "$ref": "#/components/schemas/RejectedOut"
+      },
+      "type": "array",
+      "title": "Rejected"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id",
+     "entity_type",
+     "start",
+     "end",
+     "decision",
+     "confidence_class",
+     "decision_score",
+     "threshold",
+     "reason",
+     "recognizers",
+     "sources",
+     "action",
+     "rejected"
+    ],
+    "title": "DetectionOut"
+   },
+   "EvidenceOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "start": {
+      "type": "integer",
+      "title": "Start"
+     },
+     "end": {
+      "type": "integer",
+      "title": "End"
+     },
+     "raw_score": {
+      "type": "number",
+      "title": "Raw Score"
+     },
+     "score_type": {
+      "type": "string",
+      "title": "Score Type"
+     },
+     "recognizer_id": {
+      "type": "string",
+      "title": "Recognizer Id"
+     },
+     "source": {
+      "type": "string",
+      "title": "Source"
+     },
+     "view": {
+      "type": "string",
+      "title": "View"
+     },
+     "threshold_used": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Threshold Used"
+     },
+     "threshold_source": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Threshold Source"
+     },
+     "accepted": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Accepted"
+     },
+     "rejection_reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rejection Reason"
+     },
+     "metadata": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Metadata"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id",
+     "entity_type",
+     "start",
+     "end",
+     "raw_score",
+     "score_type",
+     "recognizer_id",
+     "source",
+     "view",
+     "threshold_used",
+     "threshold_source",
+     "accepted",
+     "rejection_reason",
+     "metadata"
+    ],
+    "title": "EvidenceOut"
+   },
+   "GuardHitOut": {
+    "properties": {
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "start": {
+      "type": "integer",
+      "title": "Start"
+     },
+     "end": {
+      "type": "integer",
+      "title": "End"
+     },
+     "recognizers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Recognizers"
+     },
+     "blocking": {
+      "type": "boolean",
+      "title": "Blocking"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "entity_type",
+     "start",
+     "end",
+     "recognizers",
+     "blocking"
+    ],
+    "title": "GuardHitOut"
+   },
+   "GuardOut": {
+    "properties": {
+     "allowed": {
+      "type": "boolean",
+      "title": "Allowed"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "hits": {
+      "items": {
+       "$ref": "#/components/schemas/GuardHitOut"
+      },
+      "type": "array",
+      "title": "Hits"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "allowed",
+     "status",
+     "hits"
+    ],
+    "title": "GuardOut"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "JobIn": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "title": "Type"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 500
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason",
+      "description": "required for runs on test data"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "type"
+    ],
+    "title": "JobIn"
+   },
+   "KnownDetails": {
+    "properties": {
+     "name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 200
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "dob": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 20
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Dob",
+      "description": "YYYY-MM-DD"
+     },
+     "member_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 20,
+      "title": "Member Ids"
+     },
+     "mrn": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 64
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mrn"
+     },
+     "phone": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 64
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Phone"
+     },
+     "email": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 200
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Email"
+     },
+     "address": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 300
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "city": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 100
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "City"
+     },
+     "zip": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 20
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Zip"
+     },
+     "contacts": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Contacts",
+      "description": "relatives / caregivers"
+     },
+     "providers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Providers"
+     },
+     "facilities": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Facilities"
+     },
+     "staff": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Staff"
+     },
+     "employers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 20,
+      "title": "Employers"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "KnownDetails",
+    "description": "What the caller already knows about the member - used as a scoped registry for ONE request, then discarded."
+   },
+   "LoginIn": {
+    "properties": {
+     "username": {
+      "type": "string",
+      "maxLength": 64,
+      "title": "Username",
+      "default": ""
+     },
+     "secret": {
+      "type": "string",
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Secret"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "secret"
+    ],
+    "title": "LoginIn"
+   },
+   "RejectedOut": {
+    "properties": {
+     "recognizer_id": {
+      "type": "string",
+      "title": "Recognizer Id"
+     },
+     "entity_type": {
+      "type": "string",
+      "title": "Entity Type"
+     },
+     "raw_score": {
+      "type": "number",
+      "title": "Raw Score"
+     },
+     "score_type": {
+      "type": "string",
+      "title": "Score Type"
+     },
+     "threshold_used": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Threshold Used"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "recognizer_id",
+     "entity_type",
+     "raw_score",
+     "score_type",
+     "threshold_used",
+     "reason"
+    ],
+    "title": "RejectedOut"
+   },
+   "RestoreIn": {
+    "properties": {
+     "vault_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_\\-]{4,128}$",
+      "title": "Vault Id"
+     },
+     "text": {
+      "type": "string",
+      "maxLength": 200000,
+      "minLength": 1,
+      "title": "Text"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "vault_id",
+     "text"
+    ],
+    "title": "RestoreIn"
+   },
+   "RestoreOut": {
+    "properties": {
+     "text": {
+      "type": "string",
+      "title": "Text"
+     },
+     "replaced": {
+      "type": "integer",
+      "title": "Replaced"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "text",
+     "replaced"
+    ],
+    "title": "RestoreOut"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   },
+   "WhatIf": {
+    "properties": {
+     "disable_entities": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Disable Entities"
+     },
+     "enable_entities": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Enable Entities"
+     },
+     "disable_recognizers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Disable Recognizers"
+     },
+     "models": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Models",
+      "description": "null = configured models; [] = no contextual model"
+     },
+     "thresholds": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Thresholds",
+      "description": "'entity:NAME' or 'model:obi_roberta' -> 0..1"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "WhatIf",
+    "description": "Non-persistent overrides for one analysis. Never written to configs/phi."
+   }
+  }
+ }
+}

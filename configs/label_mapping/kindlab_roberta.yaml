@@ -1,0 +1,12 @@
+# KindLab/roberta-deid @ 551c727 - IO tags (config.json id2label), i2b2 2014 coarse categories.
+model: kindlab_roberta
+label_provenance: native_trained
+outside_label: O
+native_labels:
+  NAME: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}, rationale: "i2b2 NAME: patient, doctor, username."}
+  CONTACT: {canonical: PHONE, covers: {PHONE: full, EMAIL: full, URL: full}, rationale: "i2b2 CONTACT: phone, fax, email, URL, IP."}
+  DATE: {canonical: DATE, covers: {DATE: full, DOB: full}, rationale: "Dates incl. lone years (card)."}
+  ID: {canonical: OTHER_UNIQUE_ID, covers: {MRN: full, MEMBER_ID: full, ACCOUNT_ID: full, OTHER_UNIQUE_ID: full, NPI: partial}, rationale: "i2b2 ID: MRN, health plan, account, license, device, bio ID."}
+  LOCATION: {canonical: ADDRESS, covers: {ADDRESS: full, CITY: full, STATE: full, ZIP: full, GEOGRAPHIC_CONTEXT: full, FACILITY_NAME: full, ORGANIZATION: full, EMPLOYER: full}, rationale: "i2b2 LOCATION: hospital, organization, street, city, state, zip, country."}
+  PROFESSION: {canonical: UNMAPPED, covers: {}, rationale: "Professions are not a canonical category."}
+  AGE: {canonical: UNMAPPED, covers: {}, rationale: "No canonical AGE."}

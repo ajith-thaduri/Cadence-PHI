@@ -1,0 +1,6 @@
+# PROD: never write span text into any evaluation output; vault persisted encrypted.
+output: {show_text: never}
+redaction:
+  vault: {backend: encrypted_file, path: /var/lib/phi-shield/vault, audit: true}
+failure:
+  startup_self_test: {required: true}

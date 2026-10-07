@@ -1,0 +1,76 @@
+# LABELLED-VALUE RECOGNIZER - owner: engineering (review: privacy). harness/phi/recognizers/labelled.py
+# A field label types the identifier that directly follows it. Labels are standard field names for each Safe Harbor
+# identifier category (licences/certificates, account numbers, health-plan numbers, device and vehicle identifiers);
+# they are not taken from any evaluation document. The label is never part of the redacted span.
+recognizers:
+  labelled_identifiers:
+    type: labelled
+    enabled: true
+    version: "1"
+    developed_on: [format_spec:hipaa_safe_harbor_field_labels]
+    labels:
+      LICENSE_CERT_ID:
+        # any licence / certificate noun, whatever profession precedes it ("respiratory-care license", "ultrasound-
+        # technician certification", "nursing license/certificate reference"); never "license plate"
+        - "(?:licen[cs]e|certificate|certification|credential|permit)(?:/(?:licen[cs]e|certificate|certification|credential))?(?!\\s+plate)(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+        - "dea(?:\\s(?:registration|reg\\.?))?(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+      ACCOUNT_ID:
+        - "(?<!into\\s)(?<!on\\s)(?:bank\\s)?account(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+        - "acct\\.?(?:\\s(?:number|no\\.?))?"
+        - "billing(?:\\s(?:number|no\\.?|#|reference|ref\\.?|account|id|code))?"
+        - "bill\\s(?:no\\.?|number|#)"
+        - "iban"
+        - "(?:aba\\s)?routing(?:\\s(?:number|no\\.?|#|transit number))?"
+        - "sort code"
+      MEMBER_ID:
+        # plan / payer nouns + identifier qualifiers; the first noun of a slash compound ("workers'-compensation/
+        # health-plan identifier") need not match, the label binds at its last noun phrase
+        - "(?:health[- ]?plan\\s)?beneficiary(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+        - "(?:insurance\\s)?policy(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+        - "subscriber(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+        - "member(?:ship)?\\s(?:number|no\\.?|#|id|identifier)"
+        - "(?:health[- ]?plan|insurance|insurer|payer|payor|plan)(?:\\s(?:member|beneficiary|subscriber))?\\s(?:number|no\\.?|#|id|identifier)"
+        - "(?:medicare|medicaid)(?:\\s(?:number|no\\.?|#|id|identifier|reference|ref\\.?))?"
+      DEVICE_ID:
+        - "imei"
+        - "meid"
+        - "mac(?:\\saddress)?"
+        - "serial(?:\\s(?:number|no\\.?|#))?"
+        - "device\\s(?:id|identifier|number|serial)"
+        - "serial\\s(?:id|identifier)"
+        - "udi"
+      VEHICLE_ID:
+        - "vin"
+        - "vehicle identification number"
+        - "licen[cs]e plate(?:\\s(?:number|no\\.?))?"
+        - "(?:number\\s)?plate(?:\\s(?:number|no\\.?))?"
+        - "(?:vehicle|car|auto|motor vehicle)\\sregistration(?:\\s(?:number|no\\.?|#|plate))?"
+        - "registration plate"
+        - "tag number"
+    # between label and value: verbs / punctuation / number words only (max 4 items)
+    bridge: '(?:\s*(?:\b(?:is|was|were|of|number|num\.?|no\.?|id|reads|listed as|recorded as|on file as|reference|ref\.?)\b|\b(?:um|uh|er|erm)\b,?|[:#=\-]))*\s*["''(\[]?'
+    # one identifier token: alphanumerics joined by - / . : (never across whitespace)
+    value: '[A-Za-z0-9](?:[A-Za-z0-9]|[\-/.:](?=[A-Za-z0-9]))*'
+    continuation: '(?i:\s[A-Z0-9](?:[A-Z0-9]|-(?=[A-Z0-9])){1,9}\b)'
+    min_digits: 3
+    min_length: 5          # identifiers have >= 5 alphanumerics ("120 responses" is a count, not an account)
+    score: 0.9
+
+  # payer / insurer NAMES after a payer noun ("insurer Acme Health", "health plan Northwind Care") -> ORGANIZATION
+  labelled_payer_names:
+    type: labelled
+    enabled: true
+    version: "1"
+    developed_on: [format_spec:payer_field_labels]
+    labels:
+      ORGANIZATION:
+        - "insurer"
+        - "insurance (?:carrier|company|provider|plan)"
+        - "health (?:insurer|plan)"
+        - "payer"
+        - "payor"
+    bridge: '(?:\s*(?:\b(?:is|was|named)\b|\b(?:um|uh|er|erm)\b,?|[:,\-]))*\s*["''(\[]?'
+    value: '[A-Z][A-Za-z&''’.\-]+(?:\s(?:of\s|&\s)?[A-Z][A-Za-z&''’.\-]+){0,4}'
+    min_digits: 0
+    min_length: 3
+    score: 0.85

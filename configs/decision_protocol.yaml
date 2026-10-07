@@ -1,0 +1,50 @@
+# PRE-REGISTERED decision protocol for the contextual-ML-layer decision.
+# Written 2026-10-05 BEFORE any pairwise / ensemble / cascade result was computed and
+# BEFORE the Tier-3 Cadence-realistic set existed. The report prints this file's SHA-256.
+# Changing this file after results exist must be recorded as a protocol deviation.
+
+candidates: [stanford_v2, obi_roberta, mednotes_gliner]   # no other model without new evidence
+pipeline: "identical for all: model at its synthetic-dev-calibrated shield threshold + deterministic rules + registry, reconciled"
+no_tuning_on_tier3: true      # thresholds/rules are frozen; Tier-3 data is test-only
+
+evidence_tiers:
+  tier1: "real clinical data, trustworthy annotation, exact checkpoint (own reproduction)  -> NONE AVAILABLE (DUA/credentialed)"
+  tier2: "real clinical text, synthetic/surrogate PHI                                  -> MEDDOCAN test (Spanish)"
+  tier3: "high-fidelity Cadence-style text, independently authored, real ASR engine     -> Tier-3 set (clean + ASR conditions)"
+  tier4: "existing template synthetic benchmark                                         -> synthetic_test"
+  never_combine: true
+
+primary_model_rule:
+  decision_dataset: "tier3 ASR condition (Cadence's dominant surface is transcribed conversation)"
+  metric: "mean RESIDUAL_PHI_AFTER_SHIELD, full shield (stage D)"
+  tie: "two candidates are TIED if their difference is NOT material under the materiality rule below"
+  tie_breakers_in_order:
+    - "tier3 P95 residual PHI (full shield)"
+    - "tier3 clean-text and tier2 results must not contradict (a candidate that is materially worse on another tier loses the tie)"
+    - "published real-clinical evidence tier (independent > author-reported > uncertain)"
+    - "operational cost: CPU P95 latency, memory, model size"
+  veto: "a candidate whose full-shield high-risk recall on tier3 ASR is < 95% loses to any candidate >= 95%"
+
+materiality_rule:   # adding model B to primary A (both with rules + registry); evaluated on tier3 ASR condition
+  any_of:
+    M1_mean_residual: "relative reduction >= 30% AND absolute reduction >= 0.5 percentage points of PHI characters"
+    M2_tail_residual: "P95 residual relative reduction >= 30% AND absolute >= 2 percentage points"
+    M3_critical_category: "a high-risk category with support >= 10 where A's full-shield recall < 95%: B recovers >= 50% of A's misses AND lifts recall to >= 95%"
+    M4_asr_or_spanish_slice: "on the ASR-call slice or the Spanish/code-switched slice: relative residual reduction >= 30% AND absolute >= 1 percentage point"
+  replication: "the benefit must not reverse on tier3 clean text or tier2 (direction check)"
+  cost_guardrails_all_required:
+    over_redaction: "increase in over-redacted non-PHI character rate <= 0.5 percentage points"
+    false_positives: "increase in spurious spans <= 25% relative"
+    latency: "combined CPU P95 per typical document <= 500 ms, or an explicit GPU-hosting justification"
+  rationale: >-
+    Cadence already sends text to Bedrock under a BAA; the shield is defense in depth. A second
+    production model doubles model versioning, monitoring, testing and failure surface. That cost
+    is justified only by a large relative cut in leaked PHI (>= 30%) that is also non-trivial in
+    absolute terms, or by closing a critical-category hole. A 0.2 pp gain is not material.
+  three_models: "only if the best pair passes; the third must pass the same rule relative to that pair"
+  cascade: "only if a pair passes; adopt the cascade if it keeps >= 80% of the pair's residual reduction while running B on <= 50% of documents"
+
+production_confidence:
+  high: "own tier1 reproduction consistent with tier2/tier3"
+  medium: "tier2 and tier3 consistent AND published independent tier1 evidence for the chosen model"
+  low: "otherwise"

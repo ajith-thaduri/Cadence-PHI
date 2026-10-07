@@ -1,0 +1,13 @@
+# RUNTIME SETTINGS - owner: engineering / platform.
+presidio:
+  context_enhancement: false    # LemmaContextAwareEnhancer needs tokens/lemmas (unavailable with the NoOp NLP engine)
+  nlp_engine: no_op
+output:
+  show_text: auto               # evaluation outputs: auto = text for fabricated data, masked for real/public data
+telemetry:
+  metrics: true                 # in-process counters (harness/phi/telemetry.py); export via engine.metrics()
+model_cache:
+  # in-process model-hit cache of a SERVING engine (text sha256 -> model spans), bounded LRU. 0 = off: nothing
+  # derived from a request outlives it (data minimisation) and memory cannot grow with traffic. Evaluation
+  # tools pass their own explicit cache and are unaffected.
+  max_entries: 0

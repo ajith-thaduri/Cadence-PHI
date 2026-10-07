@@ -1,0 +1,29 @@
+# knowledgator/gliner-pii-{large,base}-v1.0 - requested labels. 'trained' = in the card's
+# predefined (optimised) label list; 'zero_shot' = requested but not in that list.
+# Clinical/non-identifier labels on the card (condition, drug, dose, age, gender ...) are
+# deliberately NOT requested: they would redact clinical content, not identifiers.
+model: kg_pii
+label_provenance: native_trained
+native_labels:
+  name: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, CARE_TEAM_MEMBER: full, PROVIDER_NAME: partial}, rationale: "Full names."}
+  first name: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, CARE_TEAM_MEMBER: full}, rationale: "First names."}
+  last name: {canonical: NAME, covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: partial}, rationale: "Last names."}
+  name medical professional: {canonical: PROVIDER_NAME, covers: {PROVIDER_NAME: full, CARE_TEAM_MEMBER: partial}, rationale: "Healthcare provider names."}
+  dob: {canonical: DOB, covers: {DOB: full}, rationale: "Date of birth."}
+  date: {canonical: DATE, covers: {DATE: full}, provenance: zero_shot, rationale: "NOT in the trained list (only dob / credit card expiration); requested zero-shot."}
+  email address: {canonical: EMAIL, covers: {EMAIL: full}, rationale: ""}
+  phone number: {canonical: PHONE, covers: {PHONE: full}, rationale: ""}
+  url: {canonical: URL, covers: {URL: full}, rationale: ""}
+  location address: {canonical: ADDRESS, covers: {ADDRESS: full}, rationale: "Street addresses."}
+  location street: {canonical: ADDRESS, covers: {ADDRESS: full}, rationale: "Street names."}
+  location city: {canonical: CITY, covers: {CITY: full}, rationale: ""}
+  location state: {canonical: STATE, covers: {STATE: full}, rationale: ""}
+  location zip: {canonical: ZIP, covers: {ZIP: full}, rationale: ""}
+  account number: {canonical: ACCOUNT_ID, covers: {ACCOUNT_ID: full}, rationale: ""}
+  healthcare number: {canonical: MEMBER_ID, covers: {MEMBER_ID: full, MRN: partial, NPI: partial}, rationale: "Healthcare numbers (insurance / health IDs)."}
+  medical record number: {canonical: MRN, covers: {MRN: full}, provenance: zero_shot, rationale: "Used in the card's examples but not in the predefined list."}
+  ssn: {canonical: OTHER_UNIQUE_ID, covers: {OTHER_UNIQUE_ID: full}, rationale: ""}
+  passport number: {canonical: OTHER_UNIQUE_ID, covers: {OTHER_UNIQUE_ID: full}, rationale: ""}
+  driver license: {canonical: OTHER_UNIQUE_ID, covers: {OTHER_UNIQUE_ID: full}, rationale: ""}
+  organization medical facility: {canonical: FACILITY_NAME, covers: {FACILITY_NAME: full}, rationale: "Healthcare facility names."}
+  organization: {canonical: ORGANIZATION, covers: {ORGANIZATION: full, EMPLOYER: full}, provenance: zero_shot, rationale: "Example label in card; not in predefined list."}

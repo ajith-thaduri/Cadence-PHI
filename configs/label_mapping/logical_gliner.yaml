@@ -1,0 +1,47 @@
+# Native -> canonical mapping for BioMike/logical-modern-gliner-bi-large-v1.0
+#
+# THIS CHECKPOINT HAS NO DOCUMENTED CLINICAL LABEL SET (no model card). The only
+# published usage (Space BioMike/Logical_GLiNER) uses labels=["answer"] for logic puzzles.
+#
+# To test it as a PHI detector we REQUEST the LOGICAL paper's 9 labels zero-shot.
+# label_provenance=zero_shot_requested: the coverage matrix reports these as "Z"
+# (requested zero-shot, never shown to be trained), never as "Y".
+model: logical_gliner
+label_provenance: zero_shot_requested
+native_labels:
+  person:
+    canonical: NAME
+    covers: {NAME: full, RELATIVE_NAME: full, PROVIDER_NAME: full, CARE_TEAM_MEMBER: full}
+    rationale: Borrowed label (LOGICAL paper definition). Zero-shot.
+  address:
+    canonical: ADDRESS
+    covers: {ADDRESS: full, CITY: full, GEOGRAPHIC_CONTEXT: full, ZIP: partial}
+    rationale: Borrowed label. Zero-shot.
+  address state:
+    canonical: STATE
+    covers: {STATE: full}
+    rationale: Borrowed label. Zero-shot.
+  address country:
+    canonical: GEOGRAPHIC_CONTEXT
+    covers: {GEOGRAPHIC_CONTEXT: partial}
+    rationale: Borrowed label. Zero-shot.
+  identification number:
+    canonical: OTHER_UNIQUE_ID
+    covers: {MEMBER_ID: full, MRN: full, ACCOUNT_ID: full, NPI: full, OTHER_UNIQUE_ID: full, PHONE: partial}
+    rationale: Borrowed label. Zero-shot.
+  dates:
+    canonical: DATE
+    covers: {DATE: full, DOB: full}
+    rationale: Borrowed label. Zero-shot.
+  languages:
+    canonical: LANGUAGE
+    covers: {LANGUAGE: full}
+    rationale: Borrowed label. Zero-shot.
+  groups:
+    canonical: UNMAPPED
+    covers: {}
+    rationale: No canonical Cadence category.
+  company:
+    canonical: ORGANIZATION
+    covers: {FACILITY_NAME: full, EMPLOYER: full, ORGANIZATION: full}
+    rationale: Borrowed label. Zero-shot.

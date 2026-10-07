@@ -1,0 +1,41 @@
+# Native -> canonical mapping for StanfordAIMI/stanford-deidentifier-v2
+# Source of native labels: config.json id2label @ 244fba6 (IO tag scheme). Adds AGE vs base.
+model: stanford_v2
+label_provenance: native_trained
+outside_label: O
+native_labels:
+  PATIENT:
+    canonical: NAME
+    covers: {NAME: full, RELATIVE_NAME: partial}
+    rationale: Patient names. Relatives / other persons not documented.
+  HCW:
+    canonical: PROVIDER_NAME
+    covers: {PROVIDER_NAME: full, CARE_TEAM_MEMBER: partial}
+    rationale: Health-care worker names.
+  HOSPITAL:
+    canonical: FACILITY_NAME
+    covers: {FACILITY_NAME: full}
+    rationale: Hospital / facility names.
+  VENDOR:
+    canonical: ORGANIZATION
+    covers: {ORGANIZATION: partial}
+    rationale: Vendor / company names.
+  DATE:
+    canonical: DATE
+    covers: {DATE: full, DOB: full}
+    rationale: Dates; DOB is not a separate label.
+  ID:
+    canonical: OTHER_UNIQUE_ID
+    covers: {MRN: full, OTHER_UNIQUE_ID: full, MEMBER_ID: partial, ACCOUNT_ID: partial, NPI: partial}
+    rationale: Generic identifier label.
+  PHONE:
+    canonical: PHONE
+    covers: {PHONE: full}
+    rationale: Phone numbers.
+  AGE:
+    canonical: UNMAPPED
+    covers: {}
+    rationale: >-
+      The canonical Cadence taxonomy has no AGE category. Not forced onto another label.
+      Gold "ignore" spans mark ages in the synthetic data so AGE predictions on them
+      are neither TP nor FP.

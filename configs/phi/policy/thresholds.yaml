@@ -1,0 +1,21 @@
+# THRESHOLDS - owner: privacy (operating points) + ML. PLACEHOLDER values; tuned values come only from
+# `python -m harness.calibrate --dataset cadence_dev` (development data) and are applied automatically from
+# generated/thresholds_calibrated.yaml (with provenance) unless the environment sets apply_generated: false.
+# Resolution (most specific wins; the winning key is recorded on every evidence item as threshold_source):
+#   model_confidence: modality.<m>.model_entity > model_entity > modality.<m>.entity > entity > model > recognizer > default
+#   deterministic / registry evidence: recognizer > deterministic_default   (ML thresholds never suppress them)
+# Scores are raw recognizer scores in their own scale - NOT probabilities.
+thresholds:
+  default: 0.5
+  deterministic_default: 0.0
+  applies_to_score_types:
+  - model_confidence
+  recognizer: {}
+  model:
+    obi_roberta: 0.5
+    stanford_v2: 0.5
+    mednotes_gliner: 0.5
+  entity: {}
+  model_entity: {}
+  modality: {}
+  provenance: {}

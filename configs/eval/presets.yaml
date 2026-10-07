@@ -1,0 +1,60 @@
+# ablation presets (evaluation only; never loaded by the engine)
+presets:
+  RULES_ONLY:
+    models: []
+    registry: false
+    contextual: false
+    normalization: false
+  REGISTRY_ONLY:
+    models: []
+    rules: false
+    contextual: false
+    normalization: false
+  RULES_REGISTRY:
+    models: []
+    contextual: false
+    normalization: false
+  OBI_ONLY:
+    models:
+    - obi_roberta
+    rules: false
+    registry: false
+    contextual: false
+    normalization: false
+  OBI_RULES:
+    models:
+    - obi_roberta
+    registry: false
+    contextual: false
+    normalization: false
+  OBI_FULL_BASELINE:
+    models:
+    - obi_roberta
+    contextual: false
+    normalization: false
+  OBI_FULL_NORMALIZED:
+    models:
+    - obi_roberta
+    contextual: false
+  OBI_FULL:
+    models:
+    - obi_roberta
+    contextual: true
+  STANFORD_FULL:
+    models:
+    - stanford_v2
+    contextual: true
+  MEDNOTES_FULL:
+    models:
+    - mednotes_gliner
+    contextual: true
+  OBI_STANFORD_FULL:
+    models:
+    - obi_roberta
+    - stanford_v2
+    contextual: true
+  OBI_MEDNOTES_FULL:
+    models:
+    - obi_roberta
+    - mednotes_gliner
+    contextual: true

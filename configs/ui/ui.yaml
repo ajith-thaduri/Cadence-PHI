@@ -1,0 +1,42 @@
+# OPERATOR CONSOLE (harness_ui) - owner: platform (review: security / privacy).
+# Start:  python -m harness_ui serve          (see docs/ui_guide.md)
+# Environment variables override the keys noted below; nothing here is a secret (secrets come from env only).
+ui:
+  host: 127.0.0.1                 # PHI_UI_HOST. auth.mode none is REFUSED on any non-loopback host
+  port: 8765                      # PHI_UI_PORT
+  engine_env: dev                 # PHI_UI_ENV - engine configuration environment (base | dev | test | prod)
+  device: auto                    # PHI_UI_DEVICE - auto | cpu | mps | cuda
+  warm_start: true                # load the engine (and model weights) at startup instead of on first request
+
+  auth:
+    mode: none                    # PHI_UI_AUTH_MODE - none (local single user) | token | users
+    token_env: PHI_UI_TOKEN       # mode token: shared secret (>= 24 chars) entered on the login page
+    token_role: admin             # role granted to token holders
+    users_file: configs/ui/users.yaml   # mode users: `python -m harness_ui user add <name> --role operator`
+    session_hours: 8
+    session_secret_env: PHI_UI_SESSION_SECRET   # unset = random per process (sessions end on restart)
+    cookie_secure: auto           # auto = Secure flag when the request is https
+    max_login_failures_per_minute: 5
+
+  roles:                          # viewer < operator < admin
+    analyze: operator             # paste / upload text, redact, outbound-guard check
+    batch: operator
+    run_jobs: operator            # launch evaluations / checks (dev + suite data)
+    run_test_data_jobs: admin     # launch an evaluation on role=test datasets (ledgered, reason required)
+    restore: admin                # re-identify tokens in downstream text (audited)
+    view_audit: admin
+
+  features:
+    what_if: true                 # per-request, non-persistent configuration overrides in the workbench
+    restore: true                 # set false to remove re-identification from the console entirely
+
+  limits:
+    max_text_chars: 50000         # aligned with failure.max_input_chars
+    max_upload_mb: 20
+    max_batch_files: 200
+    max_concurrent_jobs: 1        # evaluation jobs are CPU/GPU heavy
+    what_if_engines: 2            # cached what-if engines (each holds its own recognizer registry; weights are shared)
+
+  storage:
+    jobs_dir: results/ui_jobs     # job logs + batch outputs (sanitized text and offsets only - never originals)
+    audit_log: results/ui_audit.jsonl

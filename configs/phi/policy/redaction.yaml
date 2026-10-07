@@ -1,0 +1,19 @@
+# REDACTION POLICY - owner: privacy.
+# Operator precedence for an entity: request option redaction_operator > per_entity > catalog default_action
+# > policy profile operator. TOKENIZE tokens are sequential within the consistency scope and NOT derived
+# from PHI (45 CFR 164.514(c)); the token -> value map lives only in the vault.
+redaction:
+  default_operator: TOKENIZE
+  token_format: "[{ENTITY}_{N}]"
+  consistency_scope: conversation          # document | conversation | member  (never global)
+  # a later partial mention ("Rosa", "Dr. Ito's") reuses the token of the ONE earlier full name in the scope that
+  # contains all its words (titles and possessives ignored); ambiguous partials (two earlier matches) get a new token
+  name_coreference: [NAME, RELATIVE_NAME, PROVIDER_NAME, CARE_TEAM_MEMBER]
+  per_entity: {}
+  vault:
+    backend: memory                        # memory | encrypted_file (AES-GCM; key from key_ref)
+    path: vault
+    key_ref: env:PHI_VAULT_KEY
+    ttl_days: 30
+    max_vaults: 10000                      # memory backend: bounded LRU (no unbounded growth with traffic)
+    audit: true                            # put / get / restore / expire recorded (ids only, never values)

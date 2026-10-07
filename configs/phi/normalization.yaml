@@ -1,0 +1,42 @@
+# migrated from configs/phi_harness.yaml
+normalizers:
+  spoken_digits:
+    enabled: true
+    version: '1'
+  spoken_dates:
+    enabled: true
+    version: '1'
+  spoken_address:
+    enabled: true
+    version: '1'
+  spelled_names:
+    enabled: true
+    version: '1'
+  spoken_email:
+    enabled: true
+    version: '2'
+  asr_cleanup:
+    enabled: true
+    version: '1'
+normalized_views_feed:
+- rule
+- contextual_rule
+- registry
+normalization_profiles:
+  none: []
+  default:
+  - spoken_email
+  asr:
+  - spoken_digits
+  - spoken_dates
+  - spoken_address
+  - spelled_names
+  - spoken_email
+  - asr_cleanup
+  aggressive:
+  - spoken_digits
+  - spoken_dates
+  - spoken_address
+  - spelled_names
+  - spoken_email
+  - asr_cleanup

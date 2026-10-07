@@ -1,0 +1,38 @@
+{
+  "member": {
+    "name": "Teresa Valdovinos",
+    "member_ids": [
+      "HPV48213Q"
+    ],
+    "dob": "1958-03-22",
+    "phone": "559-555-0142",
+    "mrn": "MRN-4410982",
+    "email": "teresa.valdovinos@example.com",
+    "address": "418 Orchard Lane",
+    "city": "Visalia",
+    "zip": "93291"
+  },
+  "contacts": [
+    "Hector Valdovinos"
+  ],
+  "providers": [
+    {
+      "name": "Priya Raman",
+      "npi": "1588204417"
+    }
+  ],
+  "staff": [
+    "Lorna Becket"
+  ],
+  "facilities": [
+    {
+      "name": "Kaweah Valley Clinic",
+      "aliases": [
+        "Kaweah Valley"
+      ]
+    }
+  ],
+  "employers": [
+    "Sunridge Packing"
+  ]
+}

@@ -1,0 +1,295 @@
+# ENTITY CATALOG - owner: privacy / compliance. Single source of truth for what the engine treats as PHI.
+#
+# Each entity: description, category, HIPAA Safe Harbor identifiers it covers (45 CFR 164.514(b)(2)),
+# risk tier (direct | quasi | contextual), enabled, default redaction action, evaluation subtypes,
+# core-character rules for scoring, outbound-guard behaviour and evaluation flags.
+# Adding / disabling / modifying an entity needs NO code change. New entities start enabled: false
+# until a recognizer for them is developed on dev data and passes the behavioural suite.
+catalog_version: "2026.10.1"
+
+entities:
+  NAME:
+    description: "Name of the member (patient) or the subject of the conversation"
+    category: person
+    hipaa_safe_harbor: [names]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [MEMBER_NAME, PARTIAL_NAME, SPELLED_NAME, INITIALS]
+    core_chars: {strip_titles: true, strip_affixes: [], strip_edge_words: true}
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  RELATIVE_NAME:
+    description: "Name of a relative, contact or caregiver of the member"
+    category: person
+    hipaa_safe_harbor: [names]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [SPOUSE_NAME, PARENT_NAME, CHILD_NAME, CAREGIVER_NAME, SIBLING_NAME]
+    outbound_guard: block
+    evaluation: {high_risk: false, gate_group: direct_identifiers}
+  PROVIDER_NAME:
+    description: "Name of a clinician or other provider"
+    category: person
+    hipaa_safe_harbor: [names]
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [PROVIDER]
+    outbound_guard: flag
+    evaluation: {high_risk: true, gate_group: quasi_identifiers}
+  CARE_TEAM_MEMBER:
+    description: "Name of a Cadence or partner staff member (care manager, coordinator, social worker)"
+    category: person
+    hipaa_safe_harbor: [names]
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [STAFF_NAME]
+    evaluation: {high_risk: false, gate_group: contextual}
+  FACILITY_NAME:
+    description: "Name of a hospital, clinic, pharmacy or other care location tied to the member"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [HOSPITAL, CLINIC, PHARMACY]
+    evaluation: {high_risk: true, gate_group: quasi_identifiers}
+  ADDRESS:
+    description: "Street address, unit, PO box or other sub-city location"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [STREET_ADDRESS, PO_BOX, UNIT, SPOKEN_ADDRESS]
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  CITY:
+    description: "City or town"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    evaluation: {high_risk: false, gate_group: quasi_identifiers}
+  STATE:
+    description: "US state (permitted under Safe Harbor; redacted by Cadence policy for minimum necessary)"
+    category: location
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    evaluation: {high_risk: false, gate_group: contextual}
+  ZIP:
+    description: "ZIP code (5-digit or ZIP+4)"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [ZIP_CODE, SPOKEN_ZIP]
+    outbound_guard: block
+    evaluation: {high_risk: false, gate_group: quasi_identifiers}
+  GEOGRAPHIC_CONTEXT:
+    description: "Landmark, neighbourhood or other sub-state geographic reference"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [LANDMARK, NEIGHBORHOOD]
+    evaluation: {high_risk: false, gate_group: quasi_identifiers}
+  GEO_COORDINATES:
+    description: "Precise geographic coordinates (latitude/longitude) that locate the individual"
+    category: location
+    hipaa_safe_harbor: [geographic]
+    risk_tier: direct
+    enabled: true      # validated 2026-10-07: CheckList MFT/INV/DIR + type 100%, 0 new dev FPs (rule_changelog)
+    default_action: TOKENIZE
+    subtypes: [DECIMAL_DEGREES, DEGREES_HEMISPHERE]
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  DATE:
+    description: "Any date element (except the year alone) related to the individual"
+    category: date
+    hipaa_safe_harbor: [dates]
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [ADMISSION_DATE, DISCHARGE_DATE, APPOINTMENT_DATE, PROCEDURE_DATE, SERVICE_DATE, RELATIVE_DATE, SPOKEN_DATE]
+    evaluation: {high_risk: true, gate_group: quasi_identifiers}
+  DOB:
+    description: "Date of birth"
+    category: date
+    hipaa_safe_harbor: [dates]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [DOB, SPOKEN_DOB]
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  AGE_OVER_89:
+    description: "An age above 89 (and its elements)"
+    category: person
+    hipaa_safe_harbor: [age_over_89]
+    risk_tier: quasi
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    evaluation: {high_risk: false, gate_group: quasi_identifiers}
+  PHONE:
+    description: "Telephone or fax number (incl. partial and spoken)"
+    category: contact
+    hipaa_safe_harbor: [telephone, fax]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [PHONE, FAX, PARTIAL_PHONE, SPOKEN_PHONE]
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  EMAIL:
+    description: "Email address (incl. spoken)"
+    category: contact
+    hipaa_safe_harbor: [email]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [EMAIL, SPOKEN_EMAIL]
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  URL:
+    description: "Web URL identifying the individual"
+    category: contact
+    hipaa_safe_harbor: [url]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    outbound_guard: block
+    evaluation: {high_risk: false, gate_group: direct_identifiers}
+  IP_ADDRESS:
+    description: "IPv4 / IPv6 address"
+    category: identifier
+    hipaa_safe_harbor: [ip_address]
+    risk_tier: direct
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  SSN:
+    description: "US Social Security number"
+    category: identifier
+    hipaa_safe_harbor: [ssn]
+    risk_tier: direct
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    core_chars: {strip_titles: true, strip_affixes: [ssn, social, security, number, "no"], strip_edge_words: true}
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  MRN:
+    description: "Medical record number"
+    category: identifier
+    hipaa_safe_harbor: [mrn]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [MRN, SPOKEN_MRN]
+    core_chars: {strip_titles: true, strip_affixes: [mrn, mbr, test, npi, acct, id, member, "no", num], strip_edge_words: true}
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  MEMBER_ID:
+    description: "Health-plan beneficiary / member / policy / Medicare (MBI) number"
+    category: identifier
+    hipaa_safe_harbor: [health_plan_beneficiary]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [MEMBER_ID, HEALTH_PLAN_ID, POLICY_ID, MBI, SPOKEN_MEMBER_ID]
+    core_chars: {strip_titles: true, strip_affixes: [mrn, mbr, test, npi, acct, id, member, "no", num], strip_edge_words: true}
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  ACCOUNT_ID:
+    description: "Account number"
+    category: identifier
+    hipaa_safe_harbor: [account]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    core_chars: {strip_titles: true, strip_affixes: [mrn, mbr, test, npi, acct, id, member, "no", num], strip_edge_words: true}
+    outbound_guard: block
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  LICENSE_CERT_ID:
+    description: "Certificate or license number (driver's license, professional license)"
+    category: identifier
+    hipaa_safe_harbor: [certificate_license]
+    risk_tier: direct
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    subtypes: [DRIVER_LICENSE, MEDICAL_LICENSE]
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  VEHICLE_ID:
+    description: "Vehicle identifier: VIN or licence plate"
+    category: identifier
+    hipaa_safe_harbor: [vehicle]
+    risk_tier: direct
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    subtypes: [VIN, PLATE]
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  DEVICE_ID:
+    description: "Device identifier or serial number (e.g. pump, pacemaker, monitor)"
+    category: identifier
+    hipaa_safe_harbor: [device]
+    risk_tier: direct
+    enabled: true     # validated 2026-10-06: CheckList MFT/INV 100%, 0 new dev FPs (docs/rule_changelog.md)
+    default_action: TOKENIZE
+    subtypes: [SERIAL]
+    evaluation: {high_risk: true, gate_group: direct_identifiers}
+  NPI:
+    description: "National Provider Identifier (provider, not member, identifier)"
+    category: identifier
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    core_chars: {strip_titles: true, strip_affixes: [mrn, mbr, test, npi, acct, id, member, "no", num], strip_edge_words: true}
+    evaluation: {high_risk: true, gate_group: contextual}
+  OTHER_UNIQUE_ID:
+    description: "Any other unique identifying number or code (claim, case, authorisation, order, gate code)"
+    category: identifier
+    hipaa_safe_harbor: [other_unique_id]
+    risk_tier: direct
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [CLAIM, CASE, AUTH, ORDER, GATE_CODE]
+    core_chars: {strip_titles: true, strip_affixes: [mrn, mbr, test, npi, acct, id, member, "no", num], strip_edge_words: true}
+    outbound_guard: block
+    evaluation: {high_risk: false, gate_group: direct_identifiers}
+  EMPLOYER:
+    description: "The member's or a relative's employer"
+    category: organization
+    risk_tier: quasi
+    enabled: true
+    default_action: TOKENIZE
+    evaluation: {high_risk: false, gate_group: quasi_identifiers}
+  ORGANIZATION:
+    description: "Other organisation tied to the member (school, agency)"
+    category: organization
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    subtypes: [SCHOOL, AGENCY]
+    evaluation: {high_risk: false, gate_group: contextual}
+  LANGUAGE:
+    description: "The member's stated preferred language"
+    category: other
+    risk_tier: contextual
+    enabled: true
+    default_action: TOKENIZE
+    evaluation: {high_risk: false, gate_group: contextual}
+
+aliases:                    # usable anywhere an entity name is accepted (requests, CLI, YAML)
+  PERSON: [NAME, RELATIVE_NAME, CARE_TEAM_MEMBER]
+  PROVIDER: [PROVIDER_NAME]
+  FACILITY: [FACILITY_NAME]
+  LOCATION: [ADDRESS, CITY, STATE, ZIP, GEOGRAPHIC_CONTEXT, GEO_COORDINATES]
+  IDENTIFIER: [MEMBER_ID, MRN, ACCOUNT_ID, NPI, OTHER_UNIQUE_ID, SSN, LICENSE_CERT_ID, VEHICLE_ID, DEVICE_ID, IP_ADDRESS]
+  CONTACT: [PHONE, EMAIL, URL]
+  DATES: [DATE, DOB]
